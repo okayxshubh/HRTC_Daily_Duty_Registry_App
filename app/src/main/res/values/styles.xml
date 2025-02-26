@@ -1,0 +1,26 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/hrtc_green</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+
+    <!--For Hints in Login Screen-->
+
+    <style name="CustomTextHintStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/darkblue</item> <!-- Customize the hint color -->
+        <item name="android:textSize">15sp</item> <!-- Customize the hint size -->
+        <item name="fontFamily">@font/raleway_semibold</item> <!-- Set the font -->
+    </style>
+
+
+</resources>

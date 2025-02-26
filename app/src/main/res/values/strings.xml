@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">HRTC Daily Duty Registry</string>
+    <string name="ddtg_contact"><b>Contact Information</b>\nAddress: I.T. Bhawan, Mehli, Shimla-171013, Himachal Pradesh, India \nPhone: +91-177-2628914 \nFax: +91-177-2628914 \nEmail: dirit-hp@nic.in</string>
+    <string name="ddtg_info"><![CDATA[
+        <b>About Us - Department of Digital Technologies and Governance (DDTG), Himachal Pradesh</b>&#10;&#10;
+        The Department of Digital Technologies and Governance, established in 2004, aims to promote IT development in Himachal Pradesh. Its key objectives include enhancing IT education, enabling IT investments, and implementing e-Governance for a SMART (Simple, Moral, Accountable, Responsive, Transparent) government.&#10;&#10;
+        The department oversees projects like e-District Portal, Aadhaar services, and the State Data Centre DIGITAL TECHNOLOGIES & GOVERNANCE DIGITAL TECHNOLOGIES & GOVERNANCE
+    ]]></string>
+    <string-array name="vehicle_search_array">
+        <item>Search By Route</item>
+        <item>Search By Vehicle Number</item>
+        <item>Search By Service Number</item>
+    </string-array>
+
+</resources>

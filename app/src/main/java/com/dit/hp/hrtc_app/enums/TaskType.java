@@ -1,0 +1,108 @@
+package com.dit.hp.hrtc_app.enums;
+
+public enum TaskType {
+
+
+    LOGIN_HRTC(1),
+    GET_DRIVERS(2),
+    GET_CONDUCTORS(3),
+    GET_ROUTES(4),
+    GET_VEHICLES(5),
+    GET_ALL_RECORDS(6),
+    GET_ALL_RECORDS_FILTERED(7),
+    SAVE_RECORD(8),
+    UPDATE_RECORD(9),
+    DOWNLOAD_EXCEL(10),
+    DOWNLOAD_PDF(11),
+
+    VEHICLE_TRANSFER(12),
+    GET_DEPOTS(13),
+    GET_OLD_ROUTES(14),
+    GET_NEW_ROUTES(15),
+    GET_STAFF(16),
+
+    ADD_STAFF(17),
+    ADD_CONDUCTOR(18),
+    ADD_VEHICLE(19),
+    ADD_ROUTE(20),
+
+    EDIT_DRIVER(21),
+    EDIT_CONDUCTOR(22),
+    EDIT_VEHICLE(23),
+    EDIT_ROUTE(24),
+    REMOVE_STAFF(25),
+    REMOVE_VEHICLE(26),
+    REMOVE_ROUTE(27),
+
+
+    GET_VEHICLE_TYPE(28),
+    GET_VEHICLE_METADATA(29),
+    DRIVER_TRANSFER(30),
+    CONDUCTOR_TRANSFER(31),
+    GET_STAFF_METADATA(32),
+    ADD_DEPOT(33),
+    EDIT_DEPOT(34),
+    REMOVE_DEPOT(35),
+    ROUTE_TRANSFER(36),
+    GET_LOCATION_N_STOPS(37),
+    GET_LOCATION(38),
+    GET_GENDER(39),
+    GET_SOCIAL_CATEGORY(40),
+    GET_EMP_TYPE(41),
+    GET_RELATION(42),
+    GET_STAFF_TYPE(43),
+    GET_ROUTE_TYPE(44),
+    GET_LOCATION_FOR_STOPS(45),
+    ADD_STOP(46),
+    GET_STOPS(47),
+    REMOVE_STOP(48),
+    EDIT_STOP(49),
+    GET_OTHER_STOPS(50),
+    ADD_ADDA(51),
+    EDIT_ADDA(52),
+    REMOVE_ADDA(53),
+    GET_ADDA(54),
+    GET_OTP(55),
+    VERIFY_OTP(56),
+    RESET_PASSWORD(57),
+    GET_DEPOTS_SEARCH(58),
+    GET_STAFF_SEARCH(59),
+    GET_VEHICLE_SEARCH(60),
+    GET_ROUTES_SEARCH(61),
+    GET_RECORD_SEARCH(62),
+    GET_ADDA_SEARCH(63),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    IDK_TASK(99999)
+    ;
+
+
+    int value; private TaskType(int value) { this.value = value; }
+}

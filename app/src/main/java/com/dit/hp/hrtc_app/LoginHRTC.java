@@ -1,0 +1,314 @@
+package com.dit.hp.hrtc_app;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
+import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
+import com.dit.hp.hrtc_app.Modals.SuccessResponse;
+import com.dit.hp.hrtc_app.Modals.UploadObject;
+import com.dit.hp.hrtc_app.Modals.User;
+import com.dit.hp.hrtc_app.Presentation.CustomDialog;
+import com.dit.hp.hrtc_app.crypto.AESCrypto;
+import com.dit.hp.hrtc_app.enums.TaskType;
+import com.dit.hp.hrtc_app.interfaces.ShubhAsyncTaskListenerGet;
+import com.dit.hp.hrtc_app.json.JsonParse;
+import com.dit.hp.hrtc_app.utilities.AppStatus;
+import com.dit.hp.hrtc_app.utilities.Econstants;
+import com.dit.hp.hrtc_app.utilities.Preferences;
+
+import org.json.JSONException;
+
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+
+
+public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListenerGet {
+
+//    Interface for service calls: ShubhAsyncTaskListenerGet
+//    Interface for login: ShubhAsyncTaskListenerPost
+
+    EditText userName, password;
+    Button signInBtn;
+
+    CustomDialog CD = new CustomDialog();
+
+    Button forgotPassBtn;
+    AESCrypto aesCrypto = new AESCrypto();
+
+    private static final int STORAGE_PERMISSION_REQUEST_CODE = 100;
+    private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 101;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_hrtc_login);
+
+        userName = findViewById(R.id.userName);
+        password = findViewById(R.id.password);
+        signInBtn = findViewById(R.id.signIn);
+        forgotPassBtn = findViewById(R.id.forgotPassBtn);
+
+//        userName.setText("user1");
+        userName.setText("Admin");
+        password.setText("1234");
+
+        // Check Permissions During Login
+        checkStoragePermission();
+        checkNotificationPermission();
+
+        signInBtn.setOnClickListener(v -> {
+            if (!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+                Log.i("ID", "ID: " + userName.getText().toString().trim());
+                Log.i("Pass", "Pass: " + password.getText().toString());
+
+                if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
+                    UploadObject uploadObject = new UploadObject();
+                    uploadObject.setUrl(Econstants.base_url);
+                    uploadObject.setMethordName("/login/Auth?");
+                    uploadObject.setTasktype(TaskType.LOGIN_HRTC);
+                    uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+                    Map<String, String> params = new HashMap<>();
+                    try {
+                        // Encrypt user credentials
+                        String encrypteduserName = aesCrypto.encrypt(userName.getText().toString().trim());
+                        String encryptedPassword = aesCrypto.encrypt(password.getText().toString());
+
+                        // Add encrypted + encoded data to params
+                        params.put("username", URLEncoder.encode(encrypteduserName, "UTF-8"));
+                        params.put("password", URLEncoder.encode(encryptedPassword, "UTF-8"));
+
+                        // Encode Params for PUT Request
+                        String encParams = buildParams(params); // Method to build params to append in URL
+                        Log.i("Login Params: ", encParams);
+                        uploadObject.setParam(encParams);
+
+                    } catch (Exception e) {
+                        Log.e("Encryption Error", e.getMessage());
+                    }
+
+                    new ShubhAsyncGet(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC).execute(uploadObject);
+                    Log.i("JSON For Login: ", uploadObject.getParam());
+
+                } else {
+                    CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
+                }
+            } else {
+                CD.showDialog(LoginHRTC.this, "Please enter valid Username and Password");
+            }
+        });
+
+        forgotPassBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginHRTC.this, ResetPassword.class);
+            startActivity(intent);
+        });
+
+    }
+
+
+    // Check and Request Storage Permissions (API 29 and below)
+    private void checkStoragePermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            // For Android 10 and below
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
+
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Check for API 33+
+            // Check if the notification permission is granted
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                // Request permission if not granted
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        NOTIFICATION_PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
+
+
+    // Handle Permission Results
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case STORAGE_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    Log.d("Permission", "Storage Permission Granted");
+                } else {
+                    // Permission denied, show rationale
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        // Show rationale dialog
+                        showPermissionRationaleDialog(
+                                "Storage permission is required to access and save files.",
+                                (dialog, which) -> {
+                                    // Re-request permission when user presses OK
+                                    ActivityCompat.requestPermissions(this, new String[]{
+                                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
+                                }
+                        );
+                    } else {
+                        // Permission permanently denied, guide user to settings
+//                        Toast.makeText(this, "Storage permission denied. Please enable it from settings.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+
+            case NOTIFICATION_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    Log.d("Permission", "Notification Permission Granted");
+                } else {
+                    // Permission denied, show rationale
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
+                        // Show rationale dialog
+                        showPermissionRationaleDialog(
+                                "Notification permission is required to receive updates from the app.",
+                                (dialog, which) -> {
+                                    // Re-request permission when user presses OK
+                                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                                            NOTIFICATION_PERMISSION_REQUEST_CODE);
+                                }
+                        );
+                    } else {
+                        // Permission permanently denied, guide user to settings
+//                        Toast.makeText(this, "Notification permission denied. Please enable it from settings.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+    }
+
+    // Helper function to show rationale dialog
+    private void showPermissionRationaleDialog(String message, DialogInterface.OnClickListener onPositiveClickListener) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", onPositiveClickListener)
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+
+
+    // Custom method to encode Params.. when params are not JSON.. PUT Request to edit
+    private String buildParams(Map<String, String> params) {
+        StringBuilder paramBuilder = new StringBuilder();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (paramBuilder.length() > 0) {
+                paramBuilder.append("&");
+            }
+            paramBuilder.append(entry.getKey()).append("=").append(entry.getValue());
+        }
+        return paramBuilder.toString();
+    }
+
+
+    // Handle Result for MANAGE_EXTERNAL_STORAGE (Android 11+)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    Log.d("Permission", "Manage External Storage Permission Granted");
+                } else {
+                    Log.d("Permission", "Manage External Storage Permission Denied");
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void onTaskCompleted(ResponsePojoGet responseObject, TaskType taskType) throws JSONException {
+
+        // Login Task Type
+        if (TaskType.LOGIN_HRTC == taskType) {
+            Log.i("ASYNC TASK COMPLETED", "TASK TYPE IS HRTC LOGIN.. CHECKED");
+            SuccessResponse successResponse = null;
+
+            // responseObject will be null if invalid id pass
+            if (responseObject != null) {
+
+                successResponse = JsonParse.getDecryptedSuccessResponse(responseObject.getResponse());
+
+                // Status from response matches 200
+                if (successResponse.getStatus().equalsIgnoreCase("OK")) {
+                    Log.i("Login Response", successResponse.getData());
+
+                    // Parse the user details
+                    User user = JsonParse.parseDecryptedUserInfo(successResponse.getData());
+                    if (user != null) {
+                        Log.i("LoginActivity", "User Login As: " + user.toString());
+
+                        Intent loginIntent = new Intent(LoginHRTC.this, Homescreen.class); //MainActivity
+
+                        // Saving preferences
+                        Preferences.getInstance().empId = user.getEmpId();
+                        Preferences.getInstance().roleId = user.getRoleId();
+                        Preferences.getInstance().roleName = user.getRoleName();
+                        Preferences.getInstance().depotId = user.getId();
+                        Preferences.getInstance().depotName = user.getDepotName();
+                        Preferences.getInstance().userName = user.getuserName();
+                        Preferences.getInstance().token = user.getToken();
+                        Preferences.getInstance().savePreferences(this);
+
+                        LoginHRTC.this.startActivity(loginIntent);
+                        LoginHRTC.this.finish();
+
+                    } else if (successResponse.getStatus().equals(Integer.toString(HttpsURLConnection.HTTP_GONE))) {
+                        Log.i("Login Response Invalid ID/Pass", successResponse.getData());
+                        CD.showDialog(this, "Please enter correct username and password");
+
+                    } else {
+                        CD.showDialog(this, "Please connect to the internet");
+                    }
+
+                } else if (successResponse.getStatus().equalsIgnoreCase("NOT_FOUND")) {
+                    CD.showDialog(this, "Please enter correct username and password");
+                } else {
+                    Log.i("LoginHRTC", "Response is null");
+                    CD.showDialog(this, "Something went wrong. Check your connection.");
+                }
+            } else {
+                Log.i("LoginHRTC", "Response is null");
+                CD.showDialog(this, "Something went wrong. Check your connection.");
+            }
+
+
+        }
+
+    }
+
+
+}

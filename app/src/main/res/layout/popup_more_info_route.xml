@@ -1,0 +1,208 @@
+<!-- res/layout/dialog_more_info.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_bg"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/card_bg"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="MORE INFORMATION"
+        android:textColor="@color/hrtc_green"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Info Table -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/card_bg"
+                    android:elevation="5dp"
+                    android:stretchColumns="1">
+
+                    <!-- Row: Route ID -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="Route ID:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/routeId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:textAllCaps="true" />
+                    </TableRow>
+
+                    <!-- Row: Route Name -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="Route Name:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/routeName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp" />
+                    </TableRow>
+
+                    <!-- Row: Start Time -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="Start Time:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/startTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp" />
+                    </TableRow>
+
+                    <!-- Row: Distance -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="Distance:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp" />
+                    </TableRow>
+
+
+                    <!-- Row: Journey Hours -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="Journey Hours: \n(in mins)"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/journeyHours"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp" />
+                    </TableRow>
+
+
+                    <!-- Row: Start Location Name -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="Start Location:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/startLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp" />
+                    </TableRow>
+
+                    <!-- Row: End Location Name -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="End Location:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/endLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp" />
+                    </TableRow>
+
+                    <!-- Row: Route Type -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="Route Type:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/routeType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp" />
+                    </TableRow>
+
+                    <!-- Row: Depot Name -->
+                    <TableRow android:elevation="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="Route Depot:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/depotName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp" />
+                    </TableRow>
+
+                </TableLayout>
+
+            </ScrollView>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+</LinearLayout>

@@ -1,0 +1,58 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.dit.hp.hrtc_app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.dit.hp.hrtc_app"
+        minSdk 29  // Min Version 29 to Support Searchable Spinner + HttpManager works better with API 30+
+        targetSdk 34
+
+        // Version Codes here
+        versionCode 4
+        versionName "v4.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    // Module Dependency
+    implementation project(path: ':spinnersearchable')
+
+    // Maps
+//    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    // Draggable Route Stops
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+    // Excel Download
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    implementation libs.retrofit
+    implementation libs.retrofit.gson
+    implementation libs.gson
+    implementation libs.espresso.core
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+}

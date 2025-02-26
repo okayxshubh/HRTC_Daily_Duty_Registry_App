@@ -1,0 +1,287 @@
+<!-- res/layout/popup_more_info_register.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_bg"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/card_bg"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="MORE INFORMATION"
+        android:textColor="@color/hrtc_green"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Horizontal Scroll View -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="horizontal">
+
+        <!-- Info Table -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/card_bg"
+                android:elevation="5dp"
+                android:stretchColumns="1">
+
+                <!-- Standard fields -->
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:padding="4dp"
+                        android:text="Date:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:padding="4dp"
+                        android:text="Departure Time:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/departureTime"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <!--Route-->
+                <!--            <TableRow android:elevation="5dp">-->
+                <!--                <TextView android:text="Route ID:" android:textStyle="bold" android:padding="4dp" />-->
+                <!--                <TextView android:id="@+id/routeId" android:padding="4dp" />-->
+                <!--            </TableRow>-->
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:padding="4dp"
+                        android:text="Route Name:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/routeName"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <!-- Action Performed-->
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:padding="4dp"
+                        android:text="Action Performed:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/actionPerformed"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <!--CURTAILED STOP NAME-->
+<!--                <TableRow android:elevation="5dp" android:id="@+id/curtailedStopTR">-->
+<!--                    <TextView-->
+<!--                        android:padding="4dp"-->
+<!--                        android:text="Curtailed Stop Name:"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/curtailedStopName"-->
+<!--                        android:padding="4dp" />-->
+<!--                </TableRow>-->
+
+                <!-- Final route and stops -->
+                <TableRow
+                    android:id="@+id/otherRouteNameTR"
+                    android:elevation="5dp">
+
+                    <TextView
+                        android:padding="4dp"
+                        android:text="Other Route Name:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/otherRouteName"
+                        android:padding="4dp" />
+                </TableRow>
+
+
+
+                <!--LOCATION-->
+<!--                <TableRow android:elevation="5dp">-->
+
+<!--                    <TextView-->
+<!--                        android:padding="4dp"-->
+<!--                        android:text="Start Location:"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/routeStartLocation"-->
+<!--                        android:padding="4dp" />-->
+<!--                </TableRow>-->
+<!--                -->
+<!--                <TableRow android:elevation="5dp">-->
+
+<!--                    <TextView-->
+<!--                        android:padding="4dp"-->
+<!--                        android:text="End Location:"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/routeEndLocation"-->
+<!--                        android:padding="4dp" />-->
+<!--                </TableRow>-->
+<!--                -->
+
+
+                <!--            <TableRow android:elevation="5dp" android:id="@+id/finalStopNameTR">-->
+                <!--                <TextView android:text="Final Stop Name:" android:textStyle="bold" android:padding="4dp" />-->
+                <!--                <TextView android:id="@+id/finalStopName" android:padding="4dp" />-->
+                <!--            </TableRow>-->
+
+
+                <!--Adda-->
+                <!--            <TableRow android:elevation="5dp">-->
+                <!--                <TextView android:text="Adda Number:" android:textStyle="bold" android:padding="4dp" />-->
+                <!--                <TextView android:id="@+id/addaNo" android:padding="4dp" />-->
+                <!--            </TableRow>-->
+                <!--            <TableRow android:elevation="5dp">-->
+                <!--                <TextView android:text="Adda Location:" android:textStyle="bold" android:padding="4dp" />-->
+                <!--                <TextView android:id="@+id/addaLocation" android:padding="4dp" />-->
+                <!--            </TableRow>-->
+
+                <!-- Vehicle -->
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:padding="4dp"
+                        android:text="Vehicle Number:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/vehicleNo"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <!-- Driver -->
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:padding="4dp"
+                        android:text="Driver:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/driverName"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <!-- Conductor -->
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:padding="4dp"
+                        android:text="Conductor:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/conductorName"
+                        android:padding="4dp" />
+                </TableRow>
+
+
+
+                    <!-- Relieving driver and conductor -->
+                    <TableRow android:elevation="5dp" android:id="@+id/relievingDriverNameTR">
+                        <TextView
+                            android:padding="4dp"
+                            android:text="Relieving Driver:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/relievingDriverName"
+                            android:padding="4dp" />
+                    </TableRow>
+
+                    <!-- Relieving Stops -->
+<!--                    <TableRow android:elevation="5dp" android:id="@+id/relievingDriverStopNameTR">-->
+
+<!--                        <TextView-->
+<!--                            android:padding="4dp"-->
+<!--                            android:text="Relieving Driver's Stop:"-->
+<!--                            android:textStyle="bold" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/relievingStopDriverName"-->
+<!--                            android:padding="4dp" />-->
+<!--                    </TableRow>-->
+
+                    <TableRow android:elevation="5dp" android:id="@+id/relievingConductorNameTR">
+
+                        <TextView
+                            android:padding="4dp"
+                            android:text="Relieving Conductor:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/relievingConductorName"
+                            android:padding="4dp" />
+                    </TableRow>
+
+<!--                    <TableRow android:elevation="5dp" android:id="@+id/relievingConductorStopNameTR">-->
+
+<!--                        <TextView-->
+<!--                            android:padding="4dp"-->
+<!--                            android:text="Relieving Conductor's Stop:"-->
+<!--                            android:textStyle="bold" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/relievingStopConductorName"-->
+<!--                            android:padding="4dp" />-->
+<!--                    </TableRow>-->
+
+
+                <TableRow
+                    android:layout_marginTop="5dp"
+                    android:elevation="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="4dp"
+                        android:text="Remarks:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/remarks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:padding="4dp"
+                        android:scrollHorizontally="false"
+                        android:singleLine="false" />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </HorizontalScrollView>
+</LinearLayout>

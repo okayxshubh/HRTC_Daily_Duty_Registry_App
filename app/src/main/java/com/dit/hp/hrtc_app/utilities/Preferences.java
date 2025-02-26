@@ -1,0 +1,90 @@
+
+
+package com.dit.hp.hrtc_app.utilities;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+public class Preferences {
+
+    private static Preferences instance;
+    private final String preferenceName = "com.dit.hp.hrtc_app";
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+
+    // Key Names
+    private final String KEY_USER_NAME = "userName";
+    private final String KEY_ROLE_ID = "roleId";
+    private final String KEY_ROLE_NAME = "roleName";
+    private final String KEY_DEPOT_ID = "depotId";
+    private final String KEY_DEPOT_NAME = "depotName";
+    private final String KEY_EMP_ID = "empId";
+    private final String KEY_TOKEN = "token";
+
+    // Instance Variables
+    public Integer empId;
+    public String depotName = null;
+    public Integer roleId;
+    public String roleName = null;
+    public Integer depotId;
+    public String userName = null;
+    public String token = null;
+
+    // Singleton Constructor
+    private Preferences() {
+    }
+
+    // Singleton Instance
+    public synchronized static Preferences getInstance() {
+        if (instance == null) {
+            instance = new Preferences();
+        }
+        return instance;
+    }
+
+    // Load Preferences
+    public void loadPreferences(Context context) {
+        if (context == null) return;
+
+        preferences = context.getSharedPreferences(preferenceName, Activity.MODE_PRIVATE);
+
+        // Load values and handle `-1` as `null` for integers
+        int empIdValue = preferences.getInt(KEY_EMP_ID, -1);
+        empId = (empIdValue == -1) ? null : empIdValue;
+
+        depotName = preferences.getString(KEY_DEPOT_NAME, null);
+
+        int roleIdValue = preferences.getInt(KEY_ROLE_ID, -1);
+        roleId = (roleIdValue == -1) ? null : roleIdValue;
+
+        roleName = preferences.getString(KEY_ROLE_NAME, null);
+
+        int depotIdValue = preferences.getInt(KEY_DEPOT_ID, -1);
+        depotId = (depotIdValue == -1) ? null : depotIdValue;
+
+        userName = preferences.getString(KEY_USER_NAME, null);
+
+        token = preferences.getString(KEY_TOKEN, null);
+    }
+
+
+    // Save Preferences
+    public void savePreferences(Context context) {
+        if (context == null) return;
+
+        preferences = context.getSharedPreferences(preferenceName, Activity.MODE_PRIVATE);
+        editor = preferences.edit();
+
+        // Save integer values and handle null
+        editor.putInt(KEY_EMP_ID, empId == null ? -1 : empId);
+        editor.putString(KEY_DEPOT_NAME, depotName);
+        editor.putInt(KEY_ROLE_ID, roleId == null ? -1 : roleId);
+        editor.putString(KEY_ROLE_NAME, roleName);
+        editor.putInt(KEY_DEPOT_ID, depotId == null ? -1 : depotId);
+        editor.putString(KEY_USER_NAME, userName);
+        editor.putString(KEY_TOKEN, token);
+
+        editor.apply(); // Apply changes asynchronously
+    }
+}

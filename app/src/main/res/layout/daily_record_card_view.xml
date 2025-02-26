@@ -1,0 +1,224 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="160dp"
+    android:layout_margin="8dp"
+    android:paddingBottom="5dp"
+    app:cardElevation="5dp"
+    android:background="@drawable/customborder_dialog"
+    android:elevation="12dp"
+    app:cardCornerRadius="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:id="@+id/headTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_semibold"
+            android:paddingStart="30dp"
+            android:paddingEnd="40dp"
+            android:text="Shimla Rohru Via Jubbal"
+            android:textAlignment="center"
+            android:textColor="@color/hrtc_green"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.115" />
+
+
+        <TextView
+            android:id="@+id/driverTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:text="Driver Name"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/L1TV"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/L1TV"
+            app:layout_constraintTop_toBottomOf="@+id/L1TV" />
+
+        <ImageView
+            android:id="@+id/driverImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/steering"
+            app:layout_constraintBottom_toBottomOf="@+id/driverTV"
+            app:layout_constraintEnd_toStartOf="@+id/driverTV"
+            app:layout_constraintHorizontal_bias="0.703"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/driverTV"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/staffTypeImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/number_plate"
+            app:layout_constraintBottom_toBottomOf="@+id/L1TV"
+            app:layout_constraintEnd_toStartOf="@+id/L1TV"
+            app:layout_constraintHorizontal_bias="0.813"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/L1TV"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/L1TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:text="HP03C7827"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.197"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headTV" />
+
+        <ImageView
+            android:id="@+id/conductorImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ticket"
+            app:layout_constraintBottom_toBottomOf="@+id/conductorTV"
+            app:layout_constraintEnd_toStartOf="@+id/conductorTV"
+            app:layout_constraintHorizontal_bias="0.813"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/driverImageView"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/conductorTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:text="Conductor Name"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/driverTV"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/driverTV"
+            app:layout_constraintTop_toBottomOf="@+id/driverTV" />
+
+        <TextView
+            android:id="@+id/L2TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="80dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:text="11/11/2024"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headTV" />
+
+        <ImageView
+            android:id="@+id/timeImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/time"
+            app:layout_constraintBottom_toBottomOf="@+id/L2TV"
+            app:layout_constraintEnd_toStartOf="@+id/L2TV"
+            app:layout_constraintTop_toTopOf="@+id/L2TV"
+            app:layout_constraintVertical_bias="0.333" />
+
+        <ImageView
+            android:id="@+id/calenderImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/calendar"
+            app:layout_constraintBottom_toBottomOf="@+id/deptTimeTV"
+            app:layout_constraintEnd_toStartOf="@+id/deptTimeTV"
+            app:layout_constraintTop_toTopOf="@+id/deptTimeTV"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/deptTimeTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:text="22:00"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/L2TV"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/L2TV"
+            app:layout_constraintTop_toBottomOf="@+id/L2TV" />
+
+        <ImageButton
+            android:id="@+id/editBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/raleway_semibold"
+            android:padding="16dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/edit"
+            android:tooltipText="Edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.985"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/deleteBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="More Info"
+            android:fontFamily="@font/raleway_semibold"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/more_info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.985"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/routeActionImageView"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:background="?attr/selectableItemBackground"-->
+<!--            android:contentDescription="More Info"-->
+<!--            android:fontFamily="@font/raleway_semibold"-->
+<!--            android:padding="10dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:tooltipText="routeAction"-->
+<!--            android:src="@drawable/about_us"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintVertical_bias="0.0" />-->
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

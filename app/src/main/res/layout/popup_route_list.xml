@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/home_white_bg">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:id="@+id/a"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/top_rounded_green"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/text_in_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pick Route"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:fontFamily="@font/raleway_semibold"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/routeSearchPopup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search Routes"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/customborder_dialog"
+        android:textSize="16sp"
+        android:textColor="@color/black" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/popupRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/routes_card_view"
+        android:padding="5dp" />
+
+<!--    <Button-->
+<!--        android:id="@+id/assignRoutesButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:background="@color/green"-->
+<!--        android:text="Assign Routes"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textStyle="bold" />-->
+
+</LinearLayout>
