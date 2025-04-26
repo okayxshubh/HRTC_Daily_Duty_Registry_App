@@ -224,8 +224,12 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
 
             // Define the headers
             String[] headers = {
-                    "ID", "Route Name", "Action Taken", "Extended Route", "Curtailed Stoppage Name",
-                    "Driver Name", "Conductor Name", "Relieving Driver Name", "Relieving Conductor Name",
+                    "ID", "Route Name",
+                    "Start Time", "Start Location",
+                    "End Time", "End Location",
+                    "Driver Name", "Conductor Name",
+                    "Action Taken", "Extended Route", "Curtailed Stoppage Name",
+                    "Relieving Driver Name", "Relieving Conductor Name",
                     "Relieving Driver Stoppage", "Relieving Conductor Stoppage"
             };
 
@@ -247,58 +251,81 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
                 // Use the optString method with "N/A" as the default value for missing fields
                 row.createCell(0).setCellValue(jsonObject.optString("id", "N/A")); // Move ID to the first column
                 row.createCell(1).setCellValue(jsonObject.optString("route_name", "N/A"));
+                row.createCell(2).setCellValue(jsonObject.optString("start_time", "N/A"));
+
+                if (jsonObject.optString("start_location") == null || (jsonObject.optString("start_location")).equalsIgnoreCase("null")) {
+                    row.createCell(3).setCellValue("N/A");
+                } else {
+                    row.createCell(3).setCellValue(jsonObject.optString("start_location", "N/A"));
+                }
+
+
+                //end_time
+                row.createCell(4).setCellValue(jsonObject.optString("end_time", "N/A"));
+
+                // end_location
+                if (jsonObject.optString("end_location") == null || (jsonObject.optString("end_location")).equalsIgnoreCase("null")) {
+                    row.createCell(5).setCellValue("N/A");
+                } else {
+                    row.createCell(5).setCellValue(jsonObject.optString("end_location", "N/A"));
+                }
+
+
+                row.createCell(6).setCellValue(jsonObject.optString("driver_name", "N/A"));
+                row.createCell(7).setCellValue(jsonObject.optString("conductor_name", "N/A"));
+
+
 
                 // Action Taken
                 if (jsonObject.optString("action_taken") == null || (jsonObject.optString("action_taken")).equalsIgnoreCase("null")) {
-                    row.createCell(2).setCellValue("N/A");
+                    row.createCell(8).setCellValue("N/A");
                 } else {
-                    row.createCell(2).setCellValue(jsonObject.optString("action_taken", "N/A"));
+                    row.createCell(8).setCellValue(jsonObject.optString("action_taken", "N/A"));
                 }
 
                 // Extended Stop Name
                 if (jsonObject.optString("extended_route") == null || (jsonObject.optString("extended_route")).equalsIgnoreCase("null")) {
-                    row.createCell(3).setCellValue("N/A");
+                    row.createCell(9).setCellValue("N/A");
                 } else {
-                    row.createCell(3).setCellValue(jsonObject.optString("extended_route", "N/A"));
+                    row.createCell(9).setCellValue(jsonObject.optString("extended_route", "N/A"));
                 }
 
                 // Curtailed Stop Name
                 if (jsonObject.optString("curtailed_stoppage_name") == null || (jsonObject.optString("curtailed_stoppage_name")).equalsIgnoreCase("null")) {
-                    row.createCell(4).setCellValue("N/A");
+                    row.createCell(10).setCellValue("N/A");
                 } else {
-                    row.createCell(4).setCellValue(jsonObject.optString("curtailed_stoppage_name", "N/A"));
+                    row.createCell(10).setCellValue(jsonObject.optString("curtailed_stoppage_name", "N/A"));
                 }
 
-                row.createCell(5).setCellValue(jsonObject.optString("driver_name", "N/A"));
-                row.createCell(6).setCellValue(jsonObject.optString("conductor_name", "N/A"));
+
 
 
                 // Relieving Driver
                 if (jsonObject.optString("relieving_driver_name") == null || (jsonObject.optString("relieving_driver_name")).equalsIgnoreCase("null")) {
-                    row.createCell(7).setCellValue("N/A");
+                    row.createCell(11).setCellValue("N/A");
                 } else {
-                    row.createCell(7).setCellValue(jsonObject.optString("relieving_driver_name", "N/A"));
+                    row.createCell(11).setCellValue(jsonObject.optString("relieving_driver_name", "N/A"));
                 }
 
                 // Relieving Conductor
                 if (jsonObject.optString("relieving_conductor_name") == null || (jsonObject.optString("relieving_conductor_name")).equalsIgnoreCase("null")) {
-                    row.createCell(8).setCellValue("N/A");
+                    row.createCell(12).setCellValue("N/A");
                 } else {
-                    row.createCell(8).setCellValue(jsonObject.optString("relieving_conductor_name", "N/A"));
+                    row.createCell(12).setCellValue(jsonObject.optString("relieving_conductor_name", "N/A"));
                 }
 
                 // Relieving Driver Stop
                 if (jsonObject.optString("relieving_driver_stoppage") == null || (jsonObject.optString("relieving_driver_stoppage")).equalsIgnoreCase("null")) {
-                    row.createCell(9).setCellValue("N/A");
+                    row.createCell(13).setCellValue("N/A");
                 } else {
-                    row.createCell(9).setCellValue(jsonObject.optString("relieving_driver_stoppage", "N/A"));
+                    row.createCell(13).setCellValue(jsonObject.optString("relieving_driver_stoppage", "N/A"));
                 }
 
                 // Relieving Conductor Stop
                 if (jsonObject.optString("relieving_conductor_stoppage") == null || (jsonObject.optString("relieving_conductor_stoppage")).equalsIgnoreCase("null")) {
-                    row.createCell(10).setCellValue("N/A");
+                    row.createCell(14).setCellValue("N/A");
                 } else {
-                    row.createCell(10).setCellValue(jsonObject.optString("relieving_conductor_stoppage", "N/A"));
+                    row.createCell(14).setCellValue(jsonObject.optString("relieving_conductor_stoppage", "N/A"));
                 }
             }
 
@@ -319,6 +346,7 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
             Toast.makeText(this, "Error creating Excel: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     public void downloadExcel(String base64Data, String fileName) {
@@ -453,12 +481,11 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
                 Log.i("Bus Details", "Response Obj" + result.toString());
 
                 if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
+                    Log.e("Response", result.getResponse());
                     response = JsonParse.getSuccessResponse(result.getResponse());
                     Log.e("Response", response.toString());
-                    Log.e("Response", result.getResponse());
 
                     if (response.getStatus().equalsIgnoreCase("OK")) {
-
                         // Getting base 64 data.. Response.getResponse() is whatever is inside the key: data
                         Log.i("DownloadRecord", "Fetched Base64 Data: " + response.getData());
                         String base64Data = response.getData();

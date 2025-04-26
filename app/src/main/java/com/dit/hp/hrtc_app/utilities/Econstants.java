@@ -18,7 +18,7 @@ public class Econstants {
 
     // Search Delay
     public static final Integer SEARCH_DELAY = 700;
-    public static final Integer PAGE_SIZE = 10;
+    public static final Integer PAGE_SIZE = 30;
 
 
     // OTHERS: for appending correct url in HttpManager

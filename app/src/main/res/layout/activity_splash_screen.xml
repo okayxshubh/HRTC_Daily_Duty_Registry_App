@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:fontFamily="@font/raleway_semibold"
-            android:text="\u00A9 2024 Department of Digital Technologies and Governance"
+            android:text="\u00A9 2025 Department of Digital Technologies and Governance"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>

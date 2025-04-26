@@ -70,8 +70,6 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
     private int currentPage = 0;  // Current page index
     private final int pageSize = Econstants.PAGE_SIZE;  // Number of records per page
 
-
-
     private static final int UPDATE_REQUEST_CODE = 1;
     private static final int TRANSFER_REQUEST_CODE = 2;
 

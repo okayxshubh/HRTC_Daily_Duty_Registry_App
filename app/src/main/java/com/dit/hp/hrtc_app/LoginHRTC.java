@@ -70,8 +70,9 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         forgotPassBtn = findViewById(R.id.forgotPassBtn);
 
 //        userName.setText("user1");
+//        userName.setText("Admin");
         userName.setText("Admin");
-        password.setText("1234");
+        password.setText("Admin@1234");
 
         // Check Permissions During Login
         checkStoragePermission();

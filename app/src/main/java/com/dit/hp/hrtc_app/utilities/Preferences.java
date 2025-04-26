@@ -8,10 +8,14 @@ import android.content.SharedPreferences;
 
 public class Preferences {
 
+    // Singleton Instance of This Class
     private static Preferences instance;
-    private final String preferenceName = "com.dit.hp.hrtc_app";
+
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+
+    // Just like an Econstant Name
+    private final String preferenceName = "com.dit.hp.hrtc_app";
 
     // Key Names
     private final String KEY_USER_NAME = "userName";

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -62,8 +61,7 @@
             android:src="@drawable/hp" />
     </LinearLayout>
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/body_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -76,16 +74,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingEnd="10dp"
             android:orientation="horizontal"
+            android:paddingEnd="10dp"
             android:weightSum="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.8"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_weight="0.8"
                 android:background="@drawable/search_view_background"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -105,14 +103,14 @@
 
             <ImageButton
                 android:id="@+id/addBtn"
-                android:layout_weight="0.2"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:padding="5dp"
+                android:layout_weight="0.2"
                 android:background="?attr/selectableItemBackground"
+                android:padding="5dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/add_entity"
-                android:tooltipText="Add"/>
+                android:tooltipText="Add" />
 
         </LinearLayout>
 
@@ -142,8 +140,8 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="5dp"
                     android:background="@drawable/home_white_bg"
+                    android:padding="5dp"
                     tools:listitem="@layout/daily_record_card_view" />
 
             </ScrollView>
@@ -207,7 +205,7 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/raleway_semibold"
         android:gravity="center"
-        android:text="\u00A9 2024 Department of Digital Technologies and Governance"
+        android:text="\u00A9 2025 Department of Digital Technologies and Governance"
         android:textColor="@color/hrtc_green"
         android:textSize="16sp"
         android:textStyle="bold"
