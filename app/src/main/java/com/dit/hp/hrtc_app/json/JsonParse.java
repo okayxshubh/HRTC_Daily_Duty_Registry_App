@@ -4,18 +4,28 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.dit.hp.hrtc_app.Modals.AddaPojo;
+import com.dit.hp.hrtc_app.Modals.AdditonalChargePojo;
 import com.dit.hp.hrtc_app.Modals.CastePojo;
 import com.dit.hp.hrtc_app.Modals.DailyRegisterCardFinal;
+import com.dit.hp.hrtc_app.Modals.DepartmentPojo;
 import com.dit.hp.hrtc_app.Modals.DepotPojo;
+import com.dit.hp.hrtc_app.Modals.DesignationPojo;
+import com.dit.hp.hrtc_app.Modals.EmployeePojo;
 import com.dit.hp.hrtc_app.Modals.EmploymentTypePojo;
 import com.dit.hp.hrtc_app.Modals.GenderPojo;
+import com.dit.hp.hrtc_app.Modals.HimAccessUser;
+import com.dit.hp.hrtc_app.Modals.HimAccessUserInfo;
 import com.dit.hp.hrtc_app.Modals.LocationsPojo;
+import com.dit.hp.hrtc_app.Modals.OfficePojo;
+import com.dit.hp.hrtc_app.Modals.OfficeTypePojo;
+import com.dit.hp.hrtc_app.Modals.OrganisationPojo;
 import com.dit.hp.hrtc_app.Modals.RoutePojo;
 import com.dit.hp.hrtc_app.Modals.RouteTypePojo;
 import com.dit.hp.hrtc_app.Modals.StaffPojo;
 import com.dit.hp.hrtc_app.Modals.StaffTypePojo;
 import com.dit.hp.hrtc_app.Modals.StopPojo;
 import com.dit.hp.hrtc_app.Modals.SuccessResponse;
+import com.dit.hp.hrtc_app.Modals.TokenInfo;
 import com.dit.hp.hrtc_app.Modals.User;
 import com.dit.hp.hrtc_app.Modals.VehiclePojo;
 import com.dit.hp.hrtc_app.Modals.VehicleTypePojo;
@@ -57,7 +67,6 @@ public class JsonParse {
 
         return sr;
     }
-    
 
     public static User parseDecryptedUserInfo(String response) {
         User user = null;
@@ -80,6 +89,165 @@ public class JsonParse {
         }
 
         return user;
+    }
+
+    public static HimAccessUser parseDecryptedHimAccessUserInfo(String response) {
+        HimAccessUser user = null;
+        try {
+            JSONObject userData = new JSONObject(response);
+
+            user = new HimAccessUser();
+            user.setFirstName(userData.optString("firstName"));
+            user.setUid(userData.optString("uid"));
+            user.setMail(userData.optString("mail"));
+            user.setMobile(userData.optString("mobile"));
+            user.setDateOfRetirement(userData.optString("dateOfRetirement"));
+            user.setDateOfBirth(userData.optString("dateOfBirth"));
+            user.setCn(userData.optString("cn"));
+            user.setSn(userData.optString("sn"));
+            user.setDesignation(userData.optString("designation")); // null-safe
+            user.setDepartment(userData.optString("department"));   // null-safe
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+    public static TokenInfo parseTokenInfo(String dataString) {
+        try {
+            // Clean escape characters if any
+            dataString = dataString.replace("\\", "");
+            if (dataString.startsWith("\"")) {
+                dataString = dataString.substring(1, dataString.length() - 1);
+            }
+
+            // Directly parse JSONArray
+            JSONArray dataArray = new JSONArray(dataString);
+            JSONObject item = dataArray.getJSONObject(0);
+
+            TokenInfo info = new TokenInfo();
+            info.setEmail(item.optString("email"));
+            info.setSuccessUrl(item.optString("successUrl"));
+            info.setToken(item.optString("token"));
+            info.setTokenValidTill(item.optString("tokenValidTill"));
+
+            return info;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public static HimAccessUserInfo parseUserInfoPojo(String data) {
+
+        HimAccessUserInfo himAccessUserInfo = new HimAccessUserInfo();
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                // Employee
+                EmployeePojo employee = new EmployeePojo();
+                employee.setEmpId(obj.optInt("empId"));
+                employee.setEmployeeName(obj.optString("employeeName"));
+                employee.setEmailId(obj.optString("emailId"));
+                employee.setPmisCode(obj.optString("pmisCode"));
+                employee.setSalaryCode(obj.optString("salaryCode"));
+                employee.setCadre(obj.optString("cadre"));
+                himAccessUserInfo.setEmployeePojo(employee);
+
+                // Basic Fields
+                himAccessUserInfo.setApplicationId(obj.optInt("applicationId"));
+                himAccessUserInfo.setApplicationName(obj.optString("applicationName"));
+                himAccessUserInfo.setServiceId(obj.optInt("serviceId"));
+                himAccessUserInfo.setServiceName(obj.optString("serviceName"));
+                himAccessUserInfo.setAppRoleId(obj.optInt("appRoleId"));
+                himAccessUserInfo.setRoleId(obj.optInt("roleId"));
+                himAccessUserInfo.setRoleName(obj.optString("roleName"));
+
+                // Organisation
+                OrganisationPojo organisation = new OrganisationPojo();
+                organisation.setOrganisationId(obj.optInt("orgId"));
+                organisation.setOrganisationName(obj.optString("orgName"));
+                himAccessUserInfo.setOrganisationPojo(organisation);
+
+                // Department
+                DepartmentPojo department = new DepartmentPojo();
+                department.setDepartmentId(obj.optInt("departmentId"));
+                department.setDepartmentName(obj.optString("departmentName"));
+                himAccessUserInfo.setMainDepartmentPojo(department);
+
+                // Designation
+                DesignationPojo designation = new DesignationPojo();
+                designation.setDesignationId(obj.optInt("desigId"));
+                designation.setDesignationName(obj.optString("desigName"));
+                himAccessUserInfo.setMainDesignationPojo(designation);
+
+                // OfficeType
+                OfficeTypePojo officeType = new OfficeTypePojo();
+                officeType.setOfficeTypeId(obj.optInt("officeTypeId"));
+                officeType.setOfficeTypeName(obj.optString("officeTypeName"));
+                himAccessUserInfo.setMainOfficeTypePojo(officeType);
+
+                // Office
+                OfficePojo office = new OfficePojo();
+                office.setOfficeId(obj.optInt("officeId"));
+                office.setOfficeName(obj.optString("officeName"));
+                himAccessUserInfo.setMainOffice(office);
+
+                // Additional Charge
+                JSONArray chargeArray = obj.optJSONArray("additionalChargeDetailDTO");
+                List<AdditonalChargePojo> chargeList = new ArrayList<>();
+
+                if (chargeArray != null) {
+                    for (int j = 0; j < chargeArray.length(); j++) {
+                        JSONObject chargeObj = chargeArray.getJSONObject(j);
+
+                        AdditonalChargePojo charge = new AdditonalChargePojo();
+
+                        DepartmentPojo dept = new DepartmentPojo();
+                        dept.setDepartmentId(chargeObj.optInt("departmentId"));
+                        dept.setDepartmentName(chargeObj.optString("departmentName"));
+                        charge.setDepartmentPojo(dept);
+
+                        DesignationPojo desig = new DesignationPojo();
+                        desig.setDesignationId(chargeObj.optInt("desigId"));
+                        desig.setDesignationName(chargeObj.optString("desigName"));
+                        charge.setDesignationPojo(desig);
+
+                        OfficeTypePojo offType = new OfficeTypePojo();
+                        offType.setOfficeTypeId(chargeObj.optInt("officeTypeId"));
+                        offType.setOfficeTypeName(chargeObj.optString("officeTypeName"));
+                        charge.setOfficeTypePojo(offType);
+
+                        OfficePojo off = new OfficePojo();
+                        off.setOfficeId(chargeObj.optInt("officeId"));
+                        off.setOfficeName(chargeObj.optString("officeName"));
+                        charge.setOfficePojo(off);
+
+                        charge.setChargeAssignedOn(chargeObj.optString("chargeAssignedOn"));
+                        charge.setChargeType(chargeObj.optString("chargeType"));
+
+                        chargeList.add(charge);
+                    }
+                }
+                himAccessUserInfo.setAdditionalChargeDetailDTO(chargeList);
+
+                // Unknown part
+//                himAccessUserInfo.setDdoOfficeDetails(new ArrayList<>()); // Placeholder
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return himAccessUserInfo;
     }
 
 
@@ -376,8 +544,6 @@ public class JsonParse {
 
         return staffList;
     }
-
-
 
 
 

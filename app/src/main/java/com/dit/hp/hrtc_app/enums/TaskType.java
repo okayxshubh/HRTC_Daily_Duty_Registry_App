@@ -4,6 +4,9 @@ public enum TaskType {
 
 
     LOGIN_HRTC(1),
+    GET_TOKEN(111),
+    GET_USER_DETAILS(112),
+
     GET_DRIVERS(2),
     GET_CONDUCTORS(3),
     GET_ROUTES(4),

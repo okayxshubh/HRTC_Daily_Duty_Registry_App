@@ -25,6 +25,7 @@ public class Preferences {
     private final String KEY_DEPOT_NAME = "depotName";
     private final String KEY_EMP_ID = "empId";
     private final String KEY_TOKEN = "token";
+    private final String KEY_TOKEN_HIMACCESS = "tokenHimAccess";
 
     // Instance Variables
     public Integer empId;
@@ -34,6 +35,7 @@ public class Preferences {
     public Integer depotId;
     public String userName = null;
     public String token = null;
+    public String tokenHimAccess = null;
 
     // Singleton Constructor
     private Preferences() {
@@ -70,6 +72,8 @@ public class Preferences {
         userName = preferences.getString(KEY_USER_NAME, null);
 
         token = preferences.getString(KEY_TOKEN, null);
+
+        tokenHimAccess = preferences.getString(KEY_TOKEN_HIMACCESS, null);
     }
 
 
@@ -88,6 +92,7 @@ public class Preferences {
         editor.putInt(KEY_DEPOT_ID, depotId == null ? -1 : depotId);
         editor.putString(KEY_USER_NAME, userName);
         editor.putString(KEY_TOKEN, token);
+        editor.putString(KEY_TOKEN_HIMACCESS, tokenHimAccess);
 
         editor.apply(); // Apply changes asynchronously
     }

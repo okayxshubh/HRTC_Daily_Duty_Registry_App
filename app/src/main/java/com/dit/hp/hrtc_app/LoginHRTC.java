@@ -1,7 +1,6 @@
 package com.dit.hp.hrtc_app;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,7 +10,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,14 +19,18 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
+import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
+import com.dit.hp.hrtc_app.Modals.HimAccessUser;
+import com.dit.hp.hrtc_app.Modals.HimAccessUserInfo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
 import com.dit.hp.hrtc_app.Modals.SuccessResponse;
+import com.dit.hp.hrtc_app.Modals.TokenInfo;
 import com.dit.hp.hrtc_app.Modals.UploadObject;
-import com.dit.hp.hrtc_app.Modals.User;
 import com.dit.hp.hrtc_app.Presentation.CustomDialog;
 import com.dit.hp.hrtc_app.crypto.AESCrypto;
 import com.dit.hp.hrtc_app.enums.TaskType;
 import com.dit.hp.hrtc_app.interfaces.ShubhAsyncTaskListenerGet;
+import com.dit.hp.hrtc_app.interfaces.ShubhAsyncTaskListenerPost;
 import com.dit.hp.hrtc_app.json.JsonParse;
 import com.dit.hp.hrtc_app.utilities.AppStatus;
 import com.dit.hp.hrtc_app.utilities.Econstants;
@@ -39,11 +41,12 @@ import org.json.JSONException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListenerGet {
+public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListenerPost, ShubhAsyncTaskListenerGet {
 
 //    Interface for service calls: ShubhAsyncTaskListenerGet
 //    Interface for login: ShubhAsyncTaskListenerPost
@@ -55,6 +58,10 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
     Button forgotPassBtn;
     AESCrypto aesCrypto = new AESCrypto();
+    HimAccessUser himAccessUser = new HimAccessUser();
+    HimAccessUserInfo himAccessUserInfo = new HimAccessUserInfo();
+    TokenInfo tokenInfo = new TokenInfo();
+
 
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 100;
     private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 101;
@@ -64,20 +71,32 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hrtc_login);
 
+        Preferences.getInstance().loadPreferences(this);
+
+
         userName = findViewById(R.id.userName);
         password = findViewById(R.id.password);
         signInBtn = findViewById(R.id.signIn);
         forgotPassBtn = findViewById(R.id.forgotPassBtn);
 
-//        userName.setText("user1");
+
+        userName.setText("bhupendersingh.thakur@himaccess.hp.gov.in");
+        password.setText("Test@123");
+
+//        userName.setText("gaurang.shamjibhai@himaccess.hp.gov.in");
+//        password.setText("gaurang.shamjibhai@himaccess.hp.gov.in");
+
+//        userName.setText("ghadiyagaurang.shamjibhai@himaccess.hp.gov.in");
+//        password.setText("test@123");
+
 //        userName.setText("Admin");
-        userName.setText("Admin");
-        password.setText("Admin@1234");
+//        password.setText("Admin@1234");
 
         // Check Permissions During Login
         checkStoragePermission();
         checkNotificationPermission();
 
+        // NEW HIM ACCESS
         signInBtn.setOnClickListener(v -> {
             if (!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
                 Log.i("ID", "ID: " + userName.getText().toString().trim());
@@ -85,8 +104,9 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
                 if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
                     UploadObject uploadObject = new UploadObject();
-                    uploadObject.setUrl(Econstants.base_url);
-                    uploadObject.setMethordName("/login/Auth?");
+                    uploadObject.setUrl(Econstants.eparivar_url);
+                    uploadObject.setMethordName(Econstants.loginLDAP);
+                    uploadObject.setMasterName("");
                     uploadObject.setTasktype(TaskType.LOGIN_HRTC);
                     uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -103,13 +123,14 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         // Encode Params for PUT Request
                         String encParams = buildParams(params); // Method to build params to append in URL
                         Log.i("Login Params: ", encParams);
+
                         uploadObject.setParam(encParams);
 
                     } catch (Exception e) {
                         Log.e("Encryption Error", e.getMessage());
                     }
 
-                    new ShubhAsyncGet(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC).execute(uploadObject);
+                    new ShubhAsyncPost(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC).execute(uploadObject);
                     Log.i("JSON For Login: ", uploadObject.getParam());
 
                 } else {
@@ -125,6 +146,81 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
             startActivity(intent);
         });
 
+    }
+
+
+    // Custom methods
+
+    // Get Token.. Without JWT
+    public void getToken(String email) {
+        if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
+            UploadObject uploadObject = new UploadObject();
+
+            uploadObject.setUrl(Econstants.sarvatra_url);
+            uploadObject.setMethordName(Econstants.getToken);
+            uploadObject.setParam("");
+            uploadObject.setMasterData("");
+            uploadObject.setTasktype(TaskType.GET_TOKEN);
+            uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+            Map<String, String> params = new HashMap<>();
+            try {
+
+                // Add encrypted + encoded data to params
+                params.put("appUniqueCode", Econstants.appUniqueCode);
+                params.put("serviceId", Econstants.serviceId);
+                params.put("email", email);
+
+                // Encode Params for PUT Request
+                String normalParams = buildParams(params); // Method to build params to append in URL
+                Log.i("Normal Params: ", normalParams);
+
+                uploadObject.setParam(normalParams);
+
+            } catch (Exception e) {
+                Log.e("Encryption Error", e.getMessage());
+            }
+
+            new ShubhAsyncGet(LoginHRTC.this, LoginHRTC.this, TaskType.GET_TOKEN).execute(uploadObject);
+            Log.i("JSON For Login: ", uploadObject.getParam());
+
+        } else {
+            CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
+        }
+    }
+
+
+    // Get User Details..
+    public void getUserDetails() {
+        if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
+            UploadObject uploadObject = new UploadObject();
+            uploadObject.setUrl(Econstants.sarvatra_url);
+            uploadObject.setMethordName(Econstants.getUserDetails);
+            uploadObject.setTasktype(TaskType.GET_USER_DETAILS);
+            uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+            Map<String, String> params = new HashMap<>();
+            try {
+                // Add encrypted + encoded data to params
+                params.put("serviceId", URLEncoder.encode(Econstants.serviceId, "UTF-8"));
+                params.put("token", URLEncoder.encode(tokenInfo.getToken(), "UTF-8"));
+
+                // Encode Params for PUT Request
+                String encParams = buildParams(params); // Method to build params to append in URL
+                Log.i("Login Params: ", encParams);
+
+                uploadObject.setParam(encParams);
+
+            } catch (Exception e) {
+                Log.e("Encryption Error", e.getMessage());
+            }
+
+            new ShubhAsyncGet(LoginHRTC.this, LoginHRTC.this, TaskType.GET_USER_DETAILS).execute(uploadObject);
+            Log.i("JSON For Login: ", uploadObject.getParam());
+
+        } else {
+            CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
+        }
     }
 
 
@@ -220,7 +316,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     }
 
 
-
     // Custom method to encode Params.. when params are not JSON.. PUT Request to edit
     private String buildParams(Map<String, String> params) {
         StringBuilder paramBuilder = new StringBuilder();
@@ -261,31 +356,28 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
             // responseObject will be null if invalid id pass
             if (responseObject != null) {
 
-                successResponse = JsonParse.getDecryptedSuccessResponse(responseObject.getResponse());
+                successResponse = JsonParse.getSuccessResponse(responseObject.getResponse());
 
                 // Status from response matches 200
                 if (successResponse.getStatus().equalsIgnoreCase("OK")) {
                     Log.i("Login Response", successResponse.getData());
+                    String decryptedResponse = "";
+
+                    try {
+                        decryptedResponse = aesCrypto.decrypt(successResponse.getData());
+                    } catch (Exception e) {
+                        Log.e("Ex", Objects.requireNonNull(e.getMessage()));
+                    }
+
+                    Log.i("Login Response", (decryptedResponse));
 
                     // Parse the user details
-                    User user = JsonParse.parseDecryptedUserInfo(successResponse.getData());
-                    if (user != null) {
-                        Log.i("LoginActivity", "User Login As: " + user.toString());
+                    himAccessUser = JsonParse.parseDecryptedHimAccessUserInfo(decryptedResponse);
 
-                        Intent loginIntent = new Intent(LoginHRTC.this, Homescreen.class); //MainActivity
+                    if (himAccessUser != null) {
+                        Log.i("LoginActivity", "User Login As: " + himAccessUser.toString());
 
-                        // Saving preferences
-                        Preferences.getInstance().empId = user.getEmpId();
-                        Preferences.getInstance().roleId = user.getRoleId();
-                        Preferences.getInstance().roleName = user.getRoleName();
-                        Preferences.getInstance().depotId = user.getId();
-                        Preferences.getInstance().depotName = user.getDepotName();
-                        Preferences.getInstance().userName = user.getuserName();
-                        Preferences.getInstance().token = user.getToken();
-                        Preferences.getInstance().savePreferences(this);
-
-                        LoginHRTC.this.startActivity(loginIntent);
-                        LoginHRTC.this.finish();
+                        getToken(himAccessUser.getMail()); // Get Token
 
                     } else if (successResponse.getStatus().equals(Integer.toString(HttpsURLConnection.HTTP_GONE))) {
                         Log.i("Login Response Invalid ID/Pass", successResponse.getData());
@@ -297,6 +389,8 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
                 } else if (successResponse.getStatus().equalsIgnoreCase("NOT_FOUND")) {
                     CD.showDialog(this, "Please enter correct username and password");
+                } else if (successResponse.getStatus().equalsIgnoreCase("BAD_REQUEST")) {
+                    CD.showDialog(this, successResponse.getMessage());
                 } else {
                     Log.i("LoginHRTC", "Response is null");
                     CD.showDialog(this, "Something went wrong. Check your connection.");
@@ -305,9 +399,113 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                 Log.i("LoginHRTC", "Response is null");
                 CD.showDialog(this, "Something went wrong. Check your connection.");
             }
-
-
         }
+
+        // Get Token
+        else if (TaskType.GET_TOKEN == taskType) {
+            SuccessResponse response = null;
+
+            if (responseObject != null) {
+                Log.i("StaffDetails", "Response Obj" + responseObject.toString());
+
+                if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
+
+                    response = JsonParse.getSuccessResponse(responseObject.getResponse());
+                    Log.e("Response", response.toString());
+                    Log.e("Response", responseObject.getResponse());
+
+                    if (response.getStatus().equalsIgnoreCase("OK")) {
+
+                        tokenInfo = JsonParse.parseTokenInfo(response.getData());
+                        Preferences.getInstance().tokenHimAccess = tokenInfo.getToken();
+
+                        getUserDetails();
+
+                        Preferences.getInstance().savePreferences(this);
+
+                    } else {
+                        CD.showDialog(LoginHRTC.this, response.getMessage());
+                    }
+                } else if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
+                    // Handle HTTP 401 Unauthorized response (session expired)
+                    CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
+                } else {
+                    CD.showDialog(LoginHRTC.this, "Not able to get token");
+                }
+            } else {
+                CD.showDialog(LoginHRTC.this, "Result is null");
+            }
+        }
+
+        // Get User Info
+        else if (TaskType.GET_USER_DETAILS == taskType) {
+            SuccessResponse response = null;
+
+            if (responseObject != null) {
+                Log.i("StaffDetails", "Response Obj" + responseObject.toString());
+
+                if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
+
+                    response = JsonParse.getSuccessResponse(responseObject.getResponse());
+
+                    if (response.getStatus().equalsIgnoreCase("OK")) {
+
+
+                        String decryptedResponse;
+                        try {
+                            decryptedResponse = aesCrypto.decrypt(response.getData());
+                            // Don't call getDecryptedSuccessResponse if data is already JSONArray
+                            HimAccessUserInfo himAccessUserInfo = JsonParse.parseUserInfoPojo(decryptedResponse);
+
+                            // Use first object (if needed)
+                            Log.e("info", himAccessUserInfo.getApplicationName());
+                            Log.e("info", himAccessUserInfo.getEmployeePojo().getEmployeeName());
+                            Log.e("info", himAccessUserInfo.getEmployeePojo().getEmailId());
+
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                        // Show Dialog For Additional Chagres
+
+
+
+
+                        // Saving preferences
+//                        Preferences.getInstance().empId = himAccessUser.getEmpId();
+//                        Preferences.getInstance().roleId = himAccessUser.getRoleId();
+//                        Preferences.getInstance().roleName = himAccessUser.getRoleName();
+//                        Preferences.getInstance().depotId = himAccessUser.getId();
+//                        Preferences.getInstance().depotName = himAccessUser.getDepotName();
+//                        Preferences.getInstance().userName = himAccessUser.getuserName();
+//                        Preferences.getInstance().token = himAccessUser.getToken();
+//                        Preferences.getInstance().savePreferences(this);
+
+
+//                        Intent loginIntent = new Intent(LoginHRTC.this, Homescreen.class); //MainActivity
+//                        loginIntent.putExtra("HimAccessUser_Details", himAccessUserInfo);
+//                        LoginHRTC.this.startActivity(loginIntent);
+//                        LoginHRTC.this.finish();
+
+
+
+
+
+                        Preferences.getInstance().savePreferences(this);
+
+
+                    } else {
+                        CD.showDialog(LoginHRTC.this, response.getMessage());
+                    }
+                } else {
+                    CD.showDialog(LoginHRTC.this, "Not able to get user details");
+                }
+            } else {
+                CD.showDialog(LoginHRTC.this, "Result is null");
+            }
+        }
+
 
     }
 

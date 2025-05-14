@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="3"
+    android:layout_marginTop="5dp"
+    android:background="#fff"
+    android:elevation="4dp"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+
+    <LinearLayout
+        android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_weight="0.2"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/customborder_dialog"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:padding="3dip" >
+
+
+        <ImageView
+            android:id="@+id/imageViewEstablishment"
+            android:layout_width="60dip"
+            android:layout_margin="3dp"
+            android:layout_height="60dip"
+            android:layout_gravity="top"
+            android:src="@drawable/staff" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_weight="2.8"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:orientation="vertical"
+        android:padding="3dip" >
+
+        <TextView
+            android:id="@+id/head_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Establishment Name"
+            android:textColor="@color/blue"
+            android:textSize="18dip"
+            android:textStyle="bold"
+            android:typeface="sans"/>
+
+
+        <TextView
+            android:id="@+id/sector"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="three"
+            android:textSize="14dip"
+            android:visibility="gone"
+            android:textColor="#366988"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignBottom="@+id/thumbnail" />
+
+
+        <TextView
+            android:id="@+id/second_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Registation Number"
+            android:textSize="14sp"
+
+            android:textColor="@color/darkblue"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignBottom="@+id/thumbnail" />
+
+        <TextView
+            android:id="@+id/third_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textSize="14sp"
+            android:textColor="@color/darkblue"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignBottom="@+id/thumbnail" />
+
+
+
+    </LinearLayout>
+</LinearLayout>

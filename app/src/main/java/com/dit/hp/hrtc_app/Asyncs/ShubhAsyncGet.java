@@ -46,18 +46,27 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
         try {
             http_manager = new HttpManager();
 
+
             // Without JWT
-            if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.LOGIN_HRTC.toString())) {
+            if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OTP.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetDataWithoutJWT(uploadObjects[0]);
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
                 return Data_From_Server;
             }
 
-            // Without JWT
-            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OTP.toString())) {
+            // Get Token Without JWT
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_TOKEN.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
-                Data_From_Server = http_manager.GetDataWithoutJWT(uploadObjects[0]);
+                Data_From_Server = http_manager.GetDataWithParamsWithoutJWT(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            // Get User Details Without need of Auth Token
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_USER_DETAILS.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataWithParamsWithoutJWT(uploadObjects[0]);
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
                 return Data_From_Server;
             }

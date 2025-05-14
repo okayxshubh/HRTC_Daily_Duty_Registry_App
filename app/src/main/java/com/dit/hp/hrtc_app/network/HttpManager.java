@@ -20,6 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 
 public class HttpManager {
 
@@ -30,6 +32,159 @@ public class HttpManager {
 //    public HttpManager() throws NoSuchPaddingException, NoSuchAlgorithmException, UnsupportedEncodingException {
 //        ED = new EncryptDecrypt();
 //    }
+
+    // FOR Login + SSL + No JWT + ID Pass in Param
+    // New fix that handle both http and https connection.. No SSL issue occur
+    public ResponsePojoGet PostDataNewFixWithoutJWT(UploadObject data) {
+        HttpURLConnection conn_ = null;
+        StringBuilder sb;
+        ResponsePojoGet response = null;
+
+        try {
+            // Append encrypted params to URL
+            String finalURL = data.getUrl() + data.getMethordName() + data.getParam();
+            Log.e("URL Formed", "URL FORMED: " + finalURL);
+
+            URL url_ = new URL(finalURL);
+
+            // Open connection
+            if (finalURL.startsWith("https")) {
+                HttpsURLConnection httpsConn = (HttpsURLConnection) url_.openConnection();
+                httpsConn.setSSLSocketFactory(NetworkUtils.getSSLSocketFactory());
+                conn_ = httpsConn;
+            } else {
+                conn_ = (HttpURLConnection) url_.openConnection();
+            }
+
+            // Setup GET/POST-style behavior
+            conn_.setDoOutput(false); // Not writing any body
+            conn_.setRequestMethod("POST");
+            conn_.setUseCaches(false);
+            conn_.setConnectTimeout(10000);
+            conn_.setReadTimeout(10000);
+            conn_.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            // No body write (params already in URL)
+
+            int httpResult = conn_.getResponseCode();
+            InputStream inputStream = (httpResult == HttpURLConnection.HTTP_OK)
+                    ? conn_.getInputStream()
+                    : conn_.getErrorStream();
+
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8"))) {
+                sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+            }
+
+            Log.e("Data from Service", sb.toString());
+            response = Econstants.createOfflineObject(finalURL, data.getParam(), sb.toString(), String.valueOf(httpResult), data.getMethordName());
+
+        } catch (Exception e) {
+            Log.e("Error", "Exception: " + e.getMessage());
+            if (conn_ != null) {
+                try {
+                    response = Econstants.createOfflineObject(data.getUrl(), data.getParam(), conn_.getResponseMessage(), String.valueOf(conn_.getResponseCode()), data.getMethordName());
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        } finally {
+            if (conn_ != null) conn_.disconnect();
+        }
+
+        return response;
+    }
+
+    public ResponsePojoGet GetDataWithParamsWithoutJWT(UploadObject data) {
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        ResponsePojoGet response = null;
+
+        try {
+            // Build full URL with params
+            StringBuilder fullURL = new StringBuilder();
+            fullURL.append(data.getUrl());
+            fullURL.append(data.getMethordName());
+
+            // HRTC-specific params
+            if (Econstants.API_NAME_HRTC.equalsIgnoreCase(data.getAPI_NAME())) {
+                if (data.getStatus() != null) fullURL.append(Econstants.status).append(data.getStatus());
+                if (data.getMasterName() != null) fullURL.append(Econstants.masterName).append(data.getMasterName());
+                if (data.getParentId() != null) fullURL.append(Econstants.parentId).append(data.getParentId());
+                if (data.getSecondaryParentId() != null) fullURL.append(Econstants.secondaryParentId).append(data.getSecondaryParentId());
+            }
+
+            // Additional param string (already URL encoded)
+            if (data.getParam() != null) {
+                fullURL.append(data.getParam());
+            }
+
+            // Log formed URL
+            String finalURL = fullURL.toString();
+            Log.e("URL Formed", finalURL);
+
+            // Open connection
+            URL urlObj = new URL(finalURL);
+            connection = (HttpURLConnection) urlObj.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            // Read response
+            InputStream inputStream = (connection.getResponseCode() == 200)
+                    ? connection.getInputStream()
+                    : connection.getErrorStream();
+
+            reader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+
+            Log.e("Response", sb.toString());
+
+            // Create response object
+            response = Econstants.createOfflineObject(
+                    finalURL,
+                    data.getParam(),
+                    sb.toString(),
+                    String.valueOf(connection.getResponseCode()),
+                    data.getMethordName()
+            );
+
+        } catch (Exception e) {
+            Log.e("Exception", e.getMessage(), e);
+            try {
+                response = Econstants.createOfflineObject(
+                        data.getUrl(),
+                        data.getParam(),
+                        e.getMessage(),
+                        (connection != null) ? String.valueOf(connection.getResponseCode()) : "0",
+                        data.getMethordName()
+                );
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+
+        return response;
+    }
 
     // Without JWT Token
     public ResponsePojoGet GetDataWithoutJWT(UploadObject data) throws IOException {
