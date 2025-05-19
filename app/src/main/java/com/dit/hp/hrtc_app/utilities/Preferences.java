@@ -24,11 +24,13 @@ public class Preferences {
     private final String KEY_DEPOT_ID = "depotId";
     private final String KEY_DEPOT_NAME = "depotName";
     private final String KEY_EMP_ID = "empId";
+    private final String KEY_DEPARTMENT_ID = "departmentId";
     private final String KEY_TOKEN = "token";
     private final String KEY_TOKEN_HIMACCESS = "tokenHimAccess";
 
     // Instance Variables
     public Integer empId;
+    public Integer departmentId;
     public String depotName = null;
     public Integer roleId;
     public String roleName = null;
@@ -59,6 +61,9 @@ public class Preferences {
         int empIdValue = preferences.getInt(KEY_EMP_ID, -1);
         empId = (empIdValue == -1) ? null : empIdValue;
 
+        int departmentIdValue = preferences.getInt(KEY_DEPARTMENT_ID, -1);
+        departmentId = (departmentIdValue == -1) ? null : departmentIdValue;
+
         depotName = preferences.getString(KEY_DEPOT_NAME, null);
 
         int roleIdValue = preferences.getInt(KEY_ROLE_ID, -1);
@@ -86,6 +91,7 @@ public class Preferences {
 
         // Save integer values and handle null
         editor.putInt(KEY_EMP_ID, empId == null ? -1 : empId);
+        editor.putInt(KEY_DEPARTMENT_ID, departmentId == null ? -1 : departmentId);
         editor.putString(KEY_DEPOT_NAME, depotName);
         editor.putInt(KEY_ROLE_ID, roleId == null ? -1 : roleId);
         editor.putString(KEY_ROLE_NAME, roleName);

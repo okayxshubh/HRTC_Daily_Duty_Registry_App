@@ -1,22 +1,21 @@
 package com.dit.hp.hrtc_app.Modals;
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
 
 public class AdditonalChargePojo implements Serializable {
 
-        private DepartmentPojo departmentPojo;
+    private int empId;
 
-        private DesignationPojo designationPojo;
+    private DepartmentPojo departmentPojo;
 
-        private OfficeTypePojo officeTypePojo;
+    private DesignationPojo designationPojo;
 
-        private OfficePojo officePojo;
+    private OfficeTypePojo officeTypePojo;
 
-        private String chargeAssignedOn;
-        private String chargeType;
+    private OfficePojo officePojo;
 
+    private String chargeAssignedOn;
+    private String chargeType;
 
     public DepartmentPojo getDepartmentPojo() {
         return departmentPojo;
@@ -64,6 +63,14 @@ public class AdditonalChargePojo implements Serializable {
 
     public void setChargeType(String chargeType) {
         this.chargeType = chargeType;
+    }
+
+    public int getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(int empId) {
+        this.empId = empId;
     }
 
     @Override

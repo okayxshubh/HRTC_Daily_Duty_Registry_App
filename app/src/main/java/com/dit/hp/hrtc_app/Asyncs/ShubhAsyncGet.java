@@ -55,10 +55,18 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
                 return Data_From_Server;
             }
 
-            // Get Token Without JWT
+            // Get Him Access Token Without JWT
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_TOKEN.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetDataWithParamsWithoutJWT(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            // Get HRTC Token Without JWT
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_HRTC_JWT_TOKEN.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.PostDataWithParamsWithoutJWT(uploadObjects[0]);
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
                 return Data_From_Server;
             }
@@ -296,6 +304,13 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
                 return Data_From_Server;
             }
 
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OFFICES.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetData(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_ALL_RECORDS_FILTERED.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetData(uploadObjects[0]);
@@ -382,6 +397,14 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
                 return Data_From_Server;
             }
 
+
+            // JSON Body + Him Access Token
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_USER_OFFICE_INFO.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataWithJsonBody(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
 
 
         } catch (Exception e) {

@@ -186,6 +186,87 @@ public class HttpManager {
         return response;
     }
 
+    // FOR HRTC JTWT TOKEN
+    public ResponsePojoGet PostDataWithParamsWithoutJWT(UploadObject data) {
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        ResponsePojoGet response = null;
+
+        try {
+            // Build full URL
+            StringBuilder fullURL = new StringBuilder();
+            fullURL.append(data.getUrl());         // Base URL
+            fullURL.append(data.getMethordName()); // Endpoint with '?'
+
+            // Append parameters if available
+            String param = data.getParam();
+            if (param != null && !param.isEmpty()) {
+                fullURL.append(param.startsWith("&") ? param.substring(1) : param);
+            }
+
+            // Final URL string
+            String finalURL = fullURL.toString();
+            Log.e("URL Formed", finalURL);
+
+            // Open connection
+            URL urlObj = new URL(finalURL);
+            connection = (HttpURLConnection) urlObj.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            // Read response
+            InputStream inputStream = (connection.getResponseCode() == 200)
+                    ? connection.getInputStream()
+                    : connection.getErrorStream();
+
+            reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+
+            Log.e("Response", sb.toString());
+
+            // Create response object
+            response = Econstants.createOfflineObject(
+                    finalURL,
+                    data.getParam(),
+                    sb.toString(),
+                    String.valueOf(connection.getResponseCode()),
+                    data.getMethordName()
+            );
+
+        } catch (Exception e) {
+            Log.e("Exception", e.getMessage(), e);
+            try {
+                response = Econstants.createOfflineObject(
+                        data.getUrl(),
+                        data.getParam(),
+                        e.getMessage(),
+                        (connection != null) ? String.valueOf(connection.getResponseCode()) : "0",
+                        data.getMethordName()
+                );
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        } finally {
+            try {
+                if (reader != null) reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (connection != null) connection.disconnect();
+        }
+
+        return response;
+    }
+
+
+
+
     // Without JWT Token
     public ResponsePojoGet GetDataWithoutJWT(UploadObject data) throws IOException {
         BufferedReader reader = null;
@@ -464,6 +545,84 @@ public class HttpManager {
 
         return response;
     }
+
+    public ResponsePojoGet GetDataWithJsonBodyHimAccessToken(UploadObject data) throws IOException {
+        BufferedReader reader = null;
+        URL urlObj = null;
+        ResponsePojoGet response = null;
+        HttpURLConnection connection = null;
+
+        try {
+            // Construct URL
+            if (data.getAPI_NAME() != null && data.getAPI_NAME().equalsIgnoreCase(Econstants.API_NAME_HRTC)) {
+                urlObj = new URL(data.getUrl() + data.getMethordName());
+            } else {
+                urlObj = new URL(data.getUrl() + data.getMethordName());
+            }
+            Log.e("URL Formed", "URL FORMED: " + urlObj.toString());
+
+
+            // Open Connection
+            connection = (HttpURLConnection) urlObj.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
+            connection.setRequestProperty("Authorization", "Bearer " + Preferences.getInstance().tokenHimAccess);
+            connection.setDoOutput(true); // Allow sending request body
+
+            // Add JSON Body
+            if (data.getParam() != null && !data.getParam().isEmpty()) {
+                try (OutputStream os = connection.getOutputStream()) {
+                    byte[] input = data.getParam().getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+            }
+
+            // Handle Response
+            int responseCode = connection.getResponseCode();
+            InputStream inputStream = (responseCode == 200) ? connection.getInputStream() : connection.getErrorStream();
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder sb = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+
+            response = Econstants.createOfflineObject(
+                    data.getUrl(),
+                    data.getParam(),
+                    sb.toString(),
+                    Integer.toString(responseCode),
+                    data.getMethordName()
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response = Econstants.createOfflineObject(
+                    data.getUrl(),
+                    data.getParam(),
+                    e.getLocalizedMessage(),
+                    (connection != null) ? Integer.toString(connection.getResponseCode()) : "500",
+                    data.getMethordName()
+            );
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+
+        return response;
+    }
+
 
     // Delete Post mapping.. Same but with JSON Body
     public ResponsePojoGet DeleteDataWithJson(UploadObject data) {

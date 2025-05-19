@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import androidx.core.content.ContextCompat;
 
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
+import com.dit.hp.hrtc_app.Modals.AdditonalChargePojo;
 import com.dit.hp.hrtc_app.Modals.HimAccessUser;
 import com.dit.hp.hrtc_app.Modals.HimAccessUserInfo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
@@ -37,11 +39,16 @@ import com.dit.hp.hrtc_app.utilities.Econstants;
 import com.dit.hp.hrtc_app.utilities.Preferences;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -107,7 +114,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                     uploadObject.setUrl(Econstants.eparivar_url);
                     uploadObject.setMethordName(Econstants.loginLDAP);
                     uploadObject.setMasterName("");
-                    uploadObject.setTasktype(TaskType.LOGIN_HRTC);
+                    uploadObject.setTasktype(TaskType.LOGIN_HRTC_HIMACCESS);
                     uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
 
                     Map<String, String> params = new HashMap<>();
@@ -130,7 +137,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         Log.e("Encryption Error", e.getMessage());
                     }
 
-                    new ShubhAsyncPost(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC).execute(uploadObject);
+                    new ShubhAsyncPost(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC_HIMACCESS).execute(uploadObject);
                     Log.i("JSON For Login: ", uploadObject.getParam());
 
                 } else {
@@ -142,8 +149,9 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         });
 
         forgotPassBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginHRTC.this, ResetPassword.class);
-            startActivity(intent);
+            CD.showDialog(this, "Please visit https://himaccess.hp.gov.in for account creation and password reset.");
+//            Intent intent = new Intent(LoginHRTC.this, ResetPassword.class);
+//            startActivity(intent);
         });
 
     }
@@ -151,14 +159,52 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
     // Custom methods
 
+    // OLD HRTC LOGIN Without HIM-ACCESS
+//    public void normalHRTCLogin(String oldUserID, String oldPassword) {
+//        if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
+//            UploadObject uploadObject = new UploadObject();
+//            uploadObject.setUrl(Econstants.eparivar_url);
+//            uploadObject.setMethordName(Econstants.loginMethod);
+//            uploadObject.setMasterName("");
+//            uploadObject.setTasktype(TaskType.LOGIN_HRTC);
+//            uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+//
+//            Map<String, String> params = new HashMap<>();
+//            try {
+//                // Encrypt user credentials
+//                String encrypteduserName = aesCrypto.encrypt(oldUserID);
+//                String encryptedPassword = aesCrypto.encrypt(oldPassword);
+//
+//                // Add encrypted + encoded data to params
+//                params.put("username", URLEncoder.encode(encrypteduserName, "UTF-8"));
+//                params.put("password", URLEncoder.encode(encryptedPassword, "UTF-8"));
+//
+//                // Encode Params for PUT Request
+//                String encParams = buildParams(params); // Method to build params to append in URL
+//                Log.i("Login Params: ", encParams);
+//
+//                uploadObject.setParam(encParams);
+//
+//            } catch (Exception e) {
+//                Log.e("Encryption Error", e.getMessage());
+//            }
+//
+//            new ShubhAsyncPost(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC).execute(uploadObject);
+//            Log.i("JSON For Login: ", uploadObject.getParam());
+//
+//        } else {
+//            CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
+//        }
+//    }
+
+
     // Get Token.. Without JWT
-    public void getToken(String email) {
+    public void getHimAccessToken(String email) {
         if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
             UploadObject uploadObject = new UploadObject();
 
-            uploadObject.setUrl(Econstants.sarvatra_url);
+            uploadObject.setUrl(Econstants.sarvatra_url + "/application");
             uploadObject.setMethordName(Econstants.getToken);
-            uploadObject.setParam("");
             uploadObject.setMasterData("");
             uploadObject.setTasktype(TaskType.GET_TOKEN);
             uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
@@ -189,12 +235,46 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         }
     }
 
+    // Get HRTC Token
+    public void getHRTCToken(String email) {
+        if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
+            UploadObject uploadObject = new UploadObject();
+
+            uploadObject.setUrl(Econstants.base_url);
+            uploadObject.setMethordName("/application/getToken?");
+            uploadObject.setMasterData("");
+            uploadObject.setTasktype(TaskType.GET_HRTC_JWT_TOKEN);
+            uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+            Map<String, String> params = new HashMap<>();
+            try {
+                // Add encrypted + encoded data to params
+                params.put("username", URLEncoder.encode(aesCrypto.encrypt(email), "UTF-8"));
+
+                // Encode Params for PUT Request
+                String normalParams = buildParams(params); // Method to build params to append in URL
+                Log.i("Encoded + Encrypted Params: ", normalParams);
+
+                uploadObject.setParam(normalParams);
+
+            } catch (Exception e) {
+                Log.e("EXCEPTION LOGGED HERE.!!!!!", e.getMessage());
+            }
+
+            new ShubhAsyncGet(LoginHRTC.this, LoginHRTC.this, TaskType.GET_HRTC_JWT_TOKEN).execute(uploadObject);
+            Log.i("JSON For Login: ", uploadObject.getParam());
+
+        } else {
+            CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
+        }
+    }
+
 
     // Get User Details..
     public void getUserDetails() {
         if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
             UploadObject uploadObject = new UploadObject();
-            uploadObject.setUrl(Econstants.sarvatra_url);
+            uploadObject.setUrl(Econstants.sarvatra_url + "/application");
             uploadObject.setMethordName(Econstants.getUserDetails);
             uploadObject.setTasktype(TaskType.GET_USER_DETAILS);
             uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
@@ -220,6 +300,39 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
         } else {
             CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
+        }
+    }
+
+
+    private void getOfficeDetails(int deptId, int empId, int ofcTypeId) {
+        try {
+            if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
+
+                UploadObject object = new UploadObject();
+                object.setUrl("https://himparivarservices.hp.gov.in/sarvatra-api");
+                object.setMethordName("/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
+
+                // JSON Body
+                JSONObject json = new JSONObject();
+                json.put("deptId", aesCrypto.encrypt(String.valueOf(deptId)));
+                json.put("empId", aesCrypto.encrypt(String.valueOf(empId)));
+                json.put("ofcTypeId", aesCrypto.encrypt(String.valueOf(ofcTypeId)));
+
+                String encJsonBody = aesCrypto.encrypt(json.toString());
+                object.setParam(encJsonBody);
+
+                Log.e("JSON Body: ", "JSON Body: " + json.toString());
+                Log.e("JSON Body: ", "JSON Body Enc: " + encJsonBody);
+                object.setTasktype(TaskType.GET_USER_OFFICE_INFO);
+                object.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+                new ShubhAsyncGet(LoginHRTC.this, LoginHRTC.this, TaskType.GET_USER_OFFICE_INFO).execute(object);
+            } else {
+                // Do nothing if CD already shown once
+                CD.showDialog(LoginHRTC.this, Econstants.internetNotAvailable);
+            }
+        } catch (Exception ex) {
+            CD.showDialog(LoginHRTC.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
 
@@ -349,7 +462,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     public void onTaskCompleted(ResponsePojoGet responseObject, TaskType taskType) throws JSONException {
 
         // Login Task Type
-        if (TaskType.LOGIN_HRTC == taskType) {
+        if (TaskType.LOGIN_HRTC_HIMACCESS == taskType) {
             Log.i("ASYNC TASK COMPLETED", "TASK TYPE IS HRTC LOGIN.. CHECKED");
             SuccessResponse successResponse = null;
 
@@ -377,7 +490,9 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                     if (himAccessUser != null) {
                         Log.i("LoginActivity", "User Login As: " + himAccessUser.toString());
 
-                        getToken(himAccessUser.getMail()); // Get Token
+                        getHimAccessToken(himAccessUser.getMail()); // Get Token
+
+                        getHRTCToken(himAccessUser.getMail()); // Get HimAccess Token
 
                     } else if (successResponse.getStatus().equals(Integer.toString(HttpsURLConnection.HTTP_GONE))) {
                         Log.i("Login Response Invalid ID/Pass", successResponse.getData());
@@ -401,7 +516,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
             }
         }
 
-        // Get Token
+        // Get HimAccess Token
         else if (TaskType.GET_TOKEN == taskType) {
             SuccessResponse response = null;
 
@@ -421,14 +536,31 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
                         getUserDetails();
 
-                        Preferences.getInstance().savePreferences(this);
-
                     } else {
                         CD.showDialog(LoginHRTC.this, response.getMessage());
                     }
-                } else if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
-                    // Handle HTTP 401 Unauthorized response (session expired)
-                    CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
+                } else {
+                    CD.showDialog(LoginHRTC.this, "Not able to get token");
+                }
+            } else {
+                CD.showDialog(LoginHRTC.this, "Result is null");
+            }
+        }
+
+        // Get HRTC Token
+        else if (TaskType.GET_HRTC_JWT_TOKEN == taskType) {
+            SuccessResponse response = null;
+
+            if (responseObject != null) {
+                Log.i("Response", "Response Obj" + responseObject.toString());
+
+                if (responseObject.getResponseCode().equalsIgnoreCase("200")) {
+                    String HRTC_JWT = responseObject.getResponse().toString();
+                    Log.e("HRTC_JWT", HRTC_JWT);
+
+                    Preferences.getInstance().token = HRTC_JWT;
+                    Preferences.getInstance().savePreferences(this);
+
                 } else {
                     CD.showDialog(LoginHRTC.this, "Not able to get token");
                 }
@@ -455,22 +587,58 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         try {
                             decryptedResponse = aesCrypto.decrypt(response.getData());
                             // Don't call getDecryptedSuccessResponse if data is already JSONArray
-                            HimAccessUserInfo himAccessUserInfo = JsonParse.parseUserInfoPojo(decryptedResponse);
+                            himAccessUserInfo = JsonParse.parseUserInfoPojo(decryptedResponse);
 
                             // Use first object (if needed)
                             Log.e("info", himAccessUserInfo.getApplicationName());
                             Log.e("info", himAccessUserInfo.getEmployeePojo().getEmployeeName());
                             Log.e("info", himAccessUserInfo.getEmployeePojo().getEmailId());
 
+                            Preferences.getInstance().savePreferences(this);
+
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
 
 
-                        // Show Dialog For Additional Chagres
+                        // All Charges List
+                        List<AdditonalChargePojo> additionalChargeList = new ArrayList<>();
+
+                        // Convert main charge to additional charge
+                        AdditonalChargePojo originalCharge = new AdditonalChargePojo();
+                        originalCharge.setEmpId(himAccessUserInfo.getEmployeePojo().getEmpId());
+                        originalCharge.setDepartmentPojo(himAccessUserInfo.getMainDepartmentPojo());
+                        originalCharge.setOfficePojo(himAccessUserInfo.getMainOffice());
+                        originalCharge.setOfficeTypePojo(himAccessUserInfo.getMainOfficeTypePojo());
+                        originalCharge.setDesignationPojo(himAccessUserInfo.getMainDesignationPojo());
+
+                        additionalChargeList.add(originalCharge);
+
+                        // Parse Additional Charges + Original Charge
+                        Set<Long> seenOfficeIds = new HashSet<>();
+                        List<AdditonalChargePojo> fetchedAdditonalCharges = himAccessUserInfo.getAdditionalChargeDetailDTO();
 
 
+                        // Check if Additional Charges Fetched
+                        if (fetchedAdditonalCharges != null) {
+                            for (AdditonalChargePojo additonalChargePojo : himAccessUserInfo.getAdditionalChargeDetailDTO()) {
+                                long currentOfficeId = additonalChargePojo.getOfficePojo().getOfficeId();
+                                long originalOfficeId = originalCharge.getOfficePojo().getOfficeId();
 
+                                // Skip if same as original office OR already added
+                                if (currentOfficeId != originalOfficeId && !seenOfficeIds.contains(currentOfficeId)) {
+                                    seenOfficeIds.add(currentOfficeId);
+                                    additonalChargePojo.setEmpId(himAccessUserInfo.getEmployeePojo().getEmpId());
+                                    additionalChargeList.add(additonalChargePojo);
+                                }
+                            }
+
+                            // Show Dialog For Additional Chagres
+                            CD.showAdditionalChargeDialog(this, additionalChargeList);
+
+                        } else {
+                            Toast.makeText(this, "No Additional Charges Fetched", Toast.LENGTH_SHORT).show();
+                        }
 
                         // Saving preferences
 //                        Preferences.getInstance().empId = himAccessUser.getEmpId();
@@ -483,16 +651,17 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 //                        Preferences.getInstance().savePreferences(this);
 
 
-//                        Intent loginIntent = new Intent(LoginHRTC.this, Homescreen.class); //MainActivity
-//                        loginIntent.putExtra("HimAccessUser_Details", himAccessUserInfo);
-//                        LoginHRTC.this.startActivity(loginIntent);
-//                        LoginHRTC.this.finish();
-
-
-
-
-
-                        Preferences.getInstance().savePreferences(this);
+                        // Get Depots
+//                        if (himAccessUserInfo != null) {
+//                            // Call method
+//                            getOfficeDetails(
+//                                    himAccessUserInfo.getMainDepartmentPojo().getDepartmentId(),
+//                                    himAccessUserInfo.getEmployeePojo().getEmpId(),
+//                                    himAccessUserInfo.getMainOfficeTypePojo().getOfficeTypeId());
+//
+//                        } else {
+//                            Toast.makeText(this, "HimAccess User Info Not Fetched", Toast.LENGTH_SHORT).show();
+//                        }
 
 
                     } else {
@@ -500,6 +669,43 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                     }
                 } else {
                     CD.showDialog(LoginHRTC.this, "Not able to get user details");
+                }
+            } else {
+                CD.showDialog(LoginHRTC.this, "Result is null");
+            }
+        }
+
+
+        // Get Office Details
+        else if (TaskType.GET_USER_OFFICE_INFO == taskType) {
+            SuccessResponse response = null;
+
+            if (responseObject != null) {
+                Log.i("Details", "Response Obj" + responseObject.toString());
+
+                if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
+
+                    response = JsonParse.getSuccessResponse(responseObject.getResponse());
+                    Log.e("Response", response.toString());
+                    Log.e("Response", responseObject.getResponse());
+
+                    if (response.getStatus().equalsIgnoreCase("OK")) {
+
+                        Toast.makeText(this, "Office Details Fetched", Toast.LENGTH_SHORT).show();
+
+                        // Make Office ID as Depot ID... Save in Prefs
+
+//                        Preferences.getInstance().depotId = Integer.parseInt();
+//                        Preferences.getInstance().savePreferences(this);\
+
+                    } else {
+                        CD.showDialog(LoginHRTC.this, response.getMessage());
+                    }
+                } else if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
+                    // Handle HTTP 401 Unauthorized response (session expired)
+                    CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
+                } else {
+                    CD.showDialog(LoginHRTC.this, "Not able to get token");
                 }
             } else {
                 CD.showDialog(LoginHRTC.this, "Result is null");

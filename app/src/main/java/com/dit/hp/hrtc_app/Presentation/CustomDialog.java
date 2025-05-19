@@ -11,18 +11,26 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dit.hp.hrtc_app.Adapters.AdditionalChargesListAdapter;
 import com.dit.hp.hrtc_app.AddStop;
 import com.dit.hp.hrtc_app.AllAddaCards;
 import com.dit.hp.hrtc_app.AllConductorsCards;
 import com.dit.hp.hrtc_app.AllDepotsCards;
 import com.dit.hp.hrtc_app.AllDriversCards;
 import com.dit.hp.hrtc_app.DailyDutyRegisterCards;
+import com.dit.hp.hrtc_app.Homescreen;
 import com.dit.hp.hrtc_app.LoginHRTC;
 import com.dit.hp.hrtc_app.ManageEntities;
+import com.dit.hp.hrtc_app.Modals.AdditonalChargePojo;
+import com.dit.hp.hrtc_app.Modals.HimAccessUserInfo;
 import com.dit.hp.hrtc_app.Modals.RoutePojo;
 import com.dit.hp.hrtc_app.R;
+import com.dit.hp.hrtc_app.utilities.Preferences;
+
+import java.util.List;
 
 public class CustomDialog {
 
@@ -79,7 +87,8 @@ public class CustomDialog {
                 public void onClick(View v) {
                     dialog.dismiss();
                     Intent intent = new Intent(activity, LoginHRTC.class);
-                    startActivity(activity, intent, null);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    activity.startActivity(intent);
                     activity.finish();
                 }
             });
@@ -410,6 +419,86 @@ public class CustomDialog {
 
         dialog.show();
 
+    }
+
+
+
+
+    public void showAdditionalChargeDialog(final Activity activity, List<AdditonalChargePojo> additionalChargesList) {
+        if (activity != null) {
+            final Dialog dialog = new Dialog(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.dialog_additional_charge);
+            final AdditonalChargePojo[] selectedAdditionalCharge = new AdditonalChargePojo[1];
+
+            int width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.95);
+            int height = (int) (activity.getResources().getDisplayMetrics().heightPixels * 0.80);
+            dialog.getWindow().setLayout(width, height);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            ListView resultListView = (ListView) dialog.findViewById(R.id.resultListView);
+
+            AdditionalChargesListAdapter additionalChargesListAdapter = new AdditionalChargesListAdapter(activity, additionalChargesList);
+            resultListView.setAdapter(additionalChargesListAdapter);
+
+            resultListView.setOnItemClickListener((parent, view, position, id) -> {
+                additionalChargesListAdapter.selectSingleItem(position); // toggle
+                selectedAdditionalCharge[0] = additionalChargesListAdapter.getItem(position); // update selected
+            });
+
+
+            TextView text = (TextView) dialog.findViewById(R.id.dialog_result);
+            text.setMovementMethod(new ScrollingMovementMethod());
+
+            Button dialog_ok = (Button) dialog.findViewById(R.id.dialog_ok);
+            Button dialog_cancel = (Button) dialog.findViewById(R.id.dialog_cancel);
+
+            dialog_cancel.setOnClickListener(v -> {
+                dialog.dismiss();
+            });
+
+            dialog_ok.setOnClickListener(v -> {
+                if (selectedAdditionalCharge[0] != null){
+
+
+                    // Validation for HRTC Department
+                    if (!selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentName().trim().equalsIgnoreCase("HIMACHAL ROAD TRANSPORT CORPORATION")
+                            || !(selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentId() == 106)
+                    ){
+                        CustomDialog customDialog = new CustomDialog();
+                        customDialog.showDialog(activity, "The selected charge does not belongs to the HRTC Department.");
+                        return;
+                    }
+
+
+                    Intent intent = new Intent(activity, Homescreen.class);
+                    intent.putExtra("SelectedAdditionalCharge", selectedAdditionalCharge[0]);
+                    startActivity(activity, intent, null);
+
+                    // Office ID Becomes the Depot ID now
+//                    Preferences.getInstance().roleId = selectedAdditionalCharge[0].getRoleId();
+
+
+//                    // Saving preferences as the selected charge
+                    Preferences.getInstance().empId = selectedAdditionalCharge[0].getEmpId();
+                    Preferences.getInstance().departmentId = selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentId();
+
+//                    Preferences.getInstance().roleId = selectedAdditionalCharge[0].getRoleId();
+//                    Preferences.getInstance().roleName = selectedAdditionalCharge[0].getRoleName();
+//                    Preferences.getInstance().depotId = selectedAdditionalCharge[0].getId();
+//                    Preferences.getInstance().depotName = selectedAdditionalCharge[0].getDepotName();
+//                    Preferences.getInstance().userName = selectedAdditionalCharge[0].getuserName();
+//                    Preferences.getInstance().token = selectedAdditionalCharge[0].getToken();
+
+                    Preferences.getInstance().savePreferences(activity);
+
+                    dialog.dismiss();
+                    activity.finish();
+                }
+            });
+
+            dialog.show();
+        }
     }
 
 

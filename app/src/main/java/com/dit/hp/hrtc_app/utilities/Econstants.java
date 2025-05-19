@@ -34,16 +34,15 @@ public class Econstants {
 
 //    public static final String base_url = "http://192.168.0.172:8081"; // DIT Wifi + DIT PC
 
-//    public static final String base_url = "https://himstaging1.hp.gov.in/hrtc"; // Staging
 
 
-    public static final String base_url = "https://himparivarservices.hp.gov.in/hrtc"; // PROD
+    public static final String base_url = "https://himstaging1.hp.gov.in/hrtc"; // Staging
+//    public static final String base_url = "https://himparivarservices.hp.gov.in/hrtc"; // PROD
 
+    public static final String eparivar_url = "https://himparivarservices.hp.gov.in/ldap";    // For login purpose
 
-    public static final String eparivar_url = "https://himparivarservices.hp.gov.in/ldap";
-
-    public static final String sarvatra_url = "https://himstaging1.hp.gov.in/sarvatra-api/application";
-//    public static final String sarvatra_url = "https://himparivarservices.hp.gov.in/sarvatra-api/application";
+    public static final String sarvatra_url = "https://himstaging1.hp.gov.in/sarvatra-api";   //  Staging HIM ACCESS
+//    public static final String sarvatra_url = "https://himparivarservices.hp.gov.in/sarvatra-api";  //  Production HIM ACCESS
 
 
     public static final String appUniqueCode = "HRTCDDR";

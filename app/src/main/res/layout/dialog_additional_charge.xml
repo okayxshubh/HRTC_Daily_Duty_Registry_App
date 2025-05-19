@@ -1,104 +1,67 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/customborder_dialog"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:background="@drawable/customborder_dialog">
 
     <ImageView
         android:id="@+id/a"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/top_rounded_green"
-        android:gravity="center"
         android:padding="10dp"
         android:scaleType="fitCenter"
         android:src="@drawable/info" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/dialog_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/a"
-        android:orientation="vertical"
+        android:padding="12sp"
+        android:text="All charges of different offices are shown below. Select a charge in order to proceed. "
+        android:textColor="@color/hrtc_green"
+        android:textSize="18sp" />
+
+    <ListView
+        android:id="@+id/resultListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/dialog_result"
+        android:layout_above="@+id/bottom_buttons"
+        android:layout_margin="10dp" />
+
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
         android:weightSum="2">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.8"
-            android:orientation="vertical">
+        <Button
+            android:id="@+id/dialog_cancel"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/customborder_dialog_red"
+            android:text="Cancel"
+            android:textColor="#FFFFFFFF" />
 
-            <ScrollView
-                android:id="@+id/layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/a">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Top TextView with rounded corners -->
-                    <TextView
-                        android:id="@+id/dialog_result"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left|center_vertical|center_horizontal"
-                        android:padding="12sp"
-                        android:text="Select Main Charge or Additional Charge to Proceed"
-                        android:textColor="@color/hrtc_green"
-                        android:textSize="18sp"/>
-
-                    <ListView
-                        android:id="@+id/resultListView"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"/>
-                </LinearLayout>
-            </ScrollView>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="0.2"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:weightSum="2"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/dialog_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/customborder_dialog_red"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:layout_marginEnd="5dp"
-                    android:text="Cancel"
-                    android:textColor="#FFFFFFFF" />
-
-                <Button
-                    android:id="@+id/dialog_ok"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/customborder_dialog_green"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="Proceed"
-                    android:textColor="#FFFFFFFF" />
-            </LinearLayout>
-
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/dialog_ok"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/customborder_dialog_green"
+            android:text="Proceed"
+            android:textColor="#FFFFFFFF" />
     </LinearLayout>
+
 </RelativeLayout>

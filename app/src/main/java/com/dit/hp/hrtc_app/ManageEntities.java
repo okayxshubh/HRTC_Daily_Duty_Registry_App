@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -18,7 +19,7 @@ import com.dit.hp.hrtc_app.utilities.Preferences;
 
 public class ManageEntities extends AppCompatActivity {
 
-    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8,  aboutUsCard;
+    CardView cardView1, cardView2, cardView3, cardViewOffice, cardView5, cardView6, cardView7, cardView8,  aboutUsCard;
     ImageButton profileBtn;
     TextView welcomeTV, depotLocationTV, roleIdTV;
     CustomDialog CD = new CustomDialog();
@@ -36,11 +37,12 @@ public class ManageEntities extends AppCompatActivity {
         cardView1 = findViewById(R.id.cardView1);
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
-//        cardView4 = findViewById(R.id.cardView4);
-//        cardView5 = findViewById(R.id.cardView5);
         cardView6 = findViewById(R.id.cardView6);
         cardView7 = findViewById(R.id.cardView7);
         cardView8 = findViewById(R.id.cardView8);
+
+        cardViewOffice = findViewById(R.id.cardViewOffice);
+//        cardView5 = findViewById(R.id.cardView5);
 
         reloadUserDetails();
 
@@ -77,16 +79,6 @@ public class ManageEntities extends AppCompatActivity {
             startActivity(intent);
         });
 
-//        cardView4.setOnClickListener(v -> {
-//            Intent intent = new Intent(this, AllDriversCards.class);
-//            startActivity(intent);
-//        });
-//
-//        cardView5.setOnClickListener(v -> {
-//            Intent intent = new Intent(this, AllConductorsCards.class);
-//            startActivity(intent);
-//        });
-
         cardView6.setOnClickListener(v -> {
             // New Transfer Page
             Intent intent = new Intent(this, TransferHome.class);
@@ -102,6 +94,13 @@ public class ManageEntities extends AppCompatActivity {
             Intent intent = new Intent(this, AllStaffCards.class);
             startActivity(intent);
         });
+
+
+        cardViewOffice.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AllOfficeCards.class);
+            startActivity(intent);
+        });
+
 
 
         aboutUsCard.setOnClickListener(v -> {

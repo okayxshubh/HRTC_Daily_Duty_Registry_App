@@ -49,6 +49,13 @@ public class ShubhAsyncPost extends AsyncTask<UploadObject, Void, ResponsePojoGe
             return Data_From_Server;
         }
 
+        // Login
+        else if (uploadObjects[0].getTasktype() == TaskType.LOGIN_HRTC_HIMACCESS) {
+            Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
+            Data_From_Server = http_manager.PostDataNewFixWithoutJWT(uploadObjects[0]);
+            return Data_From_Server;
+        }
+
         // DEPOT
         else if (uploadObjects[0].getTasktype() == TaskType.ADD_DEPOT) {
             Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());

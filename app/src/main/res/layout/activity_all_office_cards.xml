@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -69,43 +70,42 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:layout_marginEnd="10dp"-->
-<!--            android:background="@drawable/search_view_background"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:padding="10dp">-->
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="10dp"-->
+        <!--            android:layout_marginEnd="10dp"-->
+        <!--            android:background="@drawable/search_view_background"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:padding="10dp">-->
 
-<!--            <TextView-->
-<!--                android:id="@+id/sortTextView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:fontFamily="@font/raleway_semibold"-->
-<!--                android:gravity="center"-->
-<!--                android:hint="Sort By Bus Type"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="16sp" />-->
+        <!--            <TextView-->
+        <!--                android:id="@+id/sortTextView"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:fontFamily="@font/raleway_semibold"-->
+        <!--                android:gravity="center"-->
+        <!--                android:hint="Sort By Employment Type"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="16sp" />-->
 
-
-<!--        </LinearLayout>-->
+        <!--        </LinearLayout>-->
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingEnd="10dp"
             android:orientation="horizontal"
+            android:paddingEnd="10dp"
             android:weightSum="1">
 
             <SearchView
                 android:id="@+id/searchView"
-                android:layout_weight="0.6"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
+                android:layout_weight="0.6"
                 android:background="@drawable/search_view_background"
                 android:elevation="4dp"
                 android:iconifiedByDefault="false"
@@ -114,19 +114,17 @@
                 android:textColorHint="@color/gray" />
 
             <ImageButton
-                android:layout_weight="0.2"
                 android:id="@+id/addBtn"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:padding="5dp"
+                android:layout_weight="0.2"
                 android:background="?attr/selectableItemBackground"
+                android:padding="5dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/add_entity"
-                android:tooltipText="Add"/>
+                android:tooltipText="Add" />
 
         </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -144,6 +142,7 @@
                     android:background="@drawable/home_white_bg"
                     android:padding="5dp"
                     tools:listitem="@layout/office_card_view" />
+
             </ScrollView>
         </LinearLayout>
 
@@ -154,7 +153,6 @@
         android:layout_height="match_parent"
         android:elevation="100dp">
 
-        <!-- CardView for Back -->
         <androidx.cardview.widget.CardView
             android:id="@+id/backCard"
             android:layout_width="match_parent"

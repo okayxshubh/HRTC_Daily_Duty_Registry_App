@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:weightSum="3"
     android:layout_marginTop="5dp"
-    android:background="#fff"
-    android:elevation="4dp"
+    android:layout_margin="10dp"
     android:orientation="horizontal"
     android:padding="5dip" >
 
@@ -26,10 +25,10 @@
         <ImageView
             android:id="@+id/imageViewEstablishment"
             android:layout_width="60dip"
-            android:layout_margin="3dp"
+            android:layout_margin="6dp"
             android:layout_height="60dip"
             android:layout_gravity="top"
-            android:src="@drawable/staff" />
+            android:src="@drawable/role_or_charges" />
 
     </LinearLayout>
 
@@ -47,7 +46,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Establishment Name"
+            android:text="Role Name"
             android:textColor="@color/blue"
             android:textSize="18dip"
             android:textStyle="bold"
