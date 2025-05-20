@@ -1,0 +1,682 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+    <!-- Top Section: Header Image -->
+    <RelativeLayout
+        android:id="@+id/top_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/navyblue"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#B7FFFFFF"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/hrtcBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="centerCrop"
+                android:src="@drawable/hrtc" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/raleway_semibold"
+                android:gravity="center"
+                android:letterSpacing="0.025"
+                android:text="Add Office"
+                android:textColor="@color/hrtc_green"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/logOutB"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/hp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <!-- Body Section: Scrollable Content -->
+    <LinearLayout
+        android:id="@+id/body_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <!--BODY-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="#FFFF"
+                    android:elevation="5dp"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/hrtc_green"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:gravity="center|center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="Basic Details"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="fill_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="2dp"-->
+<!--                    android:background="#fff"-->
+<!--                    android:elevation="4dp"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/departmentLabel"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:padding="5dp"-->
+<!--                        android:paddingStart="18dp"-->
+<!--                        android:text="Please Select Department"-->
+<!--                        android:textAlignment="textStart"-->
+<!--                        android:textColor="@color/darkblue"-->
+<!--                        android:textSize="16sp" />-->
+
+<!--                    &lt;!&ndash; Searchable Spinner for Employment Type &ndash;&gt;-->
+<!--                    <com.doi.spinnersearchable.SearchableSpinner-->
+<!--                        android:id="@+id/departmentSpinner"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        android:layout_margin="10dp"-->
+<!--                        android:background="@drawable/customborder_dialog"-->
+<!--                        android:fontFamily="@font/raleway_semibold"-->
+<!--                        android:textColor="#13914f"-->
+<!--                        android:textSize="16sp"-->
+<!--                        app:hintText="Please Select Department" />-->
+
+<!--                </LinearLayout>-->
+
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/parentOfficeLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Please Select Parent Office (if any)"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <!-- Searchable Spinner for Employment Type -->
+                    <com.doi.spinnersearchable.SearchableSpinner
+                        android:id="@+id/parentOfficeSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:textColor="#13914f"
+                        android:textSize="16sp"
+                        app:hintText="Please Select Parent Office" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/officeLevelLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Please Select Office Level"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <!-- Searchable Spinner for Employment Type -->
+                    <com.doi.spinnersearchable.SearchableSpinner
+                        android:id="@+id/officeLevelSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:textColor="#13914f"
+                        android:textSize="16sp"
+                        app:hintText="Please Select Office Level" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginTop="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/officeNameLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Office Name"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/officeName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:hint="Office Name"
+                        android:padding="8dp"
+                        android:textColor="#13914f"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/areaLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Area (Urban/Rural)"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <!-- Searchable Spinner for Employment Type -->
+                    <com.doi.spinnersearchable.SearchableSpinner
+                        android:id="@+id/areaSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:textColor="#13914f"
+                        android:textSize="16sp"
+                        app:hintText="Please Select Area (Urban/Rural)" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/districtLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="District"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <!-- Searchable Spinner for Employment Type -->
+                    <com.doi.spinnersearchable.SearchableSpinner
+                        android:id="@+id/districtSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:textColor="#13914f"
+                        android:textSize="16sp"
+                        app:hintText="Please Select District" />
+
+                </LinearLayout>
+
+
+                <!--URBAN LL-->
+                <LinearLayout
+                    android:id="@+id/urbanLinearLayout"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/municipalNPLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Select Municipal / Nagar Panchayat"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/municipalNPSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Municipal / Nagar Panchayat" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/wardLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Select Ward"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/wardSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Ward" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <!--Rural LL-->
+                <LinearLayout
+                    android:id="@+id/ruralLinearLayout"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/blockLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Block"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/blockSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Block" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/panchayatLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Panchayat"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/panchayatSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Panchayat" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/villageLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Village"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/villageSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Village" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/designationLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="HOD/HOO Designation"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <com.doi.spinnersearchable.SearchableSpinner
+                        android:id="@+id/designationSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:textColor="#13914f"
+                        android:textSize="16sp"
+                        app:hintText="Please Select HOD/HOO Designation" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/addressLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Address"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <com.doi.spinnersearchable.SearchableSpinner
+                        android:id="@+id/addressSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:textColor="#13914f"
+                        android:textSize="16sp"
+                        app:hintText="Please Select Address" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginTop="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/pincodeLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:paddingStart="18dp"
+                        android:text="Pin Code"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+
+                    <EditText
+                        android:id="@+id/pincode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:hint="Please Enter Pincode "
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:textColor="#13914f"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginTop="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/sanctionedPostLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Total No. of Sanctioned Posts"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+
+                    <EditText
+                        android:id="@+id/sanctionedPost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:hint="Please Enter Total No. of Sanctioned Posts"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:textColor="#13914f"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+
+    <!-- Bottom Section: Buttons -->
+    <LinearLayout
+        android:id="@+id/bottom_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="0.2"
+        android:background="#FFFF"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/red"
+            android:text="Back"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/proceedBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:text="Proceed"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

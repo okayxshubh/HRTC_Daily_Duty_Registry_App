@@ -25,7 +25,6 @@ import com.dit.hp.hrtc_app.Homescreen;
 import com.dit.hp.hrtc_app.LoginHRTC;
 import com.dit.hp.hrtc_app.ManageEntities;
 import com.dit.hp.hrtc_app.Modals.AdditonalChargePojo;
-import com.dit.hp.hrtc_app.Modals.HimAccessUserInfo;
 import com.dit.hp.hrtc_app.Modals.RoutePojo;
 import com.dit.hp.hrtc_app.R;
 import com.dit.hp.hrtc_app.utilities.Preferences;
@@ -259,7 +258,6 @@ public class CustomDialog {
     }
 
 
-
     public void showDismissActivityDialog(final Activity activity, String msg) {
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -379,7 +377,7 @@ public class CustomDialog {
                 activity.finish();
 
                 Intent intent = new Intent(activity, DailyDutyRegisterCards.class);
-                intent.putExtra( "AlreadyExistingRoute", alreadyExistingRouteName);
+                intent.putExtra("AlreadyExistingRoute", alreadyExistingRouteName);
                 startActivity(activity, intent, null);
             }
         });
@@ -422,8 +420,6 @@ public class CustomDialog {
     }
 
 
-
-
     public void showAdditionalChargeDialog(final Activity activity, List<AdditonalChargePojo> additionalChargesList) {
         if (activity != null) {
             final Dialog dialog = new Dialog(activity);
@@ -458,13 +454,11 @@ public class CustomDialog {
             });
 
             dialog_ok.setOnClickListener(v -> {
-                if (selectedAdditionalCharge[0] != null){
-
+                if (selectedAdditionalCharge[0] != null) {
 
                     // Validation for HRTC Department
-                    if (!selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentName().trim().equalsIgnoreCase("HIMACHAL ROAD TRANSPORT CORPORATION")
-                            || !(selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentId() == 106)
-                    ){
+                    if (!selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentName().trim().equalsIgnoreCase("HIMACHAL ROAD TRANSPORT CORPORATION"))
+                    {
                         CustomDialog customDialog = new CustomDialog();
                         customDialog.showDialog(activity, "The selected charge does not belongs to the HRTC Department.");
                         return;
@@ -476,12 +470,12 @@ public class CustomDialog {
                     startActivity(activity, intent, null);
 
                     // Office ID Becomes the Depot ID now
-//                    Preferences.getInstance().roleId = selectedAdditionalCharge[0].getRoleId();
-
+                    Preferences.getInstance().depotId = selectedAdditionalCharge[0].getOfficePojo().getOfficeId();
 
 //                    // Saving preferences as the selected charge
                     Preferences.getInstance().empId = selectedAdditionalCharge[0].getEmpId();
                     Preferences.getInstance().departmentId = selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentId();
+
 
 //                    Preferences.getInstance().roleId = selectedAdditionalCharge[0].getRoleId();
 //                    Preferences.getInstance().roleName = selectedAdditionalCharge[0].getRoleName();
@@ -494,15 +488,15 @@ public class CustomDialog {
 
                     dialog.dismiss();
                     activity.finish();
+                } else {
+                    CustomDialog customDialog = new CustomDialog();
+                    customDialog.showDialog(activity, "Please select an additional charge.");
                 }
             });
 
             dialog.show();
         }
     }
-
-
-
 
 
 }

@@ -80,7 +80,6 @@ public enum TaskType {
     GET_HRTC_JWT_TOKEN(65),
 
     ADD_OFFICE_LEVEL(66),
-    GET_OFFICE_LEVELS(67),
     EDIT_OFFICE_LEVEL(68),
     DELETE_OFFICE_LEVEL(69),
 
@@ -90,32 +89,19 @@ public enum TaskType {
     EDIT_OFFICE(72),
     DELETE_OFFICE(73),
 
+    GET_PARENT_OFFICES(74),
+    GET_AREA(76),
+    GET_DISTRICT(77),
+    GET_MUNICIPALITY_NP(78),
+    GET_WARD(79),
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    GET_BLOCK(80),
+    GET_PANCHAYAT(81),
+    GET_VILLAGE(82),
+    GET_HIMACCESS_LOGIN_OFFICE(83),
+    GET_OFFICE_LEVELS(84),
+    GET_HOD_DESIGNATION(85),
+    GET_DEPARTMENT(78),
 
 
 

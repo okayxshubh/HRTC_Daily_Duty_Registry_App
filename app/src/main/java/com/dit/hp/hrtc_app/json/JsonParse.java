@@ -10,12 +10,14 @@ import com.dit.hp.hrtc_app.Modals.DailyRegisterCardFinal;
 import com.dit.hp.hrtc_app.Modals.DepartmentPojo;
 import com.dit.hp.hrtc_app.Modals.DepotPojo;
 import com.dit.hp.hrtc_app.Modals.DesignationPojo;
+import com.dit.hp.hrtc_app.Modals.DistrictPojo;
 import com.dit.hp.hrtc_app.Modals.EmployeePojo;
 import com.dit.hp.hrtc_app.Modals.EmploymentTypePojo;
 import com.dit.hp.hrtc_app.Modals.GenderPojo;
 import com.dit.hp.hrtc_app.Modals.HimAccessUser;
 import com.dit.hp.hrtc_app.Modals.HimAccessUserInfo;
 import com.dit.hp.hrtc_app.Modals.LocationsPojo;
+import com.dit.hp.hrtc_app.Modals.OfficeLevel;
 import com.dit.hp.hrtc_app.Modals.OfficePojo;
 import com.dit.hp.hrtc_app.Modals.OfficeTypePojo;
 import com.dit.hp.hrtc_app.Modals.OrganisationPojo;
@@ -179,6 +181,7 @@ public class JsonParse {
                 // Department
                 DepartmentPojo department = new DepartmentPojo();
                 department.setDepartmentId(obj.optInt("departmentId"));
+                department.setDepartmentCode(obj.optString("departmentCode"));
                 department.setDepartmentName(obj.optString("departmentName"));
                 himAccessUserInfo.setMainDepartmentPojo(department);
 
@@ -1331,9 +1334,46 @@ public class JsonParse {
         return routeList;
     }
 
+    public static List<OfficePojo> parseAllOfficeCards(String data) {
+        List<OfficePojo> officeList = new ArrayList<>();
 
+        try {
+            JSONObject dataObject = new JSONObject(data);
+            JSONArray contentArray = dataObject.getJSONArray("content");
 
+            for (int i = 0; i < contentArray.length(); i++) {
+                JSONObject obj = contentArray.getJSONObject(i);
 
+                OfficePojo office = new OfficePojo();
+
+                office.setOfficeId(obj.optInt("id"));
+                office.setOfficeName(obj.optString("office_name"));
+                office.setSanctionedPosts(obj.optInt("sanctioned_posts"));
+                office.setOtherPosts(obj.optInt("other_posts"));
+
+                // Handle parent office (if null, default to 0 or -1)
+                String parentOffice = obj.optString("parent_office", null);
+                office.setOfficeParentId(parentOffice != null && !parentOffice.equals("null") ? 1 : 0); // Optional logic
+
+                // Create and set DepartmentPojo
+                DepartmentPojo dept = new DepartmentPojo();
+                dept.setDepartmentName(obj.optString("department_name"));
+                office.setDepartmentPojo(dept);
+
+                // OfficeTypePojo from office_level
+                OfficeTypePojo type = new OfficeTypePojo();
+                type.setOfficeTypeName(obj.optString("office_level"));
+                office.setOfficeTypePojo(type);
+
+                officeList.add(office);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return officeList;
+    }
 
     public static List<StopPojo> parseStops(String response) throws JSONException {
         List<StopPojo> stopsList = new ArrayList<>();
@@ -1362,6 +1402,128 @@ public class JsonParse {
 
         return stopsList;
     }
+
+
+    // FOR ADD OFFICE #######################
+    public static List<DistrictPojo> parseDistricts(String response) throws JSONException {
+        List<DistrictPojo> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject jsonObject = dataArray.getJSONObject(i);
+
+            DistrictPojo item = new DistrictPojo();
+            item.setDistrictLgdCode(jsonObject.optInt("lgdCode"));
+            item.setDistrictId(jsonObject.optInt("id"));
+            item.setDistrictName(jsonObject.optString("districtNameE"));
+            itemList.add(item);
+        }
+        return itemList;
+    }
+
+    public static List<DepartmentPojo> parseDepartments(String response) throws JSONException {
+        List<DepartmentPojo> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject jsonObject = dataArray.getJSONObject(i);
+
+            DepartmentPojo item = new DepartmentPojo();
+            item.setDepartmentId(jsonObject.optInt("id"));
+            item.setDepartmentName(jsonObject.optString("departmentName"));
+            item.setDepartmentCode(jsonObject.optString("departmentCode"));
+            itemList.add(item);
+        }
+        return itemList;
+    }
+
+    public static List<OfficePojo> parseParentOffices(String response) throws JSONException {
+        List<OfficePojo> officeList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject obj = dataArray.getJSONObject(i);
+            OfficePojo item = new OfficePojo();
+
+            item.setOfficeId(obj.optInt("id"));
+            item.setOfficeName(obj.optString("officeName", ""));
+            item.setAddress(obj.optString("address", ""));
+            item.setOfficeCategory(obj.optString("officeCategory", ""));
+
+            JSONObject officeObj = obj.optJSONObject("office");
+            item.setOfficeParentId(officeObj != null ? officeObj.optInt("id") : 0);
+
+            item.setLgdDistrictCode(obj.optInt("lgdDistrictCode", 0));
+            item.setLgdBlockCode(obj.has("lgdBlockCode") && !obj.isNull("lgdBlockCode") ? obj.getInt("lgdBlockCode") : 0);
+            item.setLgdPanchayatCode(obj.has("lgdPanchayatCode") && !obj.isNull("lgdPanchayatCode") ? obj.getInt("lgdPanchayatCode") : 0);
+            item.setLgdVillageCode(obj.has("lgdVillageCode") && !obj.isNull("lgdVillageCode") ? obj.getInt("lgdVillageCode") : 0);
+            item.setLgdMunicipalCode(obj.optInt("lgdMunicipalCode", 0));
+            item.setLgdWardCode(obj.optInt("lgdWardCode", 0));
+            item.setRevenueTehsilId(obj.has("revenueTehsilId") && !obj.isNull("revenueTehsilId") ? obj.getInt("revenueTehsilId") : 0);
+            item.setRevenuePatwarId(obj.has("revenuePatwarId") && !obj.isNull("revenuePatwarId") ? obj.getInt("revenuePatwarId") : 0);
+            item.setPinCode(obj.optInt("pinCode", 0));
+            item.setSanctionedPosts(obj.optInt("sanctionedPosts", 0));
+            item.setOtherPosts(obj.optInt("otherPosts", 0));
+
+            // Designation
+            JSONObject designationObj = obj.optJSONObject("designation");
+            if (designationObj != null) {
+                DesignationPojo desig = new DesignationPojo();
+                desig.setDesignationId(designationObj.optInt("id"));
+                desig.setDesignationCode(designationObj.optString("designationCode", ""));
+                desig.setDesignationName(designationObj.optString("designationName", ""));
+                item.setDesignationPojo(desig);
+            }
+
+            // Department
+            JSONObject deptObj = obj.optJSONObject("department");
+            if (deptObj != null) {
+                DepartmentPojo dept = new DepartmentPojo();
+                dept.setDepartmentId(deptObj.optInt("id"));
+                dept.setDepartmentCode(deptObj.optString("departmentCode", ""));
+                dept.setDepartmentName(deptObj.optString("departmentName", ""));
+                item.setDepartmentPojo(dept);
+            }
+
+            // Office Type
+            JSONObject typeObj = obj.optJSONObject("officeType");
+            if (typeObj != null) {
+                OfficeTypePojo type = new OfficeTypePojo();
+                type.setOfficeTypeId(typeObj.optInt("id"));
+                type.setOfficeTypeName(typeObj.optString("typeName", ""));
+                item.setOfficeTypePojo(type);
+            }
+
+            officeList.add(item);
+        }
+
+        return officeList;
+    }
+
+
+    public static List<OfficeLevel> parseOfficeLevels(String response) throws JSONException {
+        List<OfficeLevel> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject jsonObject = dataArray.getJSONObject(i);
+
+            OfficeLevel item = new OfficeLevel();
+            item.setOfficeLevelId(jsonObject.optInt("id"));
+            item.setOfficeLevelName(jsonObject.optString("typeName"));
+
+            JSONObject dept = jsonObject.optJSONObject("department");
+            if (dept != null) {
+                item.setOfficeLevelDepartmentName(dept.optString("departmentName"));
+            }
+
+            itemList.add(item);
+        }
+
+        return itemList;
+    }
+
+
 
 
 

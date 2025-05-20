@@ -6,6 +6,7 @@ public class DepartmentPojo implements Serializable {
 
         private int departmentId;
         private String departmentName;
+        private String departmentCode;
 
         public int getDepartmentId() {
                 return departmentId;
@@ -23,12 +24,17 @@ public class DepartmentPojo implements Serializable {
                 this.departmentName = departmentName;
         }
 
+        public String getDepartmentCode() {
+                return departmentCode;
+        }
+
+        public void setDepartmentCode(String departmentCode) {
+                this.departmentCode = departmentCode;
+        }
+
         @Override
         public String toString() {
-                return "DepartmentPojo{" +
-                        "departmentId=" + departmentId +
-                        ", departmentName='" + departmentName + '\'' +
-                        '}';
+                return departmentName;
         }
 }
 

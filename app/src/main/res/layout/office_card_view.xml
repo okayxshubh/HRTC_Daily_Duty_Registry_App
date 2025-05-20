@@ -1,7 +1,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="120dp"
@@ -38,29 +37,23 @@
 
 
         <TextView
-            android:id="@+id/L1TV"
-            android:layout_width="wrap_content"
+            android:id="@+id/L2TV"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="80dp"
+            android:ellipsize="end"
             android:fontFamily="@font/raleway_semibold"
-            android:text="Office ID: "
-            android:textColor="@android:color/black"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/staffTypeImageView"
-            app:layout_constraintTop_toBottomOf="@+id/headTV" />
-
-        <TextView
-            android:id="@+id/L2TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/raleway_semibold"
+            android:maxLines="2"
             android:text="Office Level: "
             android:textColor="@android:color/black"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/L1TV"
-            app:layout_constraintTop_toBottomOf="@+id/L1TV" />
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/staffTypeImageView"
+            app:layout_constraintTop_toBottomOf="@id/headTV" />
 
         <ImageView
             android:id="@+id/staffTypeImageView"

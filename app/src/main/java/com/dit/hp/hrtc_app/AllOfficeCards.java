@@ -86,7 +86,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
         backCard.setOnClickListener(v -> AllOfficeCards.this.finish());
 
         addBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(AllOfficeCards.this, AddVehicle.class);
+            Intent intent = new Intent(AllOfficeCards.this, AddOffice.class);
             startActivity(intent);
             AllOfficeCards.this.finish();
         });
@@ -138,6 +138,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
 
 
     private void loadMoreItems() {
+        System.out.println("LOADING MORE DATA");
         isLoading = true;
         currentPage++;
         fetchRecords(currentPage, pageSize);
@@ -152,7 +153,9 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
                 object.setUrl(Econstants.sarvatra_url);
                 object.setMethordName("/office/getPagedOffices?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
-                                + "&deptId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().departmentId)))
+
+                        // HARDCODE THIS DEPARTMENT ID FOR HRTC
+                                + "&deptId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(106))) // Hardcoded ID for HRTC
                                 + "&empId=" + URLEncoder.encode(aesCrypto.encrypt("0"), "UTF-8")
                                 + "&page=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(page)))
 //                        + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(""), "UTF-8")
@@ -191,18 +194,17 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
             if (AppStatus.getInstance(AllOfficeCards.this).isOnline()) {
 
                 UploadObject object = new UploadObject();
-                object.setUrl(Econstants.sarvatra_url);
                 object.setMethordName("/office/getPagedOffices?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
                         + "&deptId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().departmentId)))
                         + "&empId=" + URLEncoder.encode(aesCrypto.encrypt("0"), "UTF-8")
                         + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(query), "UTF-8")
                 );
-                object.setTasktype(TaskType.GET_OFFICES);
+                object.setTasktype(TaskType.GET_OFFICES_SEARCH);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
                 isLoading = true;  // Set loading flag
-                new ShubhAsyncGet(AllOfficeCards.this, AllOfficeCards.this, TaskType.GET_OFFICES).execute(object);
+                new ShubhAsyncGet(AllOfficeCards.this, AllOfficeCards.this, TaskType.GET_OFFICES_SEARCH).execute(object);
             } else {
                 // Do nothing if CD already shown once
                 CD.showDialog(AllOfficeCards.this, Econstants.internetNotAvailable);
@@ -387,19 +389,17 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
 
                     if (response.getStatus().equalsIgnoreCase("OK")) {
 
-                        // PARSE ALL CARDS
-//                        pojoList = JsonParse.parseVehicleListForCards(response.getData());
-//
-//                        if (pojoList.size() > 0) {
-//                            Log.e("Reports Data: ", pojoList.toString());
-//
-//                            // Load records Pagination
-//                            pojoList = JsonParse.parseVehicleListForCards(response.getData());
-//                            addMoreData(pojoList); // Add More Data on Scroll + Keep the old data
-//
-//                        } else {
-////                            CD.showDialog(AllBusesCards.this, "No Vehicles Found");
-//                        }
+                       //  PARSE ALL CARDS
+                        pojoList = JsonParse.parseAllOfficeCards(response.getData());
+
+                        if (pojoList.size() > 0) {
+                            Log.e("Reports Data: ", pojoList.toString());
+
+                            addMoreData(pojoList); // Add More Data on Scroll + Keep the old data
+
+                        } else {
+                            CD.showDialog(AllOfficeCards.this, "No Vehicles Found");
+                        }
 
                     } else {
                         CD.showDialog(AllOfficeCards.this, response.getMessage());
@@ -407,7 +407,11 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
                 } else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
                     // Handle HTTP 401 Unauthorized response (session expired)
                     CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
-                } else {
+                }
+                else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_NO_CONTENT))) {
+                    System.out.println("NO Content");
+                }
+                else {
                     CD.showDialog(AllOfficeCards.this, "Not able to fetch data");
                 }
             } else {
@@ -423,20 +427,20 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
                 if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
                     response = JsonParse.getDecryptedSuccessResponse(result.getResponse());
 
-//                    if ("OK".equalsIgnoreCase(response.getStatus())) {
-//                        pojoList.clear();  // Clear previous results
-//                        pojoList = JsonParse.parseVehicleListForCards(response.getData());
-//
-//                        if (!pojoList.isEmpty()) {
-//                            updateData(pojoList);  // Update RecyclerView with search results
-//                        } else {
-//                            // Clear RecyclerView when no staff is found
-//                            pojoList.clear();
-//                            updateData(pojoList);
-//                        }
-//                    } else {
-//                        CD.showDialog(this, response.getMessage());
-//                    }
+                    if ("OK".equalsIgnoreCase(response.getStatus())) {
+                        pojoList.clear();  // Clear previous results
+                        pojoList = JsonParse.parseAllOfficeCards(response.getData());
+
+                        if (!pojoList.isEmpty()) {
+                            updateData(pojoList);  // Update RecyclerView with search results
+                        } else {
+                            // Clear RecyclerView when no staff is found
+                            pojoList.clear();
+                            updateData(pojoList);
+                        }
+                    } else {
+                        CD.showDialog(this, response.getMessage());
+                    }
                 } else {
                     CD.showDialog(this, "Unable to fetch data");
                 }

@@ -76,7 +76,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hrtc_login);
+        setContentView(R.layout.activity_new_login);
 
         Preferences.getInstance().loadPreferences(this);
 
@@ -85,7 +85,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         password = findViewById(R.id.password);
         signInBtn = findViewById(R.id.signIn);
         forgotPassBtn = findViewById(R.id.forgotPassBtn);
-
 
         userName.setText("bhupendersingh.thakur@himaccess.hp.gov.in");
         password.setText("Test@123");
@@ -105,47 +104,52 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
         // NEW HIM ACCESS
         signInBtn.setOnClickListener(v -> {
-            if (!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
-                Log.i("ID", "ID: " + userName.getText().toString().trim());
-                Log.i("Pass", "Pass: " + password.getText().toString());
 
-                if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
-                    UploadObject uploadObject = new UploadObject();
-                    uploadObject.setUrl(Econstants.eparivar_url);
-                    uploadObject.setMethordName(Econstants.loginLDAP);
-                    uploadObject.setMasterName("");
-                    uploadObject.setTasktype(TaskType.LOGIN_HRTC_HIMACCESS);
-                    uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+            Intent intent = new Intent(LoginHRTC.this, Homescreen.class);
+            startActivity(intent);
+            finish();
 
-                    Map<String, String> params = new HashMap<>();
-                    try {
-                        // Encrypt user credentials
-                        String encrypteduserName = aesCrypto.encrypt(userName.getText().toString().trim());
-                        String encryptedPassword = aesCrypto.encrypt(password.getText().toString());
-
-                        // Add encrypted + encoded data to params
-                        params.put("username", URLEncoder.encode(encrypteduserName, "UTF-8"));
-                        params.put("password", URLEncoder.encode(encryptedPassword, "UTF-8"));
-
-                        // Encode Params for PUT Request
-                        String encParams = buildParams(params); // Method to build params to append in URL
-                        Log.i("Login Params: ", encParams);
-
-                        uploadObject.setParam(encParams);
-
-                    } catch (Exception e) {
-                        Log.e("Encryption Error", e.getMessage());
-                    }
-
-                    new ShubhAsyncPost(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC_HIMACCESS).execute(uploadObject);
-                    Log.i("JSON For Login: ", uploadObject.getParam());
-
-                } else {
-                    CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
-                }
-            } else {
-                CD.showDialog(LoginHRTC.this, "Please enter valid Username and Password");
-            }
+//            if (!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+//                Log.i("ID", "ID: " + userName.getText().toString().trim());
+//                Log.i("Pass", "Pass: " + password.getText().toString());
+//
+//                if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
+//                    UploadObject uploadObject = new UploadObject();
+//                    uploadObject.setUrl(Econstants.eparivar_url);
+//                    uploadObject.setMethordName(Econstants.loginLDAP);
+//                    uploadObject.setMasterName("");
+//                    uploadObject.setTasktype(TaskType.LOGIN_HRTC_HIMACCESS);
+//                    uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+//
+//                    Map<String, String> params = new HashMap<>();
+//                    try {
+//                        // Encrypt user credentials
+//                        String encrypteduserName = aesCrypto.encrypt(userName.getText().toString().trim());
+//                        String encryptedPassword = aesCrypto.encrypt(password.getText().toString());
+//
+//                        // Add encrypted + encoded data to params
+//                        params.put("username", URLEncoder.encode(encrypteduserName, "UTF-8"));
+//                        params.put("password", URLEncoder.encode(encryptedPassword, "UTF-8"));
+//
+//                        // Encode Params for PUT Request
+//                        String encParams = buildParams(params); // Method to build params to append in URL
+//                        Log.i("Login Params: ", encParams);
+//
+//                        uploadObject.setParam(encParams);
+//
+//                    } catch (Exception e) {
+//                        Log.e("Encryption Error", e.getMessage());
+//                    }
+//
+//                    new ShubhAsyncPost(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC_HIMACCESS).execute(uploadObject);
+//                    Log.i("JSON For Login: ", uploadObject.getParam());
+//
+//                } else {
+//                    CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
+//                }
+//            } else {
+//                CD.showDialog(LoginHRTC.this, "Please enter valid Username and Password");
+//            }
         });
 
         forgotPassBtn.setOnClickListener(v -> {
@@ -590,9 +594,13 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                             himAccessUserInfo = JsonParse.parseUserInfoPojo(decryptedResponse);
 
                             // Use first object (if needed)
-                            Log.e("info", himAccessUserInfo.getApplicationName());
-                            Log.e("info", himAccessUserInfo.getEmployeePojo().getEmployeeName());
+                            Log.e("info", himAccessUserInfo.getRoleId().toString());
                             Log.e("info", himAccessUserInfo.getEmployeePojo().getEmailId());
+
+
+                            // Add other preferences to save here
+                            Preferences.getInstance().roleId = himAccessUserInfo.getRoleId();
+                            Preferences.getInstance().userName = himAccessUserInfo.getEmployeePojo().getEmployeeName();
 
                             Preferences.getInstance().savePreferences(this);
 
@@ -640,17 +648,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                             Toast.makeText(this, "No Additional Charges Fetched", Toast.LENGTH_SHORT).show();
                         }
 
-                        // Saving preferences
-//                        Preferences.getInstance().empId = himAccessUser.getEmpId();
-//                        Preferences.getInstance().roleId = himAccessUser.getRoleId();
-//                        Preferences.getInstance().roleName = himAccessUser.getRoleName();
-//                        Preferences.getInstance().depotId = himAccessUser.getId();
-//                        Preferences.getInstance().depotName = himAccessUser.getDepotName();
-//                        Preferences.getInstance().userName = himAccessUser.getuserName();
-//                        Preferences.getInstance().token = himAccessUser.getToken();
-//                        Preferences.getInstance().savePreferences(this);
-
-
                         // Get Depots
 //                        if (himAccessUserInfo != null) {
 //                            // Call method
@@ -674,7 +671,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                 CD.showDialog(LoginHRTC.this, "Result is null");
             }
         }
-
 
         // Get Office Details
         else if (TaskType.GET_USER_OFFICE_INFO == taskType) {

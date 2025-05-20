@@ -3,8 +3,6 @@ package com.dit.hp.hrtc_app.Adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dit.hp.hrtc_app.Modals.OfficePojo;
 import com.dit.hp.hrtc_app.R;
 import com.dit.hp.hrtc_app.interfaces.OnOfficeCardClickListeners;
-import com.dit.hp.hrtc_app.utilities.Econstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +46,7 @@ public class OfficeCardsAdapter extends RecyclerView.Adapter<OfficeCardsAdapter.
 
     // ViewHolder for item information
     public static class CardViewHolder extends RecyclerView.ViewHolder {
-        TextView headTV, L2TV, officialId;
+        TextView headTV, L2TV;
         ImageButton editBtn, deleteBtn;
         CardView cardView;
         ImageView mainImageView;
@@ -57,7 +54,6 @@ public class OfficeCardsAdapter extends RecyclerView.Adapter<OfficeCardsAdapter.
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
             headTV = itemView.findViewById(R.id.headTV);
-            officialId = itemView.findViewById(R.id.L1TV);
             L2TV = itemView.findViewById(R.id.L2TV);
             mainImageView = itemView.findViewById(R.id.staffTypeImageView);
 
@@ -72,7 +68,7 @@ public class OfficeCardsAdapter extends RecyclerView.Adapter<OfficeCardsAdapter.
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.staff_card_view, parent, false);
+                .inflate(R.layout.office_card_view, parent, false);
         return new CardViewHolder(view);
     }
 
@@ -82,10 +78,8 @@ public class OfficeCardsAdapter extends RecyclerView.Adapter<OfficeCardsAdapter.
 
         holder.headTV.setText(selectedPojo.getOfficeName());
 
-        holder.officialId.setText("ID: " + String.valueOf(selectedPojo.getOfficeParentId()));
 
-        holder.L2TV.setText("Staff Type: " + selectedPojo.getDepartmentPojo().getDepartmentName());
-
+        holder.L2TV.setText("Department: " + selectedPojo.getDepartmentPojo().getDepartmentName());
 
         // Setting Logos According to Office types
 //        if (Econstants.isNotEmpty(String.valueOf(selectedPojo.getOfficeParentId()))) {

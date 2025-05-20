@@ -53,7 +53,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListenerGet {
 
-    CardView cardView1, cardView2, cardView3, cardView4, aboutUsCard;
+    CardView cardView1, cardView2, cardView3, cardView4, cardView5, aboutUsCard;
     ImageButton profileBtn;
     TextView welcomeTV, depotNameTV, addaTV, roleIdTV, bottomTextView;
     ImageView bottomImageView;
@@ -92,6 +92,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
         cardView4 = findViewById(R.id.cardView4);
+        cardView5 = findViewById(R.id.cardView5);
         aboutUsCard = findViewById(R.id.aboutUsCard);
         profileBtn = findViewById(R.id.profileB);
 
@@ -203,6 +204,25 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
             } else {
                 CD.showDialog(this, "This privilege is restricted to the Admin. Please contact your administrator for further assistance.");
             }
+        });
+
+        // Offices
+        cardView5.setOnClickListener(v -> {
+//            Integer roleId = Preferences.getInstance().roleId;  // ROLE ID COMMING AS 29 FIXX IT
+//            Log.e("ROLE Here: ", "ROLE Here: " + roleId);
+//            if (roleId != null && (roleId == 1 || roleId == 2)) {
+//                if (isDepotSelected()) {
+                    Intent intent = new Intent(Homescreen.this, AllOfficeCards.class);
+                    startActivity(intent);
+//                } else {
+//                    showDepotSelectionPopup();
+//                }
+//            } else if (roleId != null) {
+//                CD.showDialog(this, "This privilege is restricted to the Admin. Please contact your administrator for further assistance.");
+//            } else {
+//                CD.showDialog(this, "User role not found. Please login again.");
+//            }
+
         });
 
         // About Us Card click listener

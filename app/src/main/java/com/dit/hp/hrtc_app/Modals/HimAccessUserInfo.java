@@ -34,6 +34,7 @@ public class HimAccessUserInfo implements Serializable {
     private List<Object> ddoOfficeDetails; // unknown for noww
 
 
+
     public EmployeePojo getEmployeePojo() {
         return employeePojo;
     }

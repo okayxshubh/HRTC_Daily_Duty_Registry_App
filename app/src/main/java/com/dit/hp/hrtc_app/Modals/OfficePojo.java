@@ -193,10 +193,7 @@ public class OfficePojo implements Serializable {
 
     @Override
     public String toString() {
-        return "OfficePojo{" +
-                "officeId=" + officeId +
-                ", officeName='" + officeName + '\'' +
-                '}';
+        return officeName;
     }
 }
 

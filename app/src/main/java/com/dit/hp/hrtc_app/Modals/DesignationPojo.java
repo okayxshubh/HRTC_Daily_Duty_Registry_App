@@ -6,6 +6,15 @@ public class DesignationPojo implements Serializable {
 
         private int designationId;
         private String designationName;
+        private String designationCode;
+
+        public String getDesignationCode() {
+                return designationCode;
+        }
+
+        public void setDesignationCode(String designationCode) {
+                this.designationCode = designationCode;
+        }
 
         public int getDesignationId() {
                 return designationId;

@@ -304,7 +304,7 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
                 return Data_From_Server;
             }
 
-            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OFFICES.toString())) {
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_HIMACCESS_LOGIN_OFFICE.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetData(uploadObjects[0]);
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
@@ -402,6 +402,82 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_USER_OFFICE_INFO.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetDataWithJsonBody(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+
+
+            // HIM ACCESS STUFF
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OFFICES.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_PARENT_OFFICES.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_HOD_DESIGNATION.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OFFICE_LEVELS.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_DISTRICT.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_BLOCK.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetData(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_PANCHAYAT.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_VILLAGE.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_MUNICIPALITY_NP.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_WARD.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_DEPARTMENT.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
                 return Data_From_Server;
             }

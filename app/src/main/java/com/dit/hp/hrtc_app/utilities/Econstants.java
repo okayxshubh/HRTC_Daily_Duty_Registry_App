@@ -31,6 +31,9 @@ public class Econstants {
     public static final String API_NAME_HRTC = "HRTC";
     public static final String loginMethod = "/login/Auth?";
 
+    public static final Integer HRTC_DEPARTMENT_PARENT_ID = 106;
+
+
 
 //    public static final String base_url = "http://192.168.0.172:8081"; // DIT Wifi + DIT PC
 
@@ -41,8 +44,8 @@ public class Econstants {
 
     public static final String eparivar_url = "https://himparivarservices.hp.gov.in/ldap";    // For login purpose
 
-    public static final String sarvatra_url = "https://himstaging1.hp.gov.in/sarvatra-api";   //  Staging HIM ACCESS
-//    public static final String sarvatra_url = "https://himparivarservices.hp.gov.in/sarvatra-api";  //  Production HIM ACCESS
+//    public static final String sarvatra_url = "https://himstaging1.hp.gov.in/sarvatra-api";   //  Staging HIM ACCESS
+    public static final String sarvatra_url = "https://himparivarservices.hp.gov.in/sarvatra-api";  //  Production HIM ACCESS
 
 
     public static final String appUniqueCode = "HRTCDDR";

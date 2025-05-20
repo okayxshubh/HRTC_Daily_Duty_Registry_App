@@ -43,10 +43,6 @@ public class OfficeLevel implements Serializable {
 
     @Override
     public String toString() {
-        return "OfficeLevel{" +
-                "officeLevelId=" + officeLevelId +
-                ", officeLevelName='" + officeLevelName + '\'' +
-                ", officeLevelDepartmentName='" + officeLevelDepartmentName + '\'' +
-                '}';
+        return officeLevelName;
     }
 }

@@ -943,4 +943,106 @@ public class HttpManager {
     }
 
 
+    // GET FOR HIM ACCESS.. MASTERS WITHOUT TOKEN
+    public ResponsePojoGet GetDataHimAccess(UploadObject data) throws IOException {
+        BufferedReader reader = null;
+        URL urlObj = null;
+        ResponsePojoGet response = null;
+        HttpURLConnection connection = null;
+
+        try {
+            if (data.getAPI_NAME() != null && data.getAPI_NAME().equalsIgnoreCase(Econstants.API_NAME_HRTC)) {
+                StringBuilder SB = new StringBuilder();
+
+                SB.append(data.getUrl());
+                SB.append(data.getMethordName());
+
+                if (data.getStatus() != null) {
+                    SB.append(Econstants.status);
+                    SB.append(data.getStatus());
+                }
+                if (data.getMasterName() != null) {
+                    SB.append(Econstants.masterName);
+                    SB.append(data.getMasterName());
+                }
+
+                if (data.getParentId() != null) {
+                    SB.append(Econstants.parentId);
+                    SB.append(data.getParentId());
+                }
+
+                if (data.getSecondaryParentId() != null) {
+                    SB.append(Econstants.secondaryParentId);
+                    SB.append(data.getSecondaryParentId());
+                }
+
+                if (data.getParam() != null) {
+                    SB.append(data.getParam());
+                }
+
+                urlObj = new URL(SB.toString());
+                Log.e("URL Formed", "URL FORMED: " + urlObj.toString());
+
+            } else {
+                if (data.getParam() == null || data.getParam().isEmpty()) {
+                    urlObj = new URL(data.getUrl() + data.getMethordName());
+                } else {
+                    urlObj = new URL(data.getUrl() + data.getMethordName() + data.getParam());
+                }
+            }
+
+            connection = (HttpURLConnection) urlObj.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
+
+            if (connection.getResponseCode() != 200) {
+                reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                connection.disconnect();
+                Log.e("String=== ", sb.toString());
+                Log.e("D Sring=== ", sb.toString());
+                response = Econstants.createOfflineObject(data.getUrl(), data.getParam(), sb.toString(), Integer.toString(connection.getResponseCode()), data.getMethordName());
+
+                return response;
+            } else {
+
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                connection.disconnect();
+                Log.e("String=== ", sb.toString());
+                response = Econstants.createOfflineObject(data.getUrl(), data.getParam(), sb.toString(), Integer.toString(connection.getResponseCode()), data.getMethordName());
+                return response;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response = Econstants.createOfflineObject(data.getUrl(), data.getParam(), e.getLocalizedMessage(), Integer.toString(connection.getResponseCode()), data.getMethordName());
+
+            return response;
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    response = Econstants.createOfflineObject(data.getUrl(), data.getParam(), e.getLocalizedMessage(), Integer.toString(connection.getResponseCode()), data.getMethordName());
+                    return response;
+                }
+            }
+        }
+    }
+
+
+
 }
