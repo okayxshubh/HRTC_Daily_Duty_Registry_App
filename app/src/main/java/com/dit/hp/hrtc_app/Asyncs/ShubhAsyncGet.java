@@ -408,7 +408,14 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
 
 
 
-            // HIM ACCESS STUFF
+            // HIM ACCESS STUFF ########################################################################################
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_DEPARTMENT.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OFFICES.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
@@ -446,7 +453,7 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
 
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_BLOCK.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
-                Data_From_Server = http_manager.GetData(uploadObjects[0]);
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
                 return Data_From_Server;
             }
@@ -463,6 +470,7 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
                 return Data_From_Server;
             }
 
+
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_MUNICIPALITY_NP.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
@@ -475,12 +483,7 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
                 return Data_From_Server;
             }
-            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_DEPARTMENT.toString())) {
-                Log.e("We Here", uploadObjects[0].getMethordName());
-                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
-                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
-                return Data_From_Server;
-            }
+
 
 
         } catch (Exception e) {

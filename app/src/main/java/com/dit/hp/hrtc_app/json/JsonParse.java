@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.dit.hp.hrtc_app.Modals.AddaPojo;
 import com.dit.hp.hrtc_app.Modals.AdditonalChargePojo;
+import com.dit.hp.hrtc_app.Modals.BlockPojo;
 import com.dit.hp.hrtc_app.Modals.CastePojo;
 import com.dit.hp.hrtc_app.Modals.DailyRegisterCardFinal;
 import com.dit.hp.hrtc_app.Modals.DepartmentPojo;
@@ -17,10 +18,12 @@ import com.dit.hp.hrtc_app.Modals.GenderPojo;
 import com.dit.hp.hrtc_app.Modals.HimAccessUser;
 import com.dit.hp.hrtc_app.Modals.HimAccessUserInfo;
 import com.dit.hp.hrtc_app.Modals.LocationsPojo;
+import com.dit.hp.hrtc_app.Modals.MunicipalPojo;
 import com.dit.hp.hrtc_app.Modals.OfficeLevel;
 import com.dit.hp.hrtc_app.Modals.OfficePojo;
 import com.dit.hp.hrtc_app.Modals.OfficeTypePojo;
 import com.dit.hp.hrtc_app.Modals.OrganisationPojo;
+import com.dit.hp.hrtc_app.Modals.PanchayatPojo;
 import com.dit.hp.hrtc_app.Modals.RoutePojo;
 import com.dit.hp.hrtc_app.Modals.RouteTypePojo;
 import com.dit.hp.hrtc_app.Modals.StaffPojo;
@@ -31,6 +34,8 @@ import com.dit.hp.hrtc_app.Modals.TokenInfo;
 import com.dit.hp.hrtc_app.Modals.User;
 import com.dit.hp.hrtc_app.Modals.VehiclePojo;
 import com.dit.hp.hrtc_app.Modals.VehicleTypePojo;
+import com.dit.hp.hrtc_app.Modals.VillagePojo;
+import com.dit.hp.hrtc_app.Modals.WardPojo;
 import com.dit.hp.hrtc_app.crypto.AESCrypto;
 
 import org.json.JSONArray;
@@ -1437,6 +1442,26 @@ public class JsonParse {
         return itemList;
     }
 
+    public static List<DesignationPojo> parseDesignationsList(String response) throws JSONException {
+        List<DesignationPojo> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject obj = dataArray.getJSONObject(i);
+            JSONObject desigObj = obj.optJSONObject("designation");
+
+            if (desigObj != null) {
+                DesignationPojo item = new DesignationPojo();
+                item.setDesignationId(desigObj.optInt("id"));
+                item.setDesignationCode(desigObj.optString("designationCode", ""));
+                item.setDesignationName(desigObj.optString("designationName", ""));
+                itemList.add(item);
+            }
+        }
+
+        return itemList;
+    }
+
     public static List<OfficePojo> parseParentOffices(String response) throws JSONException {
         List<OfficePojo> officeList = new ArrayList<>();
         JSONArray dataArray = new JSONArray(response);
@@ -1500,7 +1525,6 @@ public class JsonParse {
         return officeList;
     }
 
-
     public static List<OfficeLevel> parseOfficeLevels(String response) throws JSONException {
         List<OfficeLevel> itemList = new ArrayList<>();
         JSONArray dataArray = new JSONArray(response);
@@ -1522,6 +1546,100 @@ public class JsonParse {
 
         return itemList;
     }
+
+
+    public static List<MunicipalPojo> parseMunicipals(String response) throws JSONException {
+        List<MunicipalPojo> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject obj = dataArray.getJSONObject(i);
+
+            MunicipalPojo item = new MunicipalPojo();
+            item.setMunicipalId(obj.optInt("id"));
+            item.setMunicipalName(obj.optString("municipalName", ""));
+            item.setMunicipalLgdCode(String.valueOf(obj.optInt("lgdCode"))); // convert to String if needed
+
+            itemList.add(item);
+        }
+
+        return itemList;
+    }
+
+    public static List<WardPojo> parseWards(String response) throws JSONException {
+        List<WardPojo> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject obj = dataArray.getJSONObject(i);
+
+            WardPojo item = new WardPojo();
+            item.setWardId(obj.optInt("id"));
+            item.setWardName(obj.optString("wardName", ""));
+            item.setWardLgdCode(obj.optString("lgdCode", ""));
+
+            itemList.add(item);
+        }
+
+        return itemList;
+    }
+
+
+
+    // RURAL
+    public static List<BlockPojo> parseBlocks(String response) throws JSONException {
+        List<BlockPojo> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject obj = dataArray.getJSONObject(i);
+
+            BlockPojo item = new BlockPojo();
+            item.setBlockId(obj.optInt("id"));
+            item.setBlockName(obj.optString("blockNameE", ""));
+            item.setBlockLgdCode(String.valueOf(obj.optInt("lgdCode"))); // convert to String if needed
+            itemList.add(item);
+        }
+
+        return itemList;
+    }
+
+    public static List<PanchayatPojo> parsePanchayats(String response) throws JSONException {
+        List<PanchayatPojo> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject jsonObject = dataArray.getJSONObject(i);
+
+            PanchayatPojo item = new PanchayatPojo();
+            item.setPanchayatId(jsonObject.optInt("id"));
+            item.setPanchayatName(jsonObject.optString("panchayatNameE"));
+            item.setPanchayatLgdCode(String.valueOf(jsonObject.optInt("lgdCode")));
+
+            itemList.add(item);
+        }
+        return itemList;
+    }
+
+    public static List<VillagePojo> parseVillages(String response) throws JSONException {
+        List<VillagePojo> itemList = new ArrayList<>();
+        JSONArray dataArray = new JSONArray(response);
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            JSONObject jsonObject = dataArray.getJSONObject(i);
+
+            VillagePojo item = new VillagePojo();
+            item.setVillageId(jsonObject.optInt("id"));
+            item.setVillage(jsonObject.optString("villageNameE"));
+            item.setVillageLgdCode(String.valueOf(jsonObject.optInt("lgdCode")));
+
+            itemList.add(item);
+        }
+        return itemList;
+    }
+
+
+
 
 
 

@@ -1043,6 +1043,87 @@ public class HttpManager {
         }
     }
 
+    // POST DATA With Master Name + JSON body + No JWT
+    public ResponsePojoGet PostDataHimAccess(UploadObject data) {
+
+        URL url_ = null;
+        HttpURLConnection conn_ = null;
+        StringBuilder sb = null;
+        JSONStringer userJson = null;
+
+        String URL = null;
+        ResponsePojoGet response = null;
+
+        try {
+
+            URL = data.getUrl() + data.getMethordName() + data.getMasterName();
+            Log.e("URL Formed", "URL FORMED: " + URL.toString());
+            url_ = new URL(URL);
+            conn_ = (HttpURLConnection) url_.openConnection();
+            conn_.setDoOutput(true);
+            conn_.setRequestMethod("POST");
+            conn_.setUseCaches(false);
+            conn_.setConnectTimeout(10000);
+            conn_.setReadTimeout(10000);
+            conn_.setRequestProperty("Content-Type", "application/json");
+            conn_.connect();
+
+
+            OutputStreamWriter out = new OutputStreamWriter(conn_.getOutputStream());
+            out.write(data.getParam());
+            out.close();
+
+            try {
+                int HttpResult = conn_.getResponseCode();
+                if (HttpResult != HttpURLConnection.HTTP_OK) {
+                    Log.e("Error", conn_.getResponseMessage());
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn_.getErrorStream(), "utf-8"));
+                    String line = null;
+                    sb = new StringBuilder();
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                    System.out.println(sb.toString());
+                    Log.e("Data from Service", sb.toString());
+                    response = new ResponsePojoGet();
+                    response = Econstants.createOfflineObject(URL, data.getParam(), sb.toString(), Integer.toString(conn_.getResponseCode()), data.getMethordName());
+                    return response;
+
+
+                } else {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn_.getInputStream(), "utf-8"));
+                    String line = null;
+                    sb = new StringBuilder();
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                    System.out.println(sb.toString());
+                    Log.e("Data from Service", sb.toString());
+                    response = new ResponsePojoGet();
+                    response = Econstants.createOfflineObject(URL, data.getParam(), sb.toString(), Integer.toString(conn_.getResponseCode()), data.getMethordName());
+
+                }
+
+            } catch (Exception e) {
+                data.getScanDataPojo().setUploaddToServeer(false);
+                response = new ResponsePojoGet();
+                response = Econstants.createOfflineObject(URL, data.getParam(), conn_.getResponseMessage(), Integer.toString(conn_.getResponseCode()), data.getMethordName());
+                return response;
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn_ != null)
+                conn_.disconnect();
+        }
+        return response;
+    }
+
 
 
 }

@@ -6,6 +6,15 @@ public class VillagePojo implements Serializable {
 
         private int villageId;
         private String village;
+        private String villageLgdCode;
+
+        public String getVillageLgdCode() {
+                return villageLgdCode;
+        }
+
+        public void setVillageLgdCode(String villageLgdCode) {
+                this.villageLgdCode = villageLgdCode;
+        }
 
         public int getVillageId() {
                 return villageId;

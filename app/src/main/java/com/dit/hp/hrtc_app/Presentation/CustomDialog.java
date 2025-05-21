@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -471,20 +472,20 @@ public class CustomDialog {
 
                     // Office ID Becomes the Depot ID now
                     Preferences.getInstance().depotId = selectedAdditionalCharge[0].getOfficePojo().getOfficeId();
+                    Preferences.getInstance().depotName = selectedAdditionalCharge[0].getOfficePojo().getOfficeName();
 
-//                    // Saving preferences as the selected charge
+//                  // Saving preferences as the selected charge
                     Preferences.getInstance().empId = selectedAdditionalCharge[0].getEmpId();
                     Preferences.getInstance().departmentId = selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentId();
 
-
-//                    Preferences.getInstance().roleId = selectedAdditionalCharge[0].getRoleId();
-//                    Preferences.getInstance().roleName = selectedAdditionalCharge[0].getRoleName();
-//                    Preferences.getInstance().depotId = selectedAdditionalCharge[0].getId();
-//                    Preferences.getInstance().depotName = selectedAdditionalCharge[0].getDepotName();
-//                    Preferences.getInstance().userName = selectedAdditionalCharge[0].getuserName();
-//                    Preferences.getInstance().token = selectedAdditionalCharge[0].getToken();
-
                     Preferences.getInstance().savePreferences(activity);
+
+                    Log.i("Selected Additional Charge: ", String.valueOf(selectedAdditionalCharge[0].getEmpId()));
+                    Log.i("Selected Additional Charge: ", selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentName());
+                    Log.i("Selected Additional Charge: ", String.valueOf(selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentId()));
+                    Log.i("Selected Additional Charge: ", String.valueOf(selectedAdditionalCharge[0].getOfficePojo().getOfficeId()));
+                    Log.i("Selected Additional Charge: ", selectedAdditionalCharge[0].getOfficePojo().getOfficeName());
+                    Log.i("Selected Additional Charge: ", selectedAdditionalCharge[0].getDepartmentPojo().getDepartmentName());
 
                     dialog.dismiss();
                     activity.finish();

@@ -72,7 +72,6 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
     private SearchableSpinner depotSpinner;
     private SearchableSpinner addaSpinner;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,9 +79,13 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
         // Load saved preferences at the very beginning
         Preferences.getInstance().loadPreferences(this);
+
         Log.i("Homescreen", "Login As: userName " + Preferences.getInstance().userName);
-        Log.i("Homescreen", "Login As: roleId " + Preferences.getInstance().roleName + " : " + Preferences.getInstance().roleId);
-        Log.i("Homescreen", "Login As: depotName " + Preferences.getInstance().depotName);
+        Log.i("Homescreen", "Login As: empId " + Preferences.getInstance().empId);
+        Log.i("Homescreen", "Login As: Department Id " + Preferences.getInstance().departmentId);
+        Log.i("Homescreen", "Login As: Department Name saved as Depot Name & Code: " + Preferences.getInstance().depotName + " : " + Preferences.getInstance().depotId);
+        Log.i("Homescreen", "Login As: RoleName And Role ID" + Preferences.getInstance().roleName + " : " + Preferences.getInstance().roleId);
+
 
         roleIdTV = findViewById(R.id.roleIdTV);
         welcomeTV = findViewById(R.id.headTV);
@@ -376,17 +379,18 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
     }
 
     private void reloadUserDetails() {
+
         // Welcome Message
         String userName = Preferences.getInstance().userName != null ? Preferences.getInstance().userName : "Guest";
         welcomeTV.setText("Welcome " + userName + " !");
 
-        // Role
-        String roleName = Preferences.getInstance().roleName;
-        roleIdTV.setText(roleName != null && !roleName.isEmpty() ? "Role: " + roleName : "Role: No Role Available");
-
         // Depot
         String depotName = Preferences.getInstance().depotName;
-        depotNameTV.setText(depotName != null && !depotName.isEmpty() ? "Depot: " + depotName : "Depot: Not Selected");
+        depotNameTV.setText(depotName != null && !depotName.isEmpty() ? "Office: " + depotName : "No Info Available");
+
+        // Role
+        String roleName = Preferences.getInstance().roleName;
+        roleIdTV.setText(roleName != null && !roleName.isEmpty() ? "Role: " + roleName : "No Info Available");
     }
 
 

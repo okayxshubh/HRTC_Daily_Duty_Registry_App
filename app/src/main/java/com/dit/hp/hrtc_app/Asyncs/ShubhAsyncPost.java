@@ -178,6 +178,15 @@ public class ShubhAsyncPost extends AsyncTask<UploadObject, Void, ResponsePojoGe
 
 
 
+        // SERVICE CALLS FOR HIM ACCESS
+        if (uploadObjects[0].getTasktype() == TaskType.ADD_OFFICE) {
+            Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
+            Data_From_Server = http_manager.PostDataHimAccess(uploadObjects[0]);
+            return Data_From_Server;
+        }
+
+
+
 
 
 

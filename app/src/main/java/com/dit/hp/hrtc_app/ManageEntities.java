@@ -113,19 +113,13 @@ public class ManageEntities extends AppCompatActivity {
     private void reloadUserDetails() {
         welcomeTV.setText("Manage Data !");
 
-        // Depot
-        if (Preferences.getInstance().depotName != null) {
-            depotLocationTV.setText("Depot: " + Preferences.getInstance().depotName);
-        } else {
-            depotLocationTV.setText("Depot: Not Selected");
-        }
+        // Role
+        String roleName = Preferences.getInstance().roleName;
+        roleIdTV.setText(roleName != null && !roleName.isEmpty() ? "Role: " + roleName : "Role: No Role Available");
 
-        // User Role
-        if (Econstants.isNotEmpty(Preferences.getInstance().roleName)) {
-            roleIdTV.setText("Role: " + Preferences.getInstance().roleName);
-        } else {
-            roleIdTV.setText("Role: No Role Available");
-        }
+        // Depot
+        String depotName = Preferences.getInstance().depotName;
+        depotLocationTV.setText(depotName != null && !depotName.isEmpty() ? "Depot: " + depotName : "Not Info Available");
     }
 
 

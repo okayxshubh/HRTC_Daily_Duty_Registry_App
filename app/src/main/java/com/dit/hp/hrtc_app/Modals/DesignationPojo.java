@@ -8,6 +8,19 @@ public class DesignationPojo implements Serializable {
         private String designationName;
         private String designationCode;
 
+        public DesignationPojo() {
+        }
+
+        public DesignationPojo(String designationName) {
+                this.designationName = designationName;
+        }
+
+        public DesignationPojo(int designationId, String designationName, String designationCode) {
+                this.designationId = designationId;
+                this.designationName = designationName;
+                this.designationCode = designationCode;
+        }
+
         public String getDesignationCode() {
                 return designationCode;
         }
@@ -34,10 +47,7 @@ public class DesignationPojo implements Serializable {
 
         @Override
         public String toString() {
-                return "DesignationPojo{" +
-                        "designationId=" + designationId +
-                        ", designationName='" + designationName + '\'' +
-                        '}';
+                return designationName;
         }
 }
 

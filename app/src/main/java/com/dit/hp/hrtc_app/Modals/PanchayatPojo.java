@@ -6,6 +6,15 @@ public class PanchayatPojo implements Serializable {
 
         private int panchayatId;
         private String panchayatName;
+        private String panchayatLgdCode;
+
+        public String getPanchayatLgdCode() {
+                return panchayatLgdCode;
+        }
+
+        public void setPanchayatLgdCode(String panchayatLgdCode) {
+                this.panchayatLgdCode = panchayatLgdCode;
+        }
 
         public int getPanchayatId() {
                 return panchayatId;

@@ -6,6 +6,15 @@ public class MunicipalPojo implements Serializable {
 
         private int municipalId;
         private String municipalName;
+        private String municipalLgdCode;
+
+        public String getMunicipalLgdCode() {
+                return municipalLgdCode;
+        }
+
+        public void setMunicipalLgdCode(String municipalLgdCode) {
+                this.municipalLgdCode = municipalLgdCode;
+        }
 
         public int getMunicipalId() {
                 return municipalId;

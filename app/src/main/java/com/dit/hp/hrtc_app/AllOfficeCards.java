@@ -287,19 +287,21 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
     }
 
     @Override
-    public void onMoreInfoClick(OfficePojo vehiclePojo, int position) {
+    public void onMoreInfoClick(OfficePojo selectedPojo, int position) {
+
         // Create the dialog and set the custom view
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.popup_more_info_buses, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.popup_more_info_offices, null);
         builder.setView(dialogView);
 
         // Find views in the dialog layout
-        TextView busType = dialogView.findViewById(R.id.busType);
-        TextView vehicleNumber = dialogView.findViewById(R.id.vehicleNumber);
-        TextView iotDeviceId = dialogView.findViewById(R.id.iotDeviceId);
-        TextView busModel = dialogView.findViewById(R.id.busModel);
-        TextView busCapacity = dialogView.findViewById(R.id.busCapacity);
-        TextView vehicleDepot = dialogView.findViewById(R.id.depotName);
+        TextView officeId = dialogView.findViewById(R.id.officeId);
+        TextView officeName = dialogView.findViewById(R.id.officeName);
+        TextView officeType = dialogView.findViewById(R.id.officeType);
+
+        officeId.setText(selectedPojo.getOfficeId());
+        officeName.setText(selectedPojo.getOfficeName());
+        officeType.setText(selectedPojo.getOfficeTypePojo().getOfficeTypeName());
 
         // Show the dialog
         builder.setPositiveButton("Close", null);

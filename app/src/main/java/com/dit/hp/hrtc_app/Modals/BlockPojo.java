@@ -6,6 +6,15 @@ public class BlockPojo implements Serializable {
 
         private int blockId;
         private String blockName;
+        private String blockLgdCode;
+
+        public String getBlockLgdCode() {
+                return blockLgdCode;
+        }
+
+        public void setBlockLgdCode(String blockLgdCode) {
+                this.blockLgdCode = blockLgdCode;
+        }
 
         public int getBlockId() {
                 return blockId;
