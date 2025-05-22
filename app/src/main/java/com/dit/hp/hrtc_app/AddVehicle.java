@@ -252,7 +252,7 @@ public class AddVehicle extends AppCompatActivity implements ShubhAsyncTaskListe
                             jsonObject.put("capacity", Integer.parseInt(vehicleCapacity.getText().toString().trim()));
 
                             jsonObject.put("depot", Preferences.getInstance().depotId);
-                            jsonObject.put("createdBy", Preferences.getInstance().empId);
+                            jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
                             Log.i("AddVehicle", "Vehicle to add: " + jsonObject.toString());
 

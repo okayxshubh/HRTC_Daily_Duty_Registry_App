@@ -10,7 +10,7 @@ public class AdditonalChargePojo implements Serializable {
 
     private DesignationPojo designationPojo;
 
-    private OfficeTypePojo officeTypePojo;
+    private OfficeLevel officeLevel;
 
     private OfficePojo officePojo;
 
@@ -33,12 +33,12 @@ public class AdditonalChargePojo implements Serializable {
         this.designationPojo = designationPojo;
     }
 
-    public OfficeTypePojo getOfficeTypePojo() {
-        return officeTypePojo;
+    public OfficeLevel getOfficeLevel() {
+        return officeLevel;
     }
 
-    public void setOfficeTypePojo(OfficeTypePojo officeTypePojo) {
-        this.officeTypePojo = officeTypePojo;
+    public void setOfficeLevel(OfficeLevel officeLevel) {
+        this.officeLevel = officeLevel;
     }
 
     public OfficePojo getOfficePojo() {
@@ -73,16 +73,19 @@ public class AdditonalChargePojo implements Serializable {
         this.empId = empId;
     }
 
+
     @Override
     public String toString() {
         return "AdditonalChargePojo{" +
-                "departmentPojo=" + departmentPojo +
+                "empId=" + empId +
+                ", departmentPojo=" + departmentPojo +
                 ", designationPojo=" + designationPojo +
-                ", officeTypePojo=" + officeTypePojo +
+                ", officeLevel=" + officeLevel +
                 ", officePojo=" + officePojo +
                 ", chargeAssignedOn='" + chargeAssignedOn + '\'' +
                 ", chargeType='" + chargeType + '\'' +
                 '}';
     }
+
 }
 

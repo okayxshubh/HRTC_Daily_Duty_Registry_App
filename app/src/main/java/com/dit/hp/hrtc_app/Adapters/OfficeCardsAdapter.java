@@ -44,6 +44,17 @@ public class OfficeCardsAdapter extends RecyclerView.Adapter<OfficeCardsAdapter.
     }
 
 
+
+    // Avoid Duplicates Helper Methods
+    public List<OfficePojo> getItems() {
+        return this.basicList;
+    }
+
+    public void addItem(OfficePojo officePojo) {
+        this.basicList.add(officePojo);
+    }
+
+
     // ViewHolder for item information
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         TextView headTV, L2TV;

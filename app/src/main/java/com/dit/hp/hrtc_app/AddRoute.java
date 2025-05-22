@@ -453,7 +453,7 @@ public class AddRoute extends AppCompatActivity implements ShubhAsyncTaskListene
                             jsonObject.put("startTime", departureTime.getText().toString());
                             jsonObject.put("depot", Preferences.getInstance().depotId);
 
-                            jsonObject.put("createdBy", Preferences.getInstance().empId);
+                            jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
                         } catch (JSONException e) {
                             Log.e("JSON Exception", e.getMessage());

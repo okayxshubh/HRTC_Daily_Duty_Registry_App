@@ -289,7 +289,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
                             jsonObject.put("staff", selectedAddaIncharge.getId());
                             jsonObject.put("depot", selectedDepot.getId());
                             jsonObject.put("remarks", remarks.getText().toString());
-                            jsonObject.put("createdBy", Preferences.getInstance().empId);
+                            jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
                         } catch (JSONException e) {
                             Log.e("JSON Exception", e.getMessage());

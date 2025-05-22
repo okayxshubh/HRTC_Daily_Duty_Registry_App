@@ -23,6 +23,7 @@ public class Preferences {
     private final String KEY_ROLE_NAME = "roleName";
     private final String KEY_DEPOT_ID = "depotId";
     private final String KEY_DEPOT_NAME = "depotName";
+    private final String KEY_USER_EMAIL = "emailID";
     private final String KEY_EMP_ID = "empId";
     private final String KEY_DEPARTMENT_ID = "departmentId";
     private final String KEY_TOKEN = "token";
@@ -32,6 +33,7 @@ public class Preferences {
     public Integer empId;
     public Integer departmentId;
     public String depotName = null;
+    public String emailID = null;
     public Integer roleId;
     public String roleName = null;
     public Integer depotId;
@@ -65,6 +67,7 @@ public class Preferences {
         departmentId = (departmentIdValue == -1) ? null : departmentIdValue;
 
         depotName = preferences.getString(KEY_DEPOT_NAME, null);
+        emailID = preferences.getString(KEY_USER_EMAIL, null);
 
         int roleIdValue = preferences.getInt(KEY_ROLE_ID, -1);
         roleId = (roleIdValue == -1) ? null : roleIdValue;
@@ -93,6 +96,7 @@ public class Preferences {
         editor.putInt(KEY_EMP_ID, empId == null ? -1 : empId);
         editor.putInt(KEY_DEPARTMENT_ID, departmentId == null ? -1 : departmentId);
         editor.putString(KEY_DEPOT_NAME, depotName);
+        editor.putString(KEY_USER_EMAIL, emailID);
         editor.putInt(KEY_ROLE_ID, roleId == null ? -1 : roleId);
         editor.putString(KEY_ROLE_NAME, roleName);
         editor.putInt(KEY_DEPOT_ID, depotId == null ? -1 : depotId);

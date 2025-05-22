@@ -1,4 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card_bg"
@@ -73,6 +74,49 @@
                     android:layout_height="wrap_content"
                     android:padding="4dp" />
             </TableRow>
+
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="HOD/HOO Designation: "
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/designationTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Pin-Code: "
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/pincodeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Address: "
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/addressTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
 
 
 

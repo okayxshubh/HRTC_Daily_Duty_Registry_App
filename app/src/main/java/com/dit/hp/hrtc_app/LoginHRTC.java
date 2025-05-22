@@ -146,6 +146,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
             } else {
                 CD.showDialog(LoginHRTC.this, "Please enter valid Username and Password");
             }
+
         });
 
         forgotPassBtn.setOnClickListener(v -> {
@@ -494,7 +495,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         getHRTCToken(himAccessUser.getMail()); // Get HimAccess Token
 
                         // Save Basic Prefs
-//                        Preferences.getInstance().userName = himAccessUserInfo.getEmployeePojo().getEmployeeName();
                         Preferences.getInstance().savePreferences(this);
 
 
@@ -544,7 +544,8 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         CD.showDialog(LoginHRTC.this, response.getMessage());
                     }
                 } else {
-                    CD.showDialog(LoginHRTC.this, "Not able to get token");
+                    Log.e("Not able to get token", "Not able to get token HimAccess");
+//                    CD.showDialog(LoginHRTC.this, "Not able to get token");
                 }
             } else {
                 CD.showDialog(LoginHRTC.this, "Result is null");
@@ -566,7 +567,8 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                     Preferences.getInstance().savePreferences(this);
 
                 } else {
-                    CD.showDialog(LoginHRTC.this, "Not able to get token");
+//                    CD.showDialog(LoginHRTC.this, "Not able to get token");
+                    Log.e("Not able to get token", "Not able to get token HRTC JWT");
                 }
             } else {
                 CD.showDialog(LoginHRTC.this, "Result is null");
@@ -600,6 +602,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
                             // Add other preferences to save here
                             Preferences.getInstance().roleId = himAccessUserInfo.getRoleId();
+                            Preferences.getInstance().emailID = himAccessUserInfo.getEmployeePojo().getEmailId();
                             Preferences.getInstance().empId = himAccessUserInfo.getEmployeePojo().getEmpId();
                             Preferences.getInstance().userName = himAccessUserInfo.getEmployeePojo().getEmployeeName();
 
@@ -618,7 +621,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         originalCharge.setEmpId(himAccessUserInfo.getEmployeePojo().getEmpId());
                         originalCharge.setDepartmentPojo(himAccessUserInfo.getMainDepartmentPojo());
                         originalCharge.setOfficePojo(himAccessUserInfo.getMainOffice());
-                        originalCharge.setOfficeTypePojo(himAccessUserInfo.getMainOfficeTypePojo());
+                        originalCharge.setOfficeLevel(himAccessUserInfo.getMainOfficeLevelPojo());
                         originalCharge.setDesignationPojo(himAccessUserInfo.getMainDesignationPojo());
 
                         additionalChargeList.add(originalCharge);
@@ -702,7 +705,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                     // Handle HTTP 401 Unauthorized response (session expired)
                     CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
                 } else {
-                    CD.showDialog(LoginHRTC.this, "Not able to get token");
+                    CD.showDialog(LoginHRTC.this, "Something went wrong..");
                 }
             } else {
                 CD.showDialog(LoginHRTC.this, "Result is null");

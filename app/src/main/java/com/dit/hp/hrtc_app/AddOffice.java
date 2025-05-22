@@ -2,7 +2,9 @@ package com.dit.hp.hrtc_app;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,7 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,11 +52,9 @@ import com.dit.hp.hrtc_app.interfaces.ShubhAsyncTaskListenerPost;
 import com.dit.hp.hrtc_app.json.JsonParse;
 import com.dit.hp.hrtc_app.utilities.AppStatus;
 import com.dit.hp.hrtc_app.utilities.Econstants;
-import com.dit.hp.hrtc_app.utilities.Preferences;
 import com.doi.spinnersearchable.SearchableSpinner;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -67,6 +69,7 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
     Button back, proceed;
     EditText departmentName, addressET, depotCode;
     String encryptedBody;
+    TextView headTV;
 
     CustomDialog CD = new CustomDialog();
 
@@ -102,6 +105,9 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
     LinearLayout ruralLinearLayout, urbarnLinearLayout, distLL;
 
     OfficePojo officeValuesToAdd = new OfficePojo();
+    OfficePojo receivedOfficeToEdit;
+    Boolean isEditMode = false;
+    ImageView mainImageView;
 
 
     @Override
@@ -109,14 +115,46 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_office);
 
-//        TextView depotLocationLabel;
-//        depotLocationLabel = findViewById(R.id.depotLocationLabel);
-//        depotLocationLabel.setText(Html.fromHtml("Depot Location <font color='#FF0000'>*</font>"));
+        // EDIT MODE
+        Intent getIntent = getIntent();
+        receivedOfficeToEdit = (OfficePojo) getIntent.getSerializableExtra("OfficeInfo");
+        isEditMode = getIntent.getBooleanExtra("EditMode", false);
+
+        // Setting Labels
+        TextView officeLevelLabel, officeNameLabel, areaLabel, districtLabel, designationLabel, pincodeLabel, addressLabel, sanctionedPostLabel;
+        officeLevelLabel = findViewById(R.id.officeLevelLabel);
+        officeLevelLabel.setText(Html.fromHtml("Please Select Office Level <font color='#FF0000'>*</font>"));
+
+        officeNameLabel = findViewById(R.id.officeNameLabel);
+        officeNameLabel.setText(Html.fromHtml("Office Name <font color='#FF0000'>*</font>"));
+
+        areaLabel = findViewById(R.id.areaLabel);
+        areaLabel.setText(Html.fromHtml("Area (Urban/Rural) <font color='#FF0000'>*</font>"));
+
+        districtLabel = findViewById(R.id.districtLabel);
+        districtLabel.setText(Html.fromHtml("District <font color='#FF0000'>*</font>"));
+
+        designationLabel = findViewById(R.id.designationLabel);
+        designationLabel.setText(Html.fromHtml("HOD / HOO Designation <font color='#FF0000'>*</font>"));
+
+        pincodeLabel = findViewById(R.id.pincodeLabel);
+        pincodeLabel.setText(Html.fromHtml("Pincode <font color='#FF0000'>*</font>"));
+
+        addressLabel = findViewById(R.id.addressLabel);
+        addressLabel.setText(Html.fromHtml("Address <font color='#FF0000'>*</font>"));
+
+        sanctionedPostLabel = findViewById(R.id.sanctionedPostLabel);
+        sanctionedPostLabel.setText(Html.fromHtml("Sanctioned Post <font color='#FF0000'>*</font>"));
+
+        headTV = findViewById(R.id.HeadTV);
+
 
         ruralLinearLayout = findViewById(R.id.ruralLinearLayout);
         urbarnLinearLayout = findViewById(R.id.urbanLinearLayout);
 
         clearOfficeBtn = findViewById(R.id.clearParentOfficeSelection);
+        mainImageView = findViewById(R.id.mainImageView);
+
 
         officeName = findViewById(R.id.officeName);
         pincode = findViewById(R.id.pincode);
@@ -148,6 +186,50 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         areaSpinner.setAdapter(areaAdapter);
 
+
+        if (isEditMode) {
+            // Revenue
+            if (receivedOfficeToEdit.getLgdMunicipalCode() != -1 && receivedOfficeToEdit.getLgdBlockCode() == -1) {
+                int defaultPosition = areaAdapter.getPosition(Econstants.OFFICE_Type_REVENUE);
+                areaSpinner.setSelection(defaultPosition); // Pre-Select
+                serviceCallDistrict();
+            } else if (receivedOfficeToEdit.getLgdBlockCode() != -1 && receivedOfficeToEdit.getLgdBlockCode() != -1) {
+                int defaultPosition = areaAdapter.getPosition(Econstants.OFFICE_Type_RURAL);
+                areaSpinner.setSelection(defaultPosition); // Pre-Select
+                serviceCallDistrict();
+            } else {
+                Log.e("Selected Area", "No Selected Area Can BE Fetched");
+            }
+        }
+
+
+        // AREA Preselect
+        if (isEditMode) {
+            if (receivedOfficeToEdit.getLgdBlockCode() != -1) {
+                areaSpinner.post(() -> {
+                    int defaultItemPosition = areaAdapter.getPosition(Econstants.OFFICE_Type_RURAL);
+                    if (defaultItemPosition != -1) {
+                        areaSpinner.setSelectedItemByIndex(defaultItemPosition);
+                    } else {
+                        Log.e("Error", "Item not found in adapter RURAL.");
+                    }
+                });
+
+            } else if (receivedOfficeToEdit.getLgdMunicipalCode() != -1) {
+                areaSpinner.post(() -> {
+                    int defaultItemPosition = areaAdapter.getPosition(Econstants.OFFICE_Type_REVENUE);
+                    if (defaultItemPosition != -1) {
+                        areaSpinner.setSelectedItemByIndex(defaultItemPosition);
+                    } else {
+                        Log.e("Error", "Item not found in adapter REVENUE.");
+                    }
+                });
+
+            } else {
+                Log.e("Selected Area", "Area Cannot Be Preselected");
+            }
+        }
+
         areaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -160,8 +242,6 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                         ruralLinearLayout.setVisibility(View.VISIBLE);
                         urbarnLinearLayout.setVisibility(View.GONE);
                         officeValuesToAdd.setOfficeArea(Econstants.OFFICE_Type_RURAL);
-                        officeValuesToAdd.setLgdMunicipalCode(null);
-                        officeValuesToAdd.setLgdWardCode(null);
                     }
 
                     //
@@ -170,11 +250,7 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                         distLL.setVisibility(View.VISIBLE);
                         ruralLinearLayout.setVisibility(View.GONE);
                         urbarnLinearLayout.setVisibility(View.VISIBLE);
-                        officeValuesToAdd.setOfficeArea(Econstants.OFFICE_Type_RURAL);
-                        officeValuesToAdd.setLgdBlockCode(null);
-                        officeValuesToAdd.setLgdPanchayatCode(null);
-                        officeValuesToAdd.setLgdVillageCode(null);
-
+                        officeValuesToAdd.setOfficeArea(Econstants.OFFICE_Type_REVENUE);
                     }
                     //
                     else {
@@ -196,6 +272,7 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
         clearOfficeBtn.setOnClickListener(v -> {
             parentOfficeSpinner.clearSelection();
             selectedOffice = null;
+            officeValuesToAdd.setOfficeParentId(-1);
         });
 
 
@@ -269,6 +346,20 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
 //        ###########################################################################################
 
+        // Preselect Text
+        if (isEditMode) {
+            proceed.setText("Edit");
+            headTV.setText("Edit Office");
+
+            officeName.setText(receivedOfficeToEdit.getOfficeName());
+            addressET.setText(receivedOfficeToEdit.getAddress());
+            officeName.setText(receivedOfficeToEdit.getOfficeName() != null ? receivedOfficeToEdit.getOfficeName() : "");
+            addressET.setText(receivedOfficeToEdit.getAddress() != null ? receivedOfficeToEdit.getAddress() : "");
+            pincode.setText(receivedOfficeToEdit.getPinCode() != -1 ? String.valueOf(receivedOfficeToEdit.getPinCode()) : "");
+            sanctionedPost.setText(receivedOfficeToEdit.getSanctionedPosts() != -1 ? String.valueOf(receivedOfficeToEdit.getSanctionedPosts()) : "");
+        }
+
+
         districtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -276,13 +367,13 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 officeValuesToAdd.setLgdDistrictCode(selectedDistrict.getDistrictLgdCode()); // ADD
                 Log.e("Selected District", selectedDistrict.toString());
 
-                if (selectedArea.equalsIgnoreCase("Rural")) {
+                if (selectedArea.equalsIgnoreCase(Econstants.OFFICE_Type_RURAL)) {
                     // Api call of block acc to district
                     serviceCallBlock(String.valueOf(selectedDistrict.getDistrictLgdCode()));
                 }
 
                 //
-                else if (selectedArea.equalsIgnoreCase("Urban")) {
+                else if (selectedArea.equalsIgnoreCase(Econstants.OFFICE_Type_REVENUE)) {
                     // Api call of municipal acc to district
                     serviceCallMunicipal(String.valueOf(selectedDistrict.getDistrictLgdCode()));
                 }
@@ -379,15 +470,17 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                officeValuesToAdd.setOfficeParentId(-1);
             }
         });
+
 
         officeLevelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedOfficeLevel = (OfficeLevel) parent.getItemAtPosition(position);
-                officeValuesToAdd.setOfficeCategory(selectedOfficeLevel.getOfficeLevelName());
+                officeValuesToAdd.setOfficeLevelPojo(selectedOfficeLevel);
+
             }
 
             @Override
@@ -395,6 +488,7 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
             }
         });
+
 
         designationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -475,7 +569,7 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 }
 
                 if (!Econstants.isNotEmpty(pincode.getText().toString())) {
-                    CD.showDialog(AddOffice.this, "Enter pincode to proceed");
+                    CD.showDialog(AddOffice.this, "Enter pin-code to proceed");
                     return;
                 }
 
@@ -490,12 +584,9 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 }
 
 
-
-
                 officeValuesToAdd.setOfficeName(officeName.getText().toString());
                 officeValuesToAdd.setAddress(addressET.getText().toString());
                 officeValuesToAdd.setPinCode(Integer.parseInt(pincode.getText().toString()));
-
 
                 officeValuesToAdd.setOfficeName(officeName.getText().toString());
                 officeValuesToAdd.setAddress(addressET.getText().toString());
@@ -503,7 +594,7 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 officeValuesToAdd.setSanctionedPosts(Integer.parseInt(sanctionedPost.getText().toString()));
 
                 // PARENT OFFICE
-                if (selectedOffice != null){
+                if (selectedOffice != null) {
                     officeValuesToAdd.setOfficeParentId(selectedOffice.getOfficeId());
                 }
 
@@ -516,17 +607,24 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                     officeValuesToAdd.setLgdBlockCode(Integer.parseInt(selectedBlock.getBlockLgdCode()));
                     officeValuesToAdd.setLgdPanchayatCode(Integer.parseInt(selectedPanchayat.getPanchayatLgdCode()));
                     officeValuesToAdd.setLgdVillageCode(Integer.parseInt(selectedVillage.getVillageLgdCode()));
-                }
-                else if (selectedArea.equalsIgnoreCase("Urban")) {
+                } else if (selectedArea.equalsIgnoreCase("Urban")) {
                     officeValuesToAdd.setLgdMunicipalCode(Integer.parseInt(selectedMunicipal.getMunicipalLgdCode()));
                     officeValuesToAdd.setLgdWardCode(Integer.parseInt(selectedWard.getWardLgdCode()));
                 }
 
-                showAddConfirmationDialog("Office");
+                if (isEditMode) {
+                    showEditConfirmationDialog("Office");
+                } else {
+                    showAddConfirmationDialog("Office");
+                }
+
+
+
 
             } else {
                 CD.showDialog(AddOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
             }
+
         });
 
     }
@@ -700,7 +798,7 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                         UploadObject uploadObject = new UploadObject();
                         // We can use Enums / Econstant to store these values of url and method names
                         try {
-                            uploadObject.setUrl(Econstants.base_url);
+                            uploadObject.setUrl(Econstants.sarvatra_url);
                             uploadObject.setMethordName("/master-data?masterName=");
                             uploadObject.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8"));
                             uploadObject.setTasktype(TaskType.ADD_OFFICE);
@@ -709,10 +807,11 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                             e.printStackTrace();
                         }
 
-                        Log.i("JSON Body", " " + officeValuesToAdd.getJSON().toString() );
+                        Log.i("JSON Body", " " + officeValuesToAdd.getJSON(this).toString());
+
 
                         try {
-                            encryptedBody = aesCrypto.encrypt(officeValuesToAdd.getJSON().toString());
+                            encryptedBody = aesCrypto.encrypt(officeValuesToAdd.getJSON(this).toString());
                         } catch (Exception e) {
                             Log.e("Encryption Error", e.getMessage());
                         }
@@ -733,6 +832,54 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
+    private void showEditConfirmationDialog(String selectedEntity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add " + selectedEntity)
+                .setMessage("Are you sure you want to edit this " + selectedEntity + " ?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+
+                        UploadObject uploadObject = new UploadObject();
+                        // We can use Enums / Econstant to store these values of url and method names
+                        try {
+                            uploadObject.setUrl(Econstants.sarvatra_url);
+                            uploadObject.setMethordName("/master-data?masterName=");
+                            uploadObject.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
+                                    + "&id=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(receivedOfficeToEdit.getOfficeId()))));
+
+                            uploadObject.setTasktype(TaskType.EDIT_OFFICE);
+                            uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i("JSON Body", " " + officeValuesToAdd.getJSONToEdit(this).toString());
+
+
+                        try {
+                            encryptedBody = aesCrypto.encrypt(officeValuesToAdd.getJSONToEdit(this).toString());
+                        } catch (Exception e) {
+                            Log.e("Encryption Error", e.getMessage());
+                        }
+
+                        uploadObject.setParam(encryptedBody);
+                        Log.i("JSON JSON Body:", "Enc JSON Body:" + encryptedBody);
+                        Log.i("Object", "Complete Object: " + uploadObject.toString());
+
+                        Log.e("URL: ", "URL: " + uploadObject.getUrl() + uploadObject.getMethordName() + uploadObject.getMasterName() + uploadObject.getParam());
+
+                        new ShubhAsyncPost(AddOffice.this, AddOffice.this, TaskType.EDIT_OFFICE).execute(uploadObject);
+
+                    } else {
+                        CD.addCompleteEntityDialog(AddOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
+                    }
+
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
 
     @Override
     public void onTaskCompleted(ResponsePojoGet responseObject, TaskType taskType) throws JSONException {
@@ -758,6 +905,19 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
                             districtSpinnerAdapter = new DistrictSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             districtSpinner.setAdapter(districtSpinnerAdapter);
+
+                            if (isEditMode && receivedOfficeToEdit != null) {
+                                // PRESELECT LOCATION
+                                districtSpinner.post(() -> {
+                                    int defaultItemPosition = districtSpinnerAdapter.getPositionForDistrict(receivedOfficeToEdit.getLgdDistrictCode());
+                                    // Set the spinner to the default position if valid
+                                    if (defaultItemPosition != -1) {
+                                        districtSpinner.setSelectedItemByIndex(defaultItemPosition);
+                                    } else {
+                                        Log.e("Error", "Item not found in adapter.");
+                                    }
+                                });
+                            }
 
                         } else {
                             CD.showDialog(AddOffice.this, "No Data Found");
@@ -799,8 +959,21 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                             officeSpinnerAdapter = new OfficeSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             parentOfficeSpinner.setAdapter(officeSpinnerAdapter);
 
+                            if (isEditMode && receivedOfficeToEdit != null && receivedOfficeToEdit.getOfficeParentId() != -1) {
+                                // PRESELECT LOCATION
+                                parentOfficeSpinner.post(() -> {
+                                    int defaultItemPosition = officeSpinnerAdapter.getPositionForOffice(receivedOfficeToEdit.getOfficeParentId());
+                                    // Set the spinner to the default position if valid
+                                    if (defaultItemPosition != -1) {
+                                        parentOfficeSpinner.setSelectedItemByIndex(defaultItemPosition);
+                                    } else {
+                                        Log.e("Error", "Item not found in adapter.");
+                                    }
+                                });
+                            }
+
                         } else {
-                            CD.showDialog(AddOffice.this, "No Data Found");
+//                            CD.showDialog(AddOffice.this, "No Data Found");
                         }
 
                     } else {
@@ -839,8 +1012,21 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                             officeLevelSpinnerAdapter = new OfficeLevelSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             officeLevelSpinner.setAdapter(officeLevelSpinnerAdapter);
 
+                            if (isEditMode && receivedOfficeToEdit != null) {
+                                // PRESELECT LOCATION
+                                officeLevelSpinner.post(() -> {
+                                    int defaultItemPosition = officeLevelSpinnerAdapter.getPositionForOfficeLevel(receivedOfficeToEdit.getOfficeLevelPojo().getOfficeLevelName(), receivedOfficeToEdit.getOfficeLevelPojo().getOfficeLevelId());
+                                    // Set the spinner to the default position if valid
+                                    if (defaultItemPosition != -1) {
+                                        officeLevelSpinner.setSelectedItemByIndex(defaultItemPosition);
+                                    } else {
+                                        Log.e("Error", "Item not found in adapter.");
+                                    }
+                                });
+                            }
+
                         } else {
-                            CD.showDialog(AddOffice.this, "No Data Found");
+                            CD.showDialog(AddOffice.this, "No Office Types Found");
                         }
 
                     } else {
@@ -878,6 +1064,19 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                             designationSpinnerAdapter = new DesignationSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             designationSpinner.setAdapter(designationSpinnerAdapter);
 
+                            if (isEditMode && receivedOfficeToEdit != null) {
+                                // PRESELECT LOCATION
+                                designationSpinner.post(() -> {
+                                    int defaultItemPosition = designationSpinnerAdapter.getPositionForItem(receivedOfficeToEdit.getDesignationPojo().getDesignationName(), receivedOfficeToEdit.getDesignationPojo().getDesignationId());
+                                    // Set the spinner to the default position if valid
+                                    if (defaultItemPosition != -1) {
+                                        designationSpinner.setSelectedItemByIndex(defaultItemPosition);
+                                    } else {
+                                        Log.e("Error", "Item not found in adapter.");
+                                    }
+                                });
+                            }
+
                         } else {
                             CD.showDialog(AddOffice.this, "No Data Found");
                         }
@@ -892,7 +1091,10 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
             } else {
                 CD.showDialog(AddOffice.this, "Not able to connect to the server");
             }
-        } else if (TaskType.GET_BLOCK == taskType) {
+        }
+
+        //
+        else if (TaskType.GET_BLOCK == taskType) {
             SuccessResponse response = null;
 
             List<BlockPojo> pojoList = new ArrayList<>();
@@ -913,6 +1115,19 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
                             blockSpinnerAdapter = new BlockSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             blockSpinner.setAdapter(blockSpinnerAdapter);
+
+                            if (isEditMode && receivedOfficeToEdit != null && receivedOfficeToEdit.getLgdBlockCode() != -1) {
+                                // PRESELECT
+                                blockSpinner.post(() -> {
+                                    int defaultItemPosition = blockSpinnerAdapter.getPositionForItem(String.valueOf(receivedOfficeToEdit.getLgdBlockCode()));
+                                    // Set the spinner to the default position if valid
+                                    if (defaultItemPosition != -1) {
+                                        blockSpinner.setSelectedItemByIndex(defaultItemPosition);
+                                    } else {
+                                        Log.e("Error", "Item not found in adapter.");
+                                    }
+                                });
+                            }
 
                         } else {
 //                            CD.showDialog(AddOffice.this, "No Data Found");
@@ -953,6 +1168,19 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                             panchayatSpinnerAdapter = new PanchayatSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             panchayatSpinner.setAdapter(panchayatSpinnerAdapter);
 
+                            if (isEditMode && receivedOfficeToEdit != null && receivedOfficeToEdit.getLgdPanchayatCode() != -1) {
+                                // PRESELECT
+                                panchayatSpinner.post(() -> {
+                                    int defaultItemPosition = panchayatSpinnerAdapter.getPositionForItem(String.valueOf(receivedOfficeToEdit.getLgdPanchayatCode()));
+                                    // Set the spinner to the default position if valid
+                                    if (defaultItemPosition != -1) {
+                                        panchayatSpinner.setSelectedItemByIndex(defaultItemPosition);
+                                    } else {
+                                        Log.e("Error", "Item not found in adapter.");
+                                    }
+                                });
+                            }
+
                         } else {
 //                            CD.showDialog(AddOffice.this, "No Data Found");
                         }
@@ -991,6 +1219,20 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
                             villageSpinnerAdapter = new VillageSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             villageSpinner.setAdapter(villageSpinnerAdapter);
+
+                            if (isEditMode && receivedOfficeToEdit != null && receivedOfficeToEdit.getLgdPanchayatCode() != -1) {
+                                // PRESELECT
+                                villageSpinner.post(() -> {
+                                    int defaultItemPosition = villageSpinnerAdapter.getPositionForItem(String.valueOf(receivedOfficeToEdit.getLgdVillageCode()));
+                                    // Set the spinner to the default position if valid
+                                    if (defaultItemPosition != -1) {
+                                        villageSpinner.setSelectedItemByIndex(defaultItemPosition);
+                                    } else {
+                                        Log.e("Error", "Item not found in adapter.");
+                                    }
+                                });
+                            }
+
 
                         } else {
 //                            CD.showDialog(AddOffice.this, "No Data Found");
@@ -1033,7 +1275,9 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                             municipalNPSPinner.setAdapter(municipalSpinnerAdapter);
 
                         } else {
-                            CD.showDialog(AddOffice.this, "No Data Found");
+                            CD.showDialog(AddOffice.this, "No Municipality / Nagar Panchayat Found");
+                            municipalNPSPinner.clearSelection();
+                            municipalNPSPinner.setAdapter(null);
                         }
 
                     } else {
@@ -1087,7 +1331,6 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
             }
         }
 
-
         // Add
         else if (TaskType.ADD_OFFICE == taskType) {
 
@@ -1106,12 +1349,16 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 } else if (successResponse.getStatus().equalsIgnoreCase("ERROR")) {
                     Log.i("Add Entity Response", successResponse.getData());
                     CD.addCompleteEntityDialog(this, successResponse.getMessage()); // Dialog that dismisses activity
-                } else {
-                    CD.addCompleteEntityDialog(this, "Please connect to the internet");
+                }else if (successResponse.getStatus().equalsIgnoreCase("NOT_FOUND")) {
+                    Log.i("Add Entity Response", successResponse.getData());
+                    CD.addCompleteEntityDialog(this, successResponse.getMessage()); // Dialog that dismisses activity
+                }
+                else {
+                    CD.showDialog(this, "Please connect to the internet");
                 }
             } else {
                 Log.i("AddDriver", "Response is null");
-                CD.addCompleteEntityDialog(this, "Response is null.");
+                CD.showDialog(this, "Response is null.");
             }
         }
 

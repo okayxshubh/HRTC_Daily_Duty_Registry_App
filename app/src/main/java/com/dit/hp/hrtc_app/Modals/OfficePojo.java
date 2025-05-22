@@ -1,7 +1,9 @@
 package com.dit.hp.hrtc_app.Modals;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.dit.hp.hrtc_app.utilities.Econstants;
 import com.dit.hp.hrtc_app.utilities.Preferences;
 
 import org.json.JSONObject;
@@ -14,7 +16,7 @@ public class OfficePojo implements Serializable {
     private String officeName;
     private String officeArea;
 
-    private OfficeTypePojo officeTypePojo;
+    private OfficeLevel officeLevelPojo;
 
     private DepartmentPojo departmentPojo;
 
@@ -69,12 +71,32 @@ public class OfficePojo implements Serializable {
         this.officeName = officeName;
     }
 
-    public OfficeTypePojo getOfficeTypePojo() {
-        return officeTypePojo;
+    public OfficeLevel getOfficeLevelPojo() {
+        return officeLevelPojo;
     }
 
-    public void setOfficeTypePojo(OfficeTypePojo officeTypePojo) {
-        this.officeTypePojo = officeTypePojo;
+    public void setOfficeLevelPojo(OfficeLevel officeLevelPojo) {
+        this.officeLevelPojo = officeLevelPojo;
+    }
+
+    public void setLgdBlockCode(int lgdBlockCode) {
+        this.lgdBlockCode = lgdBlockCode;
+    }
+
+    public void setLgdPanchayatCode(int lgdPanchayatCode) {
+        this.lgdPanchayatCode = lgdPanchayatCode;
+    }
+
+    public void setLgdVillageCode(int lgdVillageCode) {
+        this.lgdVillageCode = lgdVillageCode;
+    }
+
+    public void setLgdMunicipalCode(int lgdMunicipalCode) {
+        this.lgdMunicipalCode = lgdMunicipalCode;
+    }
+
+    public void setLgdWardCode(int lgdWardCode) {
+        this.lgdWardCode = lgdWardCode;
     }
 
     public DepartmentPojo getDepartmentPojo() {
@@ -211,41 +233,38 @@ public class OfficePojo implements Serializable {
     }
 
 
-    public JSONObject getJSON() {
+    public JSONObject getJSON(Context context) {
+        Preferences.getInstance().loadPreferences(context); // pass context here
+
         JSONObject json = new JSONObject();
         try {
-//            json.put("id", officeId);
             json.put("officeName", officeName);
 
-            if(officeTypePojo != null){
-                json.put("officeType", officeTypePojo.getOfficeTypeId());
-            }
+            json.put("officeType", officeLevelPojo.getOfficeLevelId());
 
-            if(departmentPojo != null){
-                json.put("department", departmentPojo.getDepartmentId());
-            }
+            json.put("designation", designationPojo.getDesignationId());
 
-            json.put("office", officeParentId); // Parent Office
+            json.put("department", Econstants.HRTC_DEPARTMENT_ID);
 
-            if(designationPojo != null){
-                json.put("designation", designationPojo.getDesignationId());
+            if (officeParentId != -1){
+                json.put("office", officeParentId);
+            }else{
+                json.put("office", JSONObject.NULL);
             }
 
             json.put("address", address);
-
             json.put("lgdDistrictCode", lgdDistrictCode);
-
-            // Add Area and Check
             json.put("officeCategory", officeArea);
 
-            if (officeArea.equalsIgnoreCase("Rural")){
+            if (officeArea.equalsIgnoreCase(Econstants.OFFICE_Type_RURAL)) {
                 json.put("lgdMunicipalCode", JSONObject.NULL);
                 json.put("lgdWardCode", JSONObject.NULL);
                 json.put("lgdBlockCode", lgdBlockCode);
                 json.put("lgdPanchayatCode", lgdPanchayatCode);
                 json.put("lgdVillageCode", lgdVillageCode);
             }
-            else if (officeArea.equalsIgnoreCase("Urban")){
+            //
+            else if (officeArea.equalsIgnoreCase(Econstants.OFFICE_Type_REVENUE)) {
                 json.put("lgdMunicipalCode", lgdMunicipalCode);
                 json.put("lgdWardCode", lgdWardCode);
                 json.put("lgdBlockCode", JSONObject.NULL);
@@ -253,40 +272,13 @@ public class OfficePojo implements Serializable {
                 json.put("lgdVillageCode", JSONObject.NULL);
             }
 
-
-            json.put("revenueTehsilId", revenueTehsilId);
-            json.put("revenuePatwarId", revenuePatwarId);
             json.put("pinCode", pinCode);
             json.put("sanctionedPosts", sanctionedPosts);
-            json.put("otherPosts", otherPosts);
+            json.put("otherPosts", 0);
 
+            json.put("createdBy", Preferences.getInstance().emailID);
 
-            if (officeTypePojo != null) {
-                JSONObject type = new JSONObject();
-                type.put("id", officeTypePojo.getOfficeTypeId());
-                type.put("officeTypeName", officeTypePojo.getOfficeTypeName());
-                json.put("officeType", type);
-            }
-
-            if (departmentPojo != null) {
-                JSONObject dept = new JSONObject();
-                dept.put("id", departmentPojo.getDepartmentId());
-                dept.put("departmentName", departmentPojo.getDepartmentName());
-                dept.put("departmentCode", departmentPojo.getDepartmentCode());
-                json.put("department", dept);
-            }
-
-            if (designationPojo != null) {
-                JSONObject desig = new JSONObject();
-                desig.put("id", designationPojo.getDesignationId());
-                desig.put("designationName", designationPojo.getDesignationName());
-                desig.put("designationCode", designationPojo.getDesignationCode());
-                json.put("designation", desig);
-            }
-
-
-//            json.put("depotCode", Preferences.getInstance().);
-            json.put("createdBy", Preferences.getInstance().empId);
+            Log.e("Add Office JSON", "Add Office JSON: " + json.toString());
 
         } catch (Exception e) {
             Log.e("Error", "Error in toJSON: " + e.getMessage());
@@ -294,6 +286,59 @@ public class OfficePojo implements Serializable {
         return json;
     }
 
+
+    public JSONObject getJSONToEdit(Context context) {
+        Preferences.getInstance().loadPreferences(context); // pass context here
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("officeName", officeName);
+
+            json.put("officeType", officeLevelPojo.getOfficeLevelId());
+
+            json.put("designation", designationPojo.getDesignationId());
+
+            json.put("department", Econstants.HRTC_DEPARTMENT_ID);
+
+            if (officeParentId != -1){
+                json.put("office", officeParentId);
+            }else{
+                json.put("office", JSONObject.NULL);
+            }
+
+            json.put("address", address);
+            json.put("lgdDistrictCode", lgdDistrictCode);
+            json.put("officeCategory", officeArea);
+
+            if (officeArea.equalsIgnoreCase(Econstants.OFFICE_Type_RURAL)) {
+                json.put("lgdMunicipalCode", JSONObject.NULL);
+                json.put("lgdWardCode", JSONObject.NULL);
+                json.put("lgdBlockCode", lgdBlockCode);
+                json.put("lgdPanchayatCode", lgdPanchayatCode);
+                json.put("lgdVillageCode", lgdVillageCode);
+            }
+            //
+            else if (officeArea.equalsIgnoreCase(Econstants.OFFICE_Type_REVENUE)) {
+                json.put("lgdMunicipalCode", lgdMunicipalCode);
+                json.put("lgdWardCode", lgdWardCode);
+                json.put("lgdBlockCode", JSONObject.NULL);
+                json.put("lgdPanchayatCode", JSONObject.NULL);
+                json.put("lgdVillageCode", JSONObject.NULL);
+            }
+
+            json.put("pinCode", pinCode);
+            json.put("sanctionedPosts", sanctionedPosts);
+            json.put("otherPosts", 0);
+
+            json.put("updatedBy", Preferences.getInstance().emailID);
+
+            Log.e("EDIT Office JSON", "EDIT Office JSON: " + json.toString());
+
+        } catch (Exception e) {
+            Log.e("Error", "Error in toJSON: " + e.getMessage());
+        }
+        return json;
+    }
 
 
 }

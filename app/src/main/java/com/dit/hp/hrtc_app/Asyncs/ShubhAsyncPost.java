@@ -185,6 +185,18 @@ public class ShubhAsyncPost extends AsyncTask<UploadObject, Void, ResponsePojoGe
             return Data_From_Server;
         }
 
+        if (uploadObjects[0].getTasktype() == TaskType.EDIT_OFFICE) {
+            Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
+            Data_From_Server = http_manager.PutDataHimAccess(uploadObjects[0]);
+            return Data_From_Server;
+        }
+
+        else if (uploadObjects[0].getTasktype() == TaskType.DELETE_OFFICE) {
+            Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
+            Data_From_Server = http_manager.DeleteDataHimAccess(uploadObjects[0]);
+            return Data_From_Server;
+        }
+
 
 
 

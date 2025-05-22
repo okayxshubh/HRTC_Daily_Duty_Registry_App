@@ -8,6 +8,20 @@ public class DepartmentPojo implements Serializable {
         private String departmentName;
         private String departmentCode;
 
+        public DepartmentPojo() {
+        }
+
+        public DepartmentPojo(int departmentId, String departmentName) {
+                this.departmentId = departmentId;
+                this.departmentName = departmentName;
+        }
+
+        public DepartmentPojo(int departmentId, String departmentName, String departmentCode) {
+                this.departmentId = departmentId;
+                this.departmentName = departmentName;
+                this.departmentCode = departmentCode;
+        }
+
         public int getDepartmentId() {
                 return departmentId;
         }

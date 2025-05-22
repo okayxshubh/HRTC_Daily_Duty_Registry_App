@@ -734,7 +734,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
                 }
 
                 jsonObject.put("remarks", remarks.getText().toString());
-                jsonObject.put("createdBy", Preferences.getInstance().empId);
+                jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
             } catch (JSONException e) {
                 Log.e("JSON Exception", e.getMessage());

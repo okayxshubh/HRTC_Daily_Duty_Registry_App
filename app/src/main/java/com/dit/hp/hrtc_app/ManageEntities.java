@@ -115,11 +115,11 @@ public class ManageEntities extends AppCompatActivity {
 
         // Role
         String roleName = Preferences.getInstance().roleName;
-        roleIdTV.setText(roleName != null && !roleName.isEmpty() ? "Role: " + roleName : "Role: No Role Available");
+        roleIdTV.setText(roleName != null && !roleName.isEmpty() ? "Role: " + roleName : "No Role Available");
 
         // Depot
         String depotName = Preferences.getInstance().depotName;
-        depotLocationTV.setText(depotName != null && !depotName.isEmpty() ? "Depot: " + depotName : "Not Info Available");
+        depotLocationTV.setText(depotName != null && !depotName.isEmpty() ? "Office: " + depotName : "No Info Available");
     }
 
 

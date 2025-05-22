@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dit.hp.hrtc_app.Adapters.OfficeCardsAdapter;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
+import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
 import com.dit.hp.hrtc_app.Modals.OfficePojo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
 import com.dit.hp.hrtc_app.Modals.SuccessResponse;
@@ -37,6 +38,7 @@ import com.dit.hp.hrtc_app.utilities.Preferences;
 
 import org.json.JSONException;
 
+import java.io.Serializable;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -148,15 +150,14 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
     private void fetchRecords(int page, int size) {
         try {
             if (AppStatus.getInstance(AllOfficeCards.this).isOnline()) {
-
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
-                object.setMethordName("/office/getPagedOffices?");
+                object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
 
-                        // HARDCODE THIS DEPARTMENT ID FOR HRTC
-                                + "&deptId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(106))) // Hardcoded ID for HRTC
-                                + "&empId=" + URLEncoder.encode(aesCrypto.encrypt("0"), "UTF-8")
+                                // HARDCODE THIS DEPARTMENT ID FOR HRTC
+                                + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Econstants.HRTC_DEPARTMENT_PARENT_ID))) // Hardcoded ID for HRTC
+//                                + "&empId=" + URLEncoder.encode(aesCrypto.encrypt("0"), "UTF-8")
                                 + "&page=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(page)))
 //                        + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(""), "UTF-8")
                                 + "&size=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(size)))
@@ -177,16 +178,27 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
 
     private void addMoreData(List<OfficePojo> newData) {
         if (cardsAdapter == null) {
-            // Initialize adapter if it's the first time
             cardsAdapter = new OfficeCardsAdapter(newData, this);
             recyclerView.setAdapter(cardsAdapter);
         } else {
-            // Add data without clearing old data
-            cardsAdapter.addItems(newData);
+            List<OfficePojo> existingList = cardsAdapter.getItems();
+            for (OfficePojo newOffice : newData) {
+                boolean alreadyExists = false;
+                for (OfficePojo existing : existingList) {
+                    if (existing.getOfficeId() == newOffice.getOfficeId()) {
+                        alreadyExists = true;
+                        break;
+                    }
+                }
+                if (!alreadyExists) {
+                    cardsAdapter.addItem(newOffice);
+                }
+            }
         }
-        cardsAdapter.notifyDataSetChanged();  // Notify the adapter of data change
-        isLoading = false;  // Reset loading flag
+        cardsAdapter.notifyDataSetChanged();
+        isLoading = false;
     }
+
 
     // Modify your searchStaff method as follows
     private void searchItem(String query) {
@@ -194,15 +206,16 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
             if (AppStatus.getInstance(AllOfficeCards.this).isOnline()) {
 
                 UploadObject object = new UploadObject();
-                object.setMethordName("/office/getPagedOffices?");
+                object.setUrl(Econstants.sarvatra_url);
+                object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
-                        + "&deptId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().departmentId)))
+                        // HARDCODE THIS DEPARTMENT ID FOR HRTC
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Econstants.HRTC_DEPARTMENT_PARENT_ID))) // Hardcoded ID for HRTC
                         + "&empId=" + URLEncoder.encode(aesCrypto.encrypt("0"), "UTF-8")
                         + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(query), "UTF-8")
                 );
                 object.setTasktype(TaskType.GET_OFFICES_SEARCH);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
-
                 isLoading = true;  // Set loading flag
                 new ShubhAsyncGet(AllOfficeCards.this, AllOfficeCards.this, TaskType.GET_OFFICES_SEARCH).execute(object);
             } else {
@@ -229,15 +242,14 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
         isLoading = false;  // Reset loading flag
     }
 
-
     // Interface method for edit button + Cannot edit old date records
     @Override
     public void onEditClick(OfficePojo selectedPojo, int position) {
         if (selectedPojo != null) {
-            Toast.makeText(this, "Edit Clicked", Toast.LENGTH_SHORT).show();
-//            Intent editIntent = new Intent(this, EditVehicle.class);
-//            editIntent.putExtra("VehicleInfo", (Serializable) selectedPojo);
-//            startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
+            Intent editIntent = new Intent(this, AddOffice.class);
+            editIntent.putExtra("OfficeInfo", (Serializable) selectedPojo);
+            editIntent.putExtra("EditMode", true);
+            startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
         } else {
             Log.e("onEditClick", "OfficePojo is null!");
         }
@@ -245,45 +257,45 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
 
     @Override
     public void onDeleteClick(OfficePojo selectedPojo, int position) {
-//        if (selectedPojo != null) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Delete Vehicle")
-//                    .setMessage("Are you sure you want to delete the office: " + selectedPojo.getOfficeName() + "?")
-//                    .setPositiveButton("Yes", (dialog, which) -> {
-//                        if (AppStatus.getInstance(AllOfficeCards.this).isOnline()) {
-//                            UploadObject uploadObject = new UploadObject();
-//
-//                            Log.e("Depot ID: ", "Depot ID: " + selectedPojo.getId());
-//
-//                            try {
-//                                uploadObject.setUrl(Econstants.base_url);
-//                                uploadObject.setMethordName("/master-data?masterName=");
-//
-//                                uploadObject.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
-//                                        + "&id=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(selectedPojo.getId()))));
-//
-//                                uploadObject.setTasktype(TaskType.REMOVE_VEHICLE);
-//                                uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
-//
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//
-//
-//                            Log.i("Object", "Complete Object: " + uploadObject.toString());
-//
-//                            new ShubhAsyncPost(AllOfficeCards.this, AllOfficeCards.this, TaskType.REMOVE_VEHICLE).execute(uploadObject);
-//
-//                        } else {
-//
-//                            Toast.makeText(this, "Internet not available.", Toast.LENGTH_SHORT).show();
-//                        }
-//                    })
-//                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-//                    .show();
-//        } else {
-//            Toast.makeText(this, "No vehicle selected for removal.", Toast.LENGTH_SHORT).show();
-//        }
+        if (selectedPojo != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Delete Office")
+                    .setMessage("Are you sure you want to delete the office: " + selectedPojo.getOfficeName() + "?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        if (AppStatus.getInstance(AllOfficeCards.this).isOnline()) {
+                            UploadObject uploadObject = new UploadObject();
+
+                            Log.e("POJO ID:: ", "POJO ID: " + selectedPojo.getOfficeId());
+
+                            try {
+                                uploadObject.setUrl(Econstants.sarvatra_url);
+                                uploadObject.setMethordName("/master-data?masterName=");
+
+                                uploadObject.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
+                                        + "&id=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(selectedPojo.getOfficeId()))));
+
+                                uploadObject.setTasktype(TaskType.DELETE_OFFICE);
+                                uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                            Log.i("Object", "Complete Object: " + uploadObject.toString());
+
+                            new ShubhAsyncPost(AllOfficeCards.this, AllOfficeCards.this, TaskType.DELETE_OFFICE).execute(uploadObject);
+
+                        } else {
+
+                            Toast.makeText(this, "Internet not available.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .show();
+        } else {
+            Toast.makeText(this, "No item selected for removal.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -298,10 +310,19 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
         TextView officeId = dialogView.findViewById(R.id.officeId);
         TextView officeName = dialogView.findViewById(R.id.officeName);
         TextView officeType = dialogView.findViewById(R.id.officeType);
+        TextView designationTV = dialogView.findViewById(R.id.designationTV);
+        TextView pincodeTV = dialogView.findViewById(R.id.pincodeTV);
+        TextView addressTV = dialogView.findViewById(R.id.addressTV);
 
-        officeId.setText(selectedPojo.getOfficeId());
-        officeName.setText(selectedPojo.getOfficeName());
-        officeType.setText(selectedPojo.getOfficeTypePojo().getOfficeTypeName());
+        if (selectedPojo.getOfficeId() != -1) {
+            officeId.setText(String.valueOf(selectedPojo.getOfficeId()));
+        }
+        officeName.setText(selectedPojo.getOfficeName() != null ? selectedPojo.getOfficeName() : "");
+        officeType.setText(selectedPojo.getOfficeLevelPojo() != null && selectedPojo.getOfficeLevelPojo().getOfficeLevelName() != null ? selectedPojo.getOfficeLevelPojo().getOfficeLevelName() : "");
+        designationTV.setText(selectedPojo.getDesignationPojo() != null && selectedPojo.getDesignationPojo().getDesignationName() != null ? selectedPojo.getDesignationPojo().getDesignationName() : "");
+        pincodeTV.setText(selectedPojo.getPinCode() != -1 ? String.valueOf(selectedPojo.getPinCode()) : "");
+        addressTV.setText(selectedPojo.getAddress() != null ? selectedPojo.getAddress() : "");
+
 
         // Show the dialog
         builder.setPositiveButton("Close", null);
@@ -391,7 +412,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
 
                     if (response.getStatus().equalsIgnoreCase("OK")) {
 
-                       //  PARSE ALL CARDS
+                        //  PARSE ALL CARDS
                         pojoList = JsonParse.parseAllOfficeCards(response.getData());
 
                         if (pojoList.size() > 0) {
@@ -400,7 +421,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
                             addMoreData(pojoList); // Add More Data on Scroll + Keep the old data
 
                         } else {
-                            CD.showDialog(AllOfficeCards.this, "No Vehicles Found");
+                            CD.showDialog(AllOfficeCards.this, "No Offices Found");
                         }
 
                     } else {
@@ -409,11 +430,9 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
                 } else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
                     // Handle HTTP 401 Unauthorized response (session expired)
                     CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
-                }
-                else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_NO_CONTENT))) {
+                } else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_NO_CONTENT))) {
                     System.out.println("NO Content");
-                }
-                else {
+                } else {
                     CD.showDialog(AllOfficeCards.this, "Not able to fetch data");
                 }
             } else {
@@ -440,6 +459,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
                             pojoList.clear();
                             updateData(pojoList);
                         }
+
                     } else {
                         CD.showDialog(this, response.getMessage());
                     }

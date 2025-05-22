@@ -41,7 +41,7 @@ public class OfficeLevelSpinnerAdapter extends ArrayAdapter<OfficeLevel> {
         return position;
     }
 
-    public int getPositionForLocation(String name, int id) {
+    public int getPositionForOfficeLevel(String name, int id) {
         for (int i = 0; i < values.size(); i++) {
             OfficeLevel selectedPojo = values.get(i);
             // Check if both the name and ID match

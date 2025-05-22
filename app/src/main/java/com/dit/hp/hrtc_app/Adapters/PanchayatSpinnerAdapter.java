@@ -36,11 +36,11 @@ public class PanchayatSpinnerAdapter extends ArrayAdapter<PanchayatPojo> {
     }
 
 
-    public int getPositionForItem(String name, int id) {
+    public int getPositionForItem(String lgdCode) {
         for (int i = 0; i < values.size(); i++) {
             PanchayatPojo item = values.get(i);
             // Check if both the name and ID match
-            if (item.getPanchayatName().equals(name) && item.getPanchayatId() == id) {
+            if (item.getPanchayatLgdCode().equals(lgdCode)) {
                 return i; // Return the position of the matching entry
             }
         }

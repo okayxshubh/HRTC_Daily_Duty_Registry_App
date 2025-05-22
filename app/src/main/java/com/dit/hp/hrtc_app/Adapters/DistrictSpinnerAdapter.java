@@ -41,11 +41,11 @@ public class DistrictSpinnerAdapter extends ArrayAdapter<DistrictPojo> {
         return position;
     }
 
-    public int getPositionForLocation(String name, int id) {
+    public int getPositionForDistrict(int LGDCode) {
         for (int i = 0; i < values.size(); i++) {
             DistrictPojo selectedPojo = values.get(i);
             // Check if both the name and ID match
-            if (selectedPojo.getDistrictName().equals(name) && selectedPojo.getDistrictId() == id) {
+            if (selectedPojo.getDistrictLgdCode() == LGDCode) {
                 return i; // Return the position of the matching driver
             }
         }

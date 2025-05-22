@@ -36,11 +36,11 @@ public class BlockSpinnerAdapter extends ArrayAdapter<BlockPojo> {
     }
 
 
-    public int getPositionForItem(String name, int id) {
+    public int getPositionForItem(String LGDcode) {
         for (int i = 0; i < values.size(); i++) {
             BlockPojo item = values.get(i);
             // Check if both the name and ID match
-            if (item.getBlockName().equals(name) && item.getBlockId() == id) {
+            if (item.getBlockLgdCode().equals(LGDcode)) {
                 return i; // Return the position of the matching entry
             }
         }

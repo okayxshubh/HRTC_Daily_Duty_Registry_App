@@ -32,6 +32,11 @@ public class Econstants {
     public static final String OFFICE_Type_REVENUE = "Revenue";
     public static final String OFFICE_Type_RURAL = "Rural";
 
+    public static final String HRTC_DEPARTMENT_NAME = "Himachal Road Transport Corporation";
+    public static final Integer HRTC_DEPARTMENT_ID = 106;
+
+
+
 
     public static final String loginMethod = "/login/Auth?";
 
@@ -40,7 +45,6 @@ public class Econstants {
 
 
 //    public static final String base_url = "http://192.168.0.172:8081"; // DIT Wifi + DIT PC
-
 
 
     public static final String base_url = "https://himstaging1.hp.gov.in/hrtc"; // Staging

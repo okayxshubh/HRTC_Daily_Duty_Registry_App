@@ -36,11 +36,11 @@ public class VillageSpinnerAdapter extends ArrayAdapter<VillagePojo> {
     }
 
 
-    public int getPositionForItem(String name, int id) {
+    public int getPositionForItem(String id) {
         for (int i = 0; i < values.size(); i++) {
             VillagePojo item = values.get(i);
             // Check if both the name and ID match
-            if (item.getVillage().equals(name) && item.getVillageId() == id) {
+            if (item.getVillageLgdCode().equals(id)) {
                 return i; // Return the position of the matching entry
             }
         }

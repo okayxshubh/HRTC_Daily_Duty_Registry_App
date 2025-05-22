@@ -475,7 +475,7 @@ public class AddStaff extends AppCompatActivity implements ShubhAsyncTaskListene
                             jsonObject.put("relativeName", relationName.getText().toString());
                             jsonObject.put("socialCategory", selectedSpinnerCaste.getCasteId());
 
-                            jsonObject.put("createdBy", Preferences.getInstance().empId);
+                            jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
 
                         } catch (Exception e) {

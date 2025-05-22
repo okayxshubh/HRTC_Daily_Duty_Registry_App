@@ -175,7 +175,7 @@ public class AddOfficeLevel extends AppCompatActivity implements ShubhAsyncTaskL
                         try {
                             jsonObject.put("officeLevel", officeLevelName.getText().toString());
                             jsonObject.put("location", selectedLocation.getId());
-                            jsonObject.put("createdBy", Preferences.getInstance().empId);
+                            jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
                         } catch (JSONException e) {
                             Log.e("JSON Exception", e.getMessage());

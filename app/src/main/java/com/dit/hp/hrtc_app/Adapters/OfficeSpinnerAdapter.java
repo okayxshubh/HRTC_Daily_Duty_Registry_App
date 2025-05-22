@@ -41,11 +41,11 @@ public class OfficeSpinnerAdapter extends ArrayAdapter<OfficePojo> {
         return position;
     }
 
-    public int getPositionForLocation(String name, int id) {
+    public int getPositionForOffice(int id) {
         for (int i = 0; i < values.size(); i++) {
             OfficePojo selectedPojo = values.get(i);
             // Check if both the name and ID match
-            if (selectedPojo.getOfficeName().equals(name) && selectedPojo.getOfficeId() == id) {
+            if (selectedPojo.getOfficeId() == id) {
                 return i; // Return the position of the matching driver
             }
         }

@@ -423,6 +423,13 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
                 return Data_From_Server;
             }
 
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OFFICES_SEARCH.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_PARENT_OFFICES.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);

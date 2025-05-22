@@ -22,7 +22,7 @@ public class HimAccessUserInfo implements Serializable {
 
     private DesignationPojo mainDesignationPojo;
 
-    private OfficeTypePojo mainOfficeTypePojo;
+    private OfficeLevel mainOfficeLevelPojo;
 
     private OfficePojo mainOffice;
 
@@ -107,12 +107,12 @@ public class HimAccessUserInfo implements Serializable {
         this.mainDesignationPojo = mainDesignationPojo;
     }
 
-    public OfficeTypePojo getMainOfficeTypePojo() {
-        return mainOfficeTypePojo;
+    public OfficeLevel getMainOfficeLevelPojo() {
+        return mainOfficeLevelPojo;
     }
 
-    public void setMainOfficeTypePojo(OfficeTypePojo mainOfficeTypePojo) {
-        this.mainOfficeTypePojo = mainOfficeTypePojo;
+    public void setMainOfficeLevelPojo(OfficeLevel mainOfficeLevelPojo) {
+        this.mainOfficeLevelPojo = mainOfficeLevelPojo;
     }
 
     public OfficePojo getMainOffice() {
@@ -167,7 +167,7 @@ public class HimAccessUserInfo implements Serializable {
                 ", organisationPojo=" + organisationPojo +
                 ", mainDepartmentPojo=" + mainDepartmentPojo +
                 ", mainDesignationPojo=" + mainDesignationPojo +
-                ", mainOfficeTypePojo=" + mainOfficeTypePojo +
+                ", mainOfficeTypePojo=" + mainOfficeLevelPojo +
                 ", mainOffice=" + mainOffice +
                 ", roleId=" + roleId +
                 ", roleName='" + roleName + '\'' +

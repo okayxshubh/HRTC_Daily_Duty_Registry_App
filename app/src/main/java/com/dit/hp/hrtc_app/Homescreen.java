@@ -26,7 +26,6 @@ import androidx.cardview.widget.CardView;
 import com.dit.hp.hrtc_app.Adapters.AddaSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.DepotSpinnerAdapter;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
-import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
 import com.dit.hp.hrtc_app.Modals.AddaPojo;
 import com.dit.hp.hrtc_app.Modals.DepotPojo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
@@ -43,7 +42,6 @@ import com.dit.hp.hrtc_app.utilities.Preferences;
 import com.doi.spinnersearchable.SearchableSpinner;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -214,12 +212,12 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 //            Integer roleId = Preferences.getInstance().roleId;  // ROLE ID COMMING AS 29 FIXX IT
 //            Log.e("ROLE Here: ", "ROLE Here: " + roleId);
 //            if (roleId != null && (roleId == 1 || roleId == 2)) {
-//                if (isDepotSelected()) {
+                if (isDepotSelected()) {
                     Intent intent = new Intent(Homescreen.this, AllOfficeCards.class);
                     startActivity(intent);
-//                } else {
-//                    showDepotSelectionPopup();
-//                }
+                } else {
+                    showDepotSelectionPopup();
+                }
 //            } else if (roleId != null) {
 //                CD.showDialog(this, "This privilege is restricted to the Admin. Please contact your administrator for further assistance.");
 //            } else {
@@ -279,6 +277,39 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         dialog.show();
     }
 
+
+    private void loadOfficeForAdmin() {
+        // LOAD OFFICES FOR ADMIN
+//    try {
+//        if (AppStatus.getInstance(Homescreen.this).isOnline()) {
+//
+//            UploadObject object = new UploadObject();
+//            object.setUrl(Econstants.sarvatra_url);
+//            object.setMethordName("/office/getPagedOffices?");
+//            object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
+//
+//                            // HARDCODE THIS DEPARTMENT ID FOR HRTC
+//                            + "&deptId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(106))) // Hardcoded ID for HRTC
+//                            + "&empId=" + URLEncoder.encode(aesCrypto.encrypt("0"), "UTF-8")
+//                            + "&page=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(page)))
+
+        /// /                        + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(""), "UTF-8")
+//                            + "&size=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(size)))
+//            );
+//            object.setTasktype(TaskType.GET_OFFICES);
+//            object.setAPI_NAME(Econstants.API_NAME_HRTC);
+//
+//            new ShubhAsyncGet(Homescreen.this, Homescreen.this, TaskType.GET_OFFICES).execute(object);
+//        } else {
+//            // Do nothing if CD already shown once
+//            CD.showDialog(Homescreen.this, Econstants.internetNotAvailable);
+//        }
+//    } catch (Exception ex) {
+//        CD.showDialog(Homescreen.this, "Something Bad happened . Please reinstall the application and try again.");
+//    }
+    }
+
+
     private void loadDepotsForSuperAdmin() {
         System.out.println("Loading Depots ABC");
         // Depot Service Call
@@ -301,6 +332,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         }
 
     }
+
 
     // DIALOG FOR DEPOT SELECTION
     private void showDepotSelectionPopup() {

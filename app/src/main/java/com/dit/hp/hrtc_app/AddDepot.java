@@ -162,7 +162,7 @@ public class AddDepot extends AppCompatActivity implements ShubhAsyncTaskListene
                             jsonObject.put("depotName", depotName.getText().toString());
                             jsonObject.put("depotCode", depotCode.getText().toString());
                             jsonObject.put("location", selectedLocation.getId());
-                            jsonObject.put("createdBy", Preferences.getInstance().empId);
+                            jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
                         } catch (JSONException e) {
                             Log.e("JSON Exception", e.getMessage());
