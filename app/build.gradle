@@ -33,13 +33,18 @@ android {
 dependencies {
 
     // Module Dependency
+    implementation project(path: ':easycam')
+    implementation project(path: ':locationmanager')
     implementation project(path: ':spinnersearchable')
 
-    // Maps
-//    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
-    // Draggable Route Stops
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    // Compressor (latest version)
+    implementation 'id.zelory:compressor:3.0.1'
+    // RxJava and RxAndroid
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+
 
     // Excel Download
     implementation 'org.apache.poi:poi-ooxml:5.2.3'

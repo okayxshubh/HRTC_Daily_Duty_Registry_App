@@ -1,0 +1,12 @@
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <uses-permission android:name="android.permission.CAMERA" />
+    <application>
+    <activity
+        android:name="in.balakrishnan.easycam.CameraControllerActivity"
+        android:configChanges="orientation|screenSize"
+        android:launchMode="singleTop"
+        android:theme="@style/CamAppTheme"
+        tools:ignore="MissingClass" />
+    </application>
+</manifest>

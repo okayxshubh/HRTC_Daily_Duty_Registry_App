@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "HRTC_App"
 include ':app'
 include ':spinnersearchable'
+include ':locationmanager'
+include ':easycam'

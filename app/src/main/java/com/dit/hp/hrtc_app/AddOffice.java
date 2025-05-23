@@ -1,12 +1,19 @@
 package com.dit.hp.hrtc_app;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,10 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.dit.hp.hrtc_app.Adapters.BlockSpinnerAdapter;
-import com.dit.hp.hrtc_app.Adapters.DepartmentSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.DesignationSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.DistrictSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.MunicipalSpinnerAdapter;
@@ -32,7 +38,6 @@ import com.dit.hp.hrtc_app.Adapters.WardSpinnerAdapter;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
 import com.dit.hp.hrtc_app.Modals.BlockPojo;
-import com.dit.hp.hrtc_app.Modals.DepartmentPojo;
 import com.dit.hp.hrtc_app.Modals.DesignationPojo;
 import com.dit.hp.hrtc_app.Modals.DistrictPojo;
 import com.dit.hp.hrtc_app.Modals.MunicipalPojo;
@@ -52,32 +57,40 @@ import com.dit.hp.hrtc_app.interfaces.ShubhAsyncTaskListenerPost;
 import com.dit.hp.hrtc_app.json.JsonParse;
 import com.dit.hp.hrtc_app.utilities.AppStatus;
 import com.dit.hp.hrtc_app.utilities.Econstants;
+import com.dit.hp.hrtc_app.utilities.SamplePresenter;
 import com.doi.spinnersearchable.SearchableSpinner;
+import com.kushkumardhawan.locationmanager.base.LocationBaseActivity;
+import com.kushkumardhawan.locationmanager.configuration.LocationConfiguration;
+import com.kushkumardhawan.locationmanager.constants.FailType;
+import com.kushkumardhawan.locationmanager.constants.ProcessType;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListenerPost, ShubhAsyncTaskListenerGet {
+import in.balakrishnan.easycam.CameraBundleBuilder;
+import in.balakrishnan.easycam.CameraControllerActivity;
+
+public class AddOffice extends LocationBaseActivity implements SamplePresenter.SampleView, ShubhAsyncTaskListenerPost, ShubhAsyncTaskListenerGet {
 
     AESCrypto aesCrypto = new AESCrypto();
 
     Button back, proceed;
     EditText departmentName, addressET, depotCode;
     String encryptedBody;
-    TextView headTV;
+    TextView headTV, locationTV;
+    ImageButton locationBtn;
 
     CustomDialog CD = new CustomDialog();
 
     EditText officeName, pincode, sanctionedPost;
     SearchableSpinner departmentSpinner, designationSpinner, parentOfficeSpinner, officeLevelSpinner, areaSpinner, districtSpinner, municipalNPSPinner, wardSpinner, blockSpinner, panchayatSpinner, villageSpinner;
 
-    DepartmentSpinnerAdapter departmentSpinnerAdapter;
-    DepartmentPojo selectedDepartment;
     DesignationSpinnerAdapter designationSpinnerAdapter;
     DesignationPojo selectedDesignation;
     OfficeSpinnerAdapter officeSpinnerAdapter;
@@ -101,6 +114,21 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
     ImageButton clearOfficeBtn;
 
+    // For Camera Image / Image Picked
+    private String[] list;
+    private File actualImage;
+    private File compressedImage = null;
+    private File renamedFile = null;
+    private String photoFilePath, photoFileName;
+
+
+    // Location Stuff
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+    private SamplePresenter samplePresenter;
+    private ProgressDialog progressDialog;
+
+
+
     String selectedArea;
     LinearLayout ruralLinearLayout, urbarnLinearLayout, distLL;
 
@@ -109,11 +137,15 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
     Boolean isEditMode = false;
     ImageView mainImageView;
 
+    String GLOBAL_LOCATION_STR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_office);
+
+        samplePresenter = new SamplePresenter(this);
+        locationBtn = findViewById(R.id.getLocationBtn);
 
         // EDIT MODE
         Intent getIntent = getIntent();
@@ -147,6 +179,7 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
         sanctionedPostLabel.setText(Html.fromHtml("Sanctioned Post <font color='#FF0000'>*</font>"));
 
         headTV = findViewById(R.id.HeadTV);
+        locationTV = findViewById(R.id.locationTV);
 
 
         ruralLinearLayout = findViewById(R.id.ruralLinearLayout);
@@ -154,7 +187,6 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
         clearOfficeBtn = findViewById(R.id.clearParentOfficeSelection);
         mainImageView = findViewById(R.id.mainImageView);
-
 
         officeName = findViewById(R.id.officeName);
         pincode = findViewById(R.id.pincode);
@@ -177,6 +209,29 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
         back = findViewById(R.id.backBtn);
         proceed = findViewById(R.id.proceedBtn);
+
+        getLocation(); // Automatically Fetch Location
+
+
+        mainImageView.setOnClickListener(view -> {
+            launchCamera();
+        });
+
+        locationBtn.setOnClickListener(v -> {
+            // Request Permission & Get Location
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            } else {
+                // Get Location and Print Location
+                getLocation();
+                if (GLOBAL_LOCATION_STR != null) {
+                    Log.d("Location", "Location: " + GLOBAL_LOCATION_STR);
+                }
+            }
+        });
+
 
         // Create an array of rural and urban options
         String[] areaOptions = {Econstants.OFFICE_Type_RURAL, Econstants.OFFICE_Type_REVENUE};
@@ -619,8 +674,6 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 }
 
 
-
-
             } else {
                 CD.showDialog(AddOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
             }
@@ -629,6 +682,25 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
 
     }
 
+    private void launchCamera() {
+        Intent intent = new Intent();
+        intent.setClass(AddOffice.this, CameraControllerActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("inputData", new CameraBundleBuilder()
+                .setFullscreenMode(true)
+                .setDoneButtonString("Save")
+                .setSinglePhotoMode(false)
+                .setMax_photo(1)
+                .setManualFocus(false)
+                .setBucketName(getClass().getName())
+                .setPreviewEnableCount(true)
+                .setPreviewIconVisiblity(true)
+                .setPreviewPageRedirection(true)
+                .setEnableDone(true)
+                .setClearBucket(true)
+                .createCameraBundle());
+        startActivityForResult(intent, 1560);
+    }
 
     // District
     private void serviceCallDistrict() {
@@ -878,6 +950,77 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 })
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null) {
+
+            // Camera Click Handling
+            if (resultCode == Activity.RESULT_OK && requestCode == 1560 && data != null) {
+                if (data.getStringArrayExtra("resultData").length == 0) {
+                    CD.showDialog(AddOffice.this, "Image not Clicked");
+                } else {
+                    list = data.getStringArrayExtra("resultData");
+                    File imgFile = new File(list[0]);  // Directly get file
+
+                    actualImage = new File(imgFile.getPath());
+                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(actualImage.getPath()));
+
+//                    Disposable compressedImage1 = new Compressor(this)
+//                            .compressToFileAsFlowable(actualImage)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(
+//                                    file -> {
+//                                        compressedImage = file;
+//                                        if (compressedImage != null) {
+//                                            Log.d("Compressed Image", compressedImage.getPath());
+//
+//                                            // ✅ Set the photo file path
+//                                            photoFilePath = compressedImage.getPath();
+//                                            photoFileName = compressedImage.getName();
+//
+//                                            mainImageView.setImageBitmap(BitmapFactory.decodeFile(compressedImage.getAbsolutePath()));
+//                                            mainImageView.setPadding(5, 5, 5, 5);
+//                                            Toast.makeText(getApplicationContext(), "One Image Clicked.", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    },
+//                                    throwable -> Log.e("ERROR", throwable.getMessage())
+//                            );
+                }
+            }
+        }
+
+//        if (data != null && resultCode == Activity.RESULT_OK && requestCode == 1560) {
+//            String[] resultArray = data.getStringArrayExtra("resultData");
+//
+//            if (resultArray == null || resultArray.length == 0) {
+//                CD.showDialog(AddOffice.this, "Image not Clicked");
+//            } else {
+//                actualImage = new File(resultArray[0]);
+//                mainImageView.setImageBitmap(BitmapFactory.decodeFile(resultArray[0]));
+//
+//                Disposable disposable = new Compressor(this)
+//                        .compressToFileAsFlowable(actualImage)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(
+//                                file -> {
+//                                    compressedImage = file;
+//                                    photoFilePath = compressedImage.getPath();
+//                                    photoFileName = compressedImage.getName();
+//
+//                                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(photoFilePath));
+//                                    mainImageView.setPadding(5, 5, 5, 5);
+//                                    Toast.makeText(getApplicationContext(), "One Image Clicked.", Toast.LENGTH_SHORT).show();
+//                                },
+//                                throwable -> Log.e("Compressor Error", "Error compressing image", throwable)
+//                        );
+//            }
+//        }
     }
 
 
@@ -1349,15 +1492,14 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
                 } else if (successResponse.getStatus().equalsIgnoreCase("ERROR")) {
                     Log.i("Add Entity Response", successResponse.getData());
                     CD.addCompleteEntityDialog(this, successResponse.getMessage()); // Dialog that dismisses activity
-                }else if (successResponse.getStatus().equalsIgnoreCase("NOT_FOUND")) {
+                } else if (successResponse.getStatus().equalsIgnoreCase("NOT_FOUND")) {
                     Log.i("Add Entity Response", successResponse.getData());
                     CD.addCompleteEntityDialog(this, successResponse.getMessage()); // Dialog that dismisses activity
-                }
-                else {
+                } else {
                     CD.showDialog(this, "Please connect to the internet");
                 }
             } else {
-                Log.i("AddDriver", "Response is null");
+                Log.i("Response", "Response is null");
                 CD.showDialog(this, "Response is null.");
             }
         }
@@ -1370,4 +1512,101 @@ public class AddOffice extends AppCompatActivity implements ShubhAsyncTaskListen
     public void onBackPressed() {
         showExitConfirmationDialog();
     }
+
+
+    /**
+     * Location Interface Methords
+     *
+     * @return
+     */
+    @Override
+    public LocationConfiguration getLocationConfiguration() {
+        return com.kushkumardhawan.locationmanager.configuration.Configurations.defaultConfiguration("Permission Required !", "GPS needs to be turned on.");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        samplePresenter.onLocationChanged(location);
+    }
+
+    @Override
+    public void onLocationFailed(@FailType int type) {
+        samplePresenter.onLocationFailed(type);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getLocationManager().isWaitingForLocation() && !getLocationManager().isAnyDialogShowing()) {
+            displayProgress();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        dismissProgress();
+    }
+
+    private void displayProgress() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.getWindow().addFlags(Window.FEATURE_NO_TITLE);
+            progressDialog.setMessage("Getting location...");
+        }
+
+        if (!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
+    }
+
+    @Override
+    public String getText() {
+        return "";  //locationText.getText().toString()
+    }
+
+    @Override
+    public void setText(String text) {
+        GLOBAL_LOCATION_STR = text; // Set location
+        locationTV.setText(text);
+        Log.e("Location GPS", text);
+    }
+
+    @Override
+    public void updateProgress(String text) {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.setMessage(text);
+        }
+    }
+
+    @Override
+    public void dismissProgress() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onProcessTypeChanged(@ProcessType int processType) {
+        samplePresenter.onProcessTypeChanged(processType);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        samplePresenter.destroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.2"
+compressor = "3.0.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -9,8 +10,10 @@ activity = "1.9.3"
 constraintlayout = "2.2.0"
 retrofit = "2.9.0"
 gson = "2.10.1"
+rxandroid = "2.1.1"
 
 [libraries]
+compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -22,6 +25,7 @@ jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-datab
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

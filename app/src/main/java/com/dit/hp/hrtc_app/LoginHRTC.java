@@ -1,12 +1,16 @@
 package com.dit.hp.hrtc_app;
 
+import static androidx.constraintlayout.motion.widget.Debug.getLocation;
+
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,6 +76,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 100;
     private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 101;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +105,12 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
         // Check Permissions During Login
         checkStoragePermission();
+
         checkNotificationPermission();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestLocationPermission();
+        }
 
         // NEW HIM ACCESS
         signInBtn.setOnClickListener(v -> {
@@ -363,6 +373,16 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         }
     }
 
+    private void requestLocationPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{
+                        android.Manifest.permission.ACCESS_FINE_LOCATION,
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                },
+                LOCATION_PERMISSION_REQUEST_CODE
+        );
+    }
+
 
     // Handle Permission Results
     @Override
@@ -372,51 +392,66 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         switch (requestCode) {
             case STORAGE_PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted
                     Log.d("Permission", "Storage Permission Granted");
                 } else {
-                    // Permission denied, show rationale
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        // Show rationale dialog
                         showPermissionRationaleDialog(
                                 "Storage permission is required to access and save files.",
-                                (dialog, which) -> {
-                                    // Re-request permission when user presses OK
-                                    ActivityCompat.requestPermissions(this, new String[]{
-                                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
-                                }
+                                (dialog, which) -> ActivityCompat.requestPermissions(this,
+                                        new String[]{
+                                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        STORAGE_PERMISSION_REQUEST_CODE)
                         );
-                    } else {
-                        // Permission permanently denied, guide user to settings
-//                        Toast.makeText(this, "Storage permission denied. Please enable it from settings.", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
 
             case NOTIFICATION_PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted
                     Log.d("Permission", "Notification Permission Granted");
                 } else {
-                    // Permission denied, show rationale
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
-                        // Show rationale dialog
                         showPermissionRationaleDialog(
                                 "Notification permission is required to receive updates from the app.",
-                                (dialog, which) -> {
-                                    // Re-request permission when user presses OK
-                                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS},
-                                            NOTIFICATION_PERMISSION_REQUEST_CODE);
-                                }
+                                (dialog, which) -> ActivityCompat.requestPermissions(this,
+                                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                                        NOTIFICATION_PERMISSION_REQUEST_CODE)
                         );
+                    }
+                }
+                break;
+
+            case LOCATION_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLocation(); // permission granted
+                } else {
+                    boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(
+                            this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+                    if (showRationale) {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Permission Needed")
+                                .setMessage("Location access is required for this feature to work. Please allow it.")
+                                .setPositiveButton("Retry", (dialog, which) -> requestLocationPermission())
+                                .setNegativeButton("Cancel", null)
+                                .show();
                     } else {
-                        // Permission permanently denied, guide user to settings
-//                        Toast.makeText(this, "Notification permission denied. Please enable it from settings.", Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(this)
+                                .setTitle("Permission Denied")
+                                .setMessage("You have permanently denied location access. Please enable it from app settings.")
+                                .setPositiveButton("Go to Settings", (dialog, which) -> {
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.setData(Uri.fromParts("package", getPackageName(), null));
+                                    startActivity(intent);
+                                })
+                                .setNegativeButton("Cancel", null)
+                                .show();
                     }
                 }
                 break;
         }
+
     }
 
     // Helper function to show rationale dialog
