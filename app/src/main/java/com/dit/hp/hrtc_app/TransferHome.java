@@ -198,7 +198,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                             if (oldItemPosition != -1) {
                                 oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
 
-                                if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+                                if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                                     oldDepotSpinner.setEnabled(true);
                                 } else {
                                     oldDepotSpinner.setEnabled(true);
@@ -245,7 +245,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                             if (oldItemPosition != -1) {
                                 oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
 
-                                if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+                                if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                                     oldDepotSpinner.setEnabled(true);
                                 } else {
                                     oldDepotSpinner.setEnabled(true);
@@ -291,7 +291,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                             if (oldItemPosition != -1) {
                                 oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
 
-                                if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+                                if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                                     oldDepotSpinner.setEnabled(true);
                                 } else {
                                     oldDepotSpinner.setEnabled(true);
@@ -337,7 +337,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                             if (oldItemPosition != -1) {
                                 oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
 
-                                if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+                                if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                                     oldDepotSpinner.setEnabled(true);
                                 } else {
                                     oldDepotSpinner.setEnabled(true);
@@ -935,7 +935,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                                 if (oldItemPosition != -1) {
                                     oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
                                     // Unlocked for Super Admin and Admin only
-                                    if(Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2){
+                                    if(Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2){
                                         oldDepotSpinner.setEnabled(true);
                                     } else{
                                         oldDepotSpinner.setEnabled(true);

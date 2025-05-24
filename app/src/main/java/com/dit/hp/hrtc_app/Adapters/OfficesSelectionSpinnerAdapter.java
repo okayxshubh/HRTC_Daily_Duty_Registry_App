@@ -7,18 +7,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.dit.hp.hrtc_app.Modals.MunicipalPojo;
-import com.dit.hp.hrtc_app.Modals.WardPojo;
-import com.dit.hp.hrtc_app.Modals.WardPojo;
+import com.dit.hp.hrtc_app.Modals.OfficeSelectionPojo;
+import com.dit.hp.hrtc_app.Modals.OfficeSelectionPojo;
 
 import java.util.List;
 
-public class WardSpinnerAdapter extends ArrayAdapter<WardPojo> {
+public class OfficesSelectionSpinnerAdapter extends ArrayAdapter<OfficeSelectionPojo> {
 
     private Context context;
-    private List<WardPojo> values;
+    private List<OfficeSelectionPojo> values;
 
-    public WardSpinnerAdapter(Context context, int textViewResourceId, List<WardPojo> values) {
+    public OfficesSelectionSpinnerAdapter(Context context, int textViewResourceId, List<OfficeSelectionPojo> values) {
         super(context, textViewResourceId, values);
         this.context = context;
         this.values = values;
@@ -28,7 +27,7 @@ public class WardSpinnerAdapter extends ArrayAdapter<WardPojo> {
         return values.size();
     }
 
-    public WardPojo getItem(int position) {
+    public OfficeSelectionPojo getItem(int position) {
         return values.get(position);
     }
 
@@ -36,16 +35,18 @@ public class WardSpinnerAdapter extends ArrayAdapter<WardPojo> {
         return position;
     }
 
-    public int getPositionForWard(String LGDcode) {
+
+    public int getPositionForOffice(String name, int id) {
         for (int i = 0; i < values.size(); i++) {
-            WardPojo item = values.get(i);
+            OfficeSelectionPojo item = values.get(i);
             // Check if both the name and ID match
-            if (item.getWardLgdCode().equals(LGDcode)) {
+            if (item.getOfficeName().equals(name) && item.getOfficeId() == id) {
                 return i; // Return the position of the matching entry
             }
         }
         return -1; // Return -1 if no match is found
     }
+
 
     // And the "magic" goes here
     // This is for the "passive" state of the spinner
@@ -60,7 +61,7 @@ public class WardSpinnerAdapter extends ArrayAdapter<WardPojo> {
         label.setPadding(30, 0, 30, 0);
         // Then you can get the current item using the values array (Users array) and the current position
         // You can NOW reference each method you has created in your bean object (User class)
-        label.setText(values.get(position).getWardName());
+        label.setText(values.get(position).getOfficeName());
 
         // And finally return your dynamic (or custom) view for each spinner item
         return label;
@@ -76,7 +77,7 @@ public class WardSpinnerAdapter extends ArrayAdapter<WardPojo> {
         label.setTextColor(Color.parseColor("#585566"));
         label.setTextSize(18);
         label.setPadding(15, 15, 15, 15);
-        label.setText(values.get(position).getWardName());
+        label.setText(values.get(position).getOfficeName());
 
         return label;
     }

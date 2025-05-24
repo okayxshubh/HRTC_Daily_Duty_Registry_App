@@ -166,11 +166,15 @@ public class ShubhAsyncPost extends AsyncTask<UploadObject, Void, ResponsePojoGe
             Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
             Data_From_Server = http_manager.PostData(uploadObjects[0]);
             return Data_From_Server;
-        } else if (uploadObjects[0].getTasktype() == TaskType.EDIT_ADDA) {
+        }
+
+        else if (uploadObjects[0].getTasktype() == TaskType.EDIT_ADDA) {
             Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
             Data_From_Server = http_manager.PutData(uploadObjects[0]);
             return Data_From_Server;
-        } else if (uploadObjects[0].getTasktype() == TaskType.REMOVE_ADDA) {
+        }
+
+        else if (uploadObjects[0].getTasktype() == TaskType.REMOVE_ADDA) {
             Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
             Data_From_Server = http_manager.DeleteData(uploadObjects[0]);
             return Data_From_Server;
@@ -194,6 +198,15 @@ public class ShubhAsyncPost extends AsyncTask<UploadObject, Void, ResponsePojoGe
         else if (uploadObjects[0].getTasktype() == TaskType.DELETE_OFFICE) {
             Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
             Data_From_Server = http_manager.DeleteDataHimAccess(uploadObjects[0]);
+            return Data_From_Server;
+        }
+
+
+
+        // POST Data Without JWT
+        if (uploadObjects[0].getTasktype() == TaskType.GET_OFFICE_FOR_ADMIN) {
+            Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
+            Data_From_Server = http_manager.PostDataHimAccess(uploadObjects[0]);
             return Data_From_Server;
         }
 

@@ -1,12 +1,10 @@
 package com.dit.hp.hrtc_app;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Html;
@@ -19,11 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.dit.hp.hrtc_app.Adapters.BlockSpinnerAdapter;
@@ -73,10 +71,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import in.balakrishnan.easycam.CameraBundleBuilder;
-import in.balakrishnan.easycam.CameraControllerActivity;
-
-public class AddOffice extends LocationBaseActivity implements SamplePresenter.SampleView, ShubhAsyncTaskListenerPost, ShubhAsyncTaskListenerGet {
+public class EditOffice extends AppCompatActivity implements ShubhAsyncTaskListenerPost, ShubhAsyncTaskListenerGet {
 
     AESCrypto aesCrypto = new AESCrypto();
 
@@ -134,16 +129,15 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
     OfficePojo officeValuesToAdd = new OfficePojo();
     OfficePojo receivedOfficeToEdit;
     Boolean isEditMode = false;
-    ImageView mainImageView;
 
     String GLOBAL_LOCATION_STR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_office);
+        setContentView(R.layout.activity_edit_office);
 
-        samplePresenter = new SamplePresenter(this);
+
         locationBtn = findViewById(R.id.getLocationBtn);
 
         // EDIT MODE
@@ -197,7 +191,6 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
         urbarnLinearLayout = findViewById(R.id.urbanLinearLayout);
 
         clearOfficeBtn = findViewById(R.id.clearParentOfficeSelection);
-        mainImageView = findViewById(R.id.mainImageView);
 
         officeName = findViewById(R.id.officeName);
         pincode = findViewById(R.id.pincode);
@@ -221,13 +214,6 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
         back = findViewById(R.id.backBtn);
         proceed = findViewById(R.id.proceedBtn);
 
-        getLocation(); // Automatically Fetch Location
-
-
-        mainImageView.setOnClickListener(view -> {
-            launchCamera();
-        });
-
 
         if (isEditMode) {
             locationBtn.setClickable(true);
@@ -242,11 +228,6 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
             } else {
-                // Get Location and Print Location
-                getLocation();
-                if (GLOBAL_LOCATION_STR != null) {
-                    Log.d("Location", "Location: " + GLOBAL_LOCATION_STR);
-                }
             }
         });
 
@@ -365,7 +346,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
         // Parent Office
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
 
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
@@ -375,19 +356,19 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_PARENT_OFFICES);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_PARENT_OFFICES).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_PARENT_OFFICES).execute(object);
 
             } else {
                 // Do nothing if CD already shown once
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
 
         // Office Level
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
 
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
@@ -397,19 +378,19 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_OFFICE_LEVELS);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_OFFICE_LEVELS).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_OFFICE_LEVELS).execute(object);
 
             } else {
                 // Do nothing if CD already shown once
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
 
         // Designation
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
 
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
@@ -419,13 +400,13 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_HOD_DESIGNATION);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_HOD_DESIGNATION).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_HOD_DESIGNATION).execute(object);
 
             } else {
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
 
 
@@ -478,6 +459,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedMunicipal = (MunicipalPojo) parent.getItemAtPosition(position);
+                Log.e("Selected Municipal: ", selectedMunicipal.getMunicipalName() + " : " + selectedMunicipal.getMunicipalLgdCode());
                 officeValuesToAdd.setLgdMunicipalCode(Integer.parseInt(selectedMunicipal.getMunicipalLgdCode())); // Add
 
                 serviceCallWard(String.valueOf(selectedMunicipal.getMunicipalLgdCode()));  // Ward
@@ -525,6 +507,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedPanchayat = (PanchayatPojo) parent.getItemAtPosition(position);
                 officeValuesToAdd.setLgdPanchayatCode(Integer.parseInt(selectedPanchayat.getPanchayatLgdCode()));
+
                 serviceCallVillage(String.valueOf(selectedPanchayat.getPanchayatLgdCode()));
 
             }
@@ -600,80 +583,75 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
         // Save Btn (Proceed Button)
         proceed.setOnClickListener(v -> {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
-
-                if (mainImageView.getDrawable() != null && photoFilePath == null && photoFileName == null) {
-                    CD.showDialog(AddOffice.this, "Please click photo of the asset to proceed");
-                    return;
-                }
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
 
                 if (selectedOfficeLevel == null) {
-                    CD.showDialog(AddOffice.this, "Select office level to proceed");
+                    CD.showDialog(EditOffice.this, "Select office level to proceed");
                     return;
                 }
 
                 if (!Econstants.isNotEmpty(officeName.getText().toString())) {
-                    CD.showDialog(AddOffice.this, "Enter office name to proceed");
+                    CD.showDialog(EditOffice.this, "Enter office name to proceed");
                     return;
                 }
 
 
                 if (selectedArea == null) {
-                    CD.showDialog(AddOffice.this, "Select area to proceed");
+                    CD.showDialog(EditOffice.this, "Select area to proceed");
                     return;
                 }
 
                 if (selectedDistrict == null) {
-                    CD.showDialog(AddOffice.this, "Select district to proceed");
+                    CD.showDialog(EditOffice.this, "Select district to proceed");
                     return;
                 }
 
                 if (selectedArea.equalsIgnoreCase(Econstants.OFFICE_Type_RURAL)) {
                     if (selectedBlock == null) {
-                        CD.showDialog(AddOffice.this, "Select block to proceed");
+                        CD.showDialog(EditOffice.this, "Select block to proceed");
                         return;
                     }
 
                     if (selectedPanchayat == null) {
-                        CD.showDialog(AddOffice.this, "Select panchayat to proceed");
+                        CD.showDialog(EditOffice.this, "Select panchayat to proceed");
                         return;
                     }
 
                     if (selectedVillage == null) {
-                        CD.showDialog(AddOffice.this, "Select village to proceed");
+                        CD.showDialog(EditOffice.this, "Select village to proceed");
                         return;
                     }
                 }
 
                 if (selectedArea.equalsIgnoreCase(Econstants.OFFICE_Type_REVENUE)) {
                     if (selectedMunicipal == null) {
-                        CD.showDialog(AddOffice.this, "Select municipal to proceed");
+                        CD.showDialog(EditOffice.this, "Select municipal to proceed");
                         return;
                     }
 
                     if (selectedWard == null) {
-                        CD.showDialog(AddOffice.this, "Select ward to proceed");
+                        CD.showDialog(EditOffice.this, "Select ward to proceed");
                         return;
                     }
                 }
 
                 if (selectedDesignation == null) {
-                    CD.showDialog(AddOffice.this, "Select HOD / HOO designation to proceed");
+                    CD.showDialog(EditOffice.this, "Select HOD / HOO designation to proceed");
                     return;
                 }
 
                 if (!Econstants.isNotEmpty(pincode.getText().toString())) {
-                    CD.showDialog(AddOffice.this, "Enter pin-code to proceed");
+                    CD.showDialog(EditOffice.this, "Enter pin-code to proceed");
                     return;
                 }
 
                 if (!Econstants.isNotEmpty(addressET.getText().toString())) {
-                    CD.showDialog(AddOffice.this, "Enter address to proceed");
+                    CD.showDialog(EditOffice.this, "Enter address to proceed");
                     return;
                 }
 
                 if (!Econstants.isNotEmpty(sanctionedPost.getText().toString())) {
-                    CD.showDialog(AddOffice.this, "Enter the number of sanctioned post to proceed");
+                    CD.showDialog(EditOffice.this, "Enter the number of sanctioned post to proceed");
                     return;
                 }
 
@@ -706,45 +684,21 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                     officeValuesToAdd.setLgdWardCode(Integer.parseInt(selectedWard.getWardLgdCode()));
                 }
 
-                if (isEditMode) {
-                    showEditConfirmationDialog("Office");
-                } else {
-                    showAddConfirmationDialog("Office");
-                }
-
+                showEditConfirmationDialog("Office");
 
             } else {
-                CD.showDialog(AddOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
+                CD.showDialog(EditOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
             }
 
         });
 
     }
 
-    private void launchCamera() {
-        Intent intent = new Intent();
-        intent.setClass(AddOffice.this, CameraControllerActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("inputData", new CameraBundleBuilder()
-                .setFullscreenMode(true)
-                .setDoneButtonString("Save")
-                .setSinglePhotoMode(false)
-                .setMax_photo(1)
-                .setManualFocus(false)
-                .setBucketName(getClass().getName())
-                .setPreviewEnableCount(true)
-                .setPreviewIconVisiblity(true)
-                .setPreviewPageRedirection(true)
-                .setEnableDone(true)
-                .setClearBucket(true)
-                .createCameraBundle());
-        startActivityForResult(intent, 1560);
-    }
 
     // District
     private void serviceCallDistrict() {
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
 
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
@@ -753,21 +707,21 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_DISTRICT);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_DISTRICT).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_DISTRICT).execute(object);
 
             } else {
                 // Do nothing if CD already shown once
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
 
 
     private void serviceCallMunicipal(String selectedDistID) {
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
                 object.setMethordName("/master-data?");
@@ -777,20 +731,20 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_MUNICIPALITY_NP);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_MUNICIPALITY_NP).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_MUNICIPALITY_NP).execute(object);
 
             } else {
                 // Do nothing if CD already shown once
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
 
     private void serviceCallWard(String selectedMunicipal) {
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
                 object.setMethordName("/master-data?");
@@ -800,14 +754,14 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_WARD);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_WARD).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_WARD).execute(object);
 
             } else {
                 // Do nothing if CD already shown once
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
 
@@ -815,7 +769,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
     // RURAL
     private void serviceCallBlock(String selectedDistID) {
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
                 object.setMethordName("/master-data?");
@@ -825,20 +779,20 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_BLOCK);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_BLOCK).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_BLOCK).execute(object);
 
             } else {
                 // Do nothing if CD already shown once
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
 
     private void serviceCallPanchayat(String selectedBlock) {
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
                 object.setMethordName("/master-data?");
@@ -848,20 +802,20 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_PANCHAYAT);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_PANCHAYAT).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_PANCHAYAT).execute(object);
 
             } else {
                 // Do nothing if CD already shown once
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
 
     private void serviceCallVillage(String selectedPanchayat) {
         try {
-            if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+            if (AppStatus.getInstance(EditOffice.this).isOnline()) {
                 UploadObject object = new UploadObject();
                 object.setUrl(Econstants.sarvatra_url);
                 object.setMethordName("/master-data?");
@@ -871,14 +825,14 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 object.setTasktype(TaskType.GET_VILLAGE);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(AddOffice.this, AddOffice.this, TaskType.GET_VILLAGE).execute(object);
+                new ShubhAsyncGet(EditOffice.this, EditOffice.this, TaskType.GET_VILLAGE).execute(object);
 
             } else {
                 // Do nothing if CD already shown once
-                CD.showDialog(AddOffice.this, Econstants.internetNotAvailable);
+                CD.showDialog(EditOffice.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
-            CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
+            CD.showDialog(EditOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
 
@@ -888,7 +842,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to go back? Any progress made will be lost.").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                AddOffice.this.finish();
+                EditOffice.this.finish();
             }
         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -899,56 +853,12 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
         dialog.show();
     }
 
-    private void showAddConfirmationDialog(String selectedEntity) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add " + selectedEntity)
-                .setMessage("Are you sure you want to add this " + selectedEntity + " ?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    if (AppStatus.getInstance(AddOffice.this).isOnline()) {
-
-                        UploadObject uploadObject = new UploadObject();
-                        // We can use Enums / Econstant to store these values of url and method names
-                        try {
-                            uploadObject.setUrl(Econstants.sarvatra_url);
-                            uploadObject.setMethordName("/master-data?masterName=");
-                            uploadObject.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8"));
-                            uploadObject.setTasktype(TaskType.ADD_OFFICE);
-                            uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        Log.i("JSON Body", " " + officeValuesToAdd.getJSON(this).toString());
-
-                        try {
-                            encryptedBody = aesCrypto.encrypt(officeValuesToAdd.getJSON(this).toString());
-                        } catch (Exception e) {
-                            Log.e("Encryption Error", e.getMessage());
-                        }
-
-                        uploadObject.setParam(encryptedBody);
-                        Log.i("JSON JSON Body:", "Enc JSON Body:" + encryptedBody);
-                        Log.i("Object", "Complete Object: " + uploadObject.toString());
-
-                        Log.e("URL: ", "URL: " + uploadObject.getUrl() + uploadObject.getMethordName() + uploadObject.getMasterName() + uploadObject.getParam());
-
-                        new ShubhAsyncPost(AddOffice.this, AddOffice.this, TaskType.ADD_OFFICE).execute(uploadObject);
-
-                    } else {
-                        CD.addCompleteEntityDialog(AddOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
-                    }
-
-                })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
     private void showEditConfirmationDialog(String selectedEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add " + selectedEntity)
                 .setMessage("Are you sure you want to edit this " + selectedEntity + " ?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    if (AppStatus.getInstance(AddOffice.this).isOnline()) {
+                    if (AppStatus.getInstance(EditOffice.this).isOnline()) {
 
                         UploadObject uploadObject = new UploadObject();
                         // We can use Enums / Econstant to store these values of url and method names
@@ -964,7 +874,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                             e.printStackTrace();
                         }
 
-                        Log.i("JSON Body", " " + officeValuesToAdd.getJSONToEdit(this).toString());
+                        Log.i("JSON Body EDIT", " " + officeValuesToAdd.getJSONToEdit(this).toString());
 
 
                         try {
@@ -974,92 +884,20 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                         }
 
                         uploadObject.setParam(encryptedBody);
-                        Log.i("JSON JSON Body:", "Enc JSON Body:" + encryptedBody);
+                        Log.i("JSON JSON Body EDIT:", "Enc JSON Body EDIT:" + encryptedBody);
                         Log.i("Object", "Complete Object: " + uploadObject.toString());
 
                         Log.e("URL: ", "URL: " + uploadObject.getUrl() + uploadObject.getMethordName() + uploadObject.getMasterName() + uploadObject.getParam());
 
-                        new ShubhAsyncPost(AddOffice.this, AddOffice.this, TaskType.EDIT_OFFICE).execute(uploadObject);
+                        new ShubhAsyncPost(EditOffice.this, EditOffice.this, TaskType.EDIT_OFFICE).execute(uploadObject);
 
                     } else {
-                        CD.addCompleteEntityDialog(AddOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
+                        CD.addCompleteEntityDialog(EditOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
                     }
 
                 })
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (data != null) {
-
-            // Camera Click Handling
-            if (resultCode == Activity.RESULT_OK && requestCode == 1560 && data != null) {
-                if (data.getStringArrayExtra("resultData").length == 0) {
-                    CD.showDialog(AddOffice.this, "Image not Clicked");
-                } else {
-                    list = data.getStringArrayExtra("resultData");
-                    File imgFile = new File(list[0]);  // Directly get file
-
-                    actualImage = new File(imgFile.getPath());
-                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(actualImage.getPath()));
-                    mainImageView.setPadding(5,5,5,5);
-
-//                    Disposable compressedImage1 = new Compressor(this)
-//                            .compressToFileAsFlowable(actualImage)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe(
-//                                    file -> {
-//                                        compressedImage = file;
-//                                        if (compressedImage != null) {
-//                                            Log.d("Compressed Image", compressedImage.getPath());
-//
-//                                            // ✅ Set the photo file path
-//                                            photoFilePath = compressedImage.getPath();
-//                                            photoFileName = compressedImage.getName();
-//
-//                                            mainImageView.setImageBitmap(BitmapFactory.decodeFile(compressedImage.getAbsolutePath()));
-//                                            mainImageView.setPadding(5, 5, 5, 5);
-//                                            Toast.makeText(getApplicationContext(), "One Image Clicked.", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    },
-//                                    throwable -> Log.e("ERROR", throwable.getMessage())
-//                            );
-                }
-            }
-        }
-
-//        if (data != null && resultCode == Activity.RESULT_OK && requestCode == 1560) {
-//            String[] resultArray = data.getStringArrayExtra("resultData");
-//
-//            if (resultArray == null || resultArray.length == 0) {
-//                CD.showDialog(AddOffice.this, "Image not Clicked");
-//            } else {
-//                actualImage = new File(resultArray[0]);
-//                mainImageView.setImageBitmap(BitmapFactory.decodeFile(resultArray[0]));
-//
-//                Disposable disposable = new Compressor(this)
-//                        .compressToFileAsFlowable(actualImage)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(
-//                                file -> {
-//                                    compressedImage = file;
-//                                    photoFilePath = compressedImage.getPath();
-//                                    photoFileName = compressedImage.getName();
-//
-//                                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(photoFilePath));
-//                                    mainImageView.setPadding(5, 5, 5, 5);
-//                                    Toast.makeText(getApplicationContext(), "One Image Clicked.", Toast.LENGTH_SHORT).show();
-//                                },
-//                                throwable -> Log.e("Compressor Error", "Error compressing image", throwable)
-//                        );
-//            }
-//        }
     }
 
 
@@ -1103,18 +941,18 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
 
                         } else {
-                            CD.showDialog(AddOffice.this, "No Data Found");
+                            CD.showDialog(EditOffice.this, "No Data Found");
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "Not able to get data");
+                    CD.showDialog(EditOffice.this, "Not able to get data");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
@@ -1160,14 +998,14 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "No Response Fetched");
+                    CD.showDialog(EditOffice.this, "No Response Fetched");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
@@ -1208,18 +1046,18 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                             }
 
                         } else {
-                            CD.showDialog(AddOffice.this, "No Office Types Found");
+                            CD.showDialog(EditOffice.this, "No Office Types Found");
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "No Response");
+                    CD.showDialog(EditOffice.this, "No Response");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
@@ -1260,18 +1098,18 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                             }
 
                         } else {
-                            CD.showDialog(AddOffice.this, "No Data Found");
+                            CD.showDialog(EditOffice.this, "No Data Found");
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "No Response");
+                    CD.showDialog(EditOffice.this, "No Response");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
@@ -1316,14 +1154,14 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "No Response");
+                    CD.showDialog(EditOffice.this, "No Response");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
@@ -1368,14 +1206,14 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "No Response");
+                    CD.showDialog(EditOffice.this, "No Response");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
@@ -1420,14 +1258,14 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "No Response");
+                    CD.showDialog(EditOffice.this, "No Response");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
@@ -1474,20 +1312,20 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
 
                         } else {
-                            CD.showDialog(AddOffice.this, "No Municipality / Nagar Panchayat Found");
+                            CD.showDialog(EditOffice.this, "No Municipality / Nagar Panchayat Found");
                             municipalNPSPinner.clearSelection();
                             municipalNPSPinner.setAdapter(null);
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "No Response");
+                    CD.showDialog(EditOffice.this, "No Response");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
@@ -1532,19 +1370,19 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                         }
 
                     } else {
-                        CD.showDialog(AddOffice.this, "Response Not OK");
+                        CD.showDialog(EditOffice.this, "Response Not OK");
                     }
 
                 } else {
-                    CD.showDialog(AddOffice.this, "No Response");
+                    CD.showDialog(EditOffice.this, "No Response");
                 }
             } else {
-                CD.showDialog(AddOffice.this, "Not able to connect to the server");
+                CD.showDialog(EditOffice.this, "Not able to connect to the server");
             }
         }
 
         // Add
-        else if (TaskType.ADD_OFFICE == taskType) {
+        else if (TaskType.EDIT_OFFICE == taskType) {
 
             Log.i("ASYNC TASK COMPLETED", "TASK TYPE IS Adding Entity");
             SuccessResponse successResponse = null;
@@ -1556,6 +1394,9 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 // Status from response matches 200
                 if (successResponse.getStatus().equalsIgnoreCase("OK")) {
                     Log.i("Add Entity Response", successResponse.getData());
+
+                    Intent resultIntent = new Intent();
+                    setResult(RESULT_OK, resultIntent);
                     CD.showDismissActivityDialog(this, successResponse.getMessage()); // Dialog that dismisses activity
 
                 } else if (successResponse.getStatus().equalsIgnoreCase("ERROR")) {
@@ -1582,100 +1423,5 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
         showExitConfirmationDialog();
     }
 
-
-    /**
-     * Location Interface Methords
-     *
-     * @return
-     */
-    @Override
-    public LocationConfiguration getLocationConfiguration() {
-        return com.kushkumardhawan.locationmanager.configuration.Configurations.defaultConfiguration("Permission Required !", "GPS needs to be turned on.");
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        samplePresenter.onLocationChanged(location);
-    }
-
-    @Override
-    public void onLocationFailed(@FailType int type) {
-        samplePresenter.onLocationFailed(type);
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (getLocationManager().isWaitingForLocation() && !getLocationManager().isAnyDialogShowing()) {
-            displayProgress();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        dismissProgress();
-    }
-
-    private void displayProgress() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.getWindow().addFlags(Window.FEATURE_NO_TITLE);
-            progressDialog.setMessage("Getting location...");
-        }
-
-        if (!progressDialog.isShowing()) {
-            progressDialog.show();
-        }
-    }
-
-    @Override
-    public String getText() {
-        return "";  //locationText.getText().toString()
-    }
-
-    @Override
-    public void setText(String text) {
-        GLOBAL_LOCATION_STR = text; // Set location
-        locationTV.setText(text);
-        Log.e("Location GPS", text);
-    }
-
-    @Override
-    public void updateProgress(String text) {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.setMessage(text);
-        }
-    }
-
-    @Override
-    public void dismissProgress() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-    }
-
-    @Override
-    public void onProcessTypeChanged(@ProcessType int processType) {
-        samplePresenter.onProcessTypeChanged(processType);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        samplePresenter.destroy();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }

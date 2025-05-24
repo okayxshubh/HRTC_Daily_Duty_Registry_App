@@ -102,6 +102,7 @@ public enum TaskType {
     GET_OFFICE_LEVELS(84),
     GET_HOD_DESIGNATION(85),
     GET_DEPARTMENT(78),
+    GET_OFFICE_FOR_ADMIN(78),
 
 
 

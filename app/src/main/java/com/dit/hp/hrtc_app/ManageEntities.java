@@ -19,7 +19,7 @@ import com.dit.hp.hrtc_app.utilities.Preferences;
 
 public class ManageEntities extends AppCompatActivity {
 
-    CardView cardView1, cardView2, cardView3, cardViewOffice, cardView5, cardView6, cardView7, cardView8,  aboutUsCard;
+    CardView cardView1, cardView2, cardView3, cardView5, cardView6, cardView7, cardView8,  aboutUsCard;
     ImageButton profileBtn;
     TextView welcomeTV, depotLocationTV, roleIdTV;
     CustomDialog CD = new CustomDialog();
@@ -41,8 +41,6 @@ public class ManageEntities extends AppCompatActivity {
         cardView7 = findViewById(R.id.cardView7);
         cardView8 = findViewById(R.id.cardView8);
 
-        cardViewOffice = findViewById(R.id.cardViewOffice);
-//        cardView5 = findViewById(R.id.cardView5);
 
         reloadUserDetails();
 
@@ -94,13 +92,6 @@ public class ManageEntities extends AppCompatActivity {
             Intent intent = new Intent(this, AllStaffCards.class);
             startActivity(intent);
         });
-
-
-        cardViewOffice.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllOfficeCards.class);
-            startActivity(intent);
-        });
-
 
 
         aboutUsCard.setOnClickListener(v -> {

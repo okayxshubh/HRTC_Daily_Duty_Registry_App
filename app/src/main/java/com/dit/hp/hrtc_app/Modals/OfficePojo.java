@@ -18,6 +18,8 @@ public class OfficePojo implements Serializable {
 
     private OfficeLevel officeLevelPojo;
 
+    private OfficePojo parentOffice;
+
     private DepartmentPojo departmentPojo;
 
     private DesignationPojo designationPojo;
@@ -46,6 +48,14 @@ public class OfficePojo implements Serializable {
     private int sanctionedPosts;
 
     private int otherPosts;
+
+    public OfficePojo getParentOffice() {
+        return parentOffice;
+    }
+
+    public void setParentOffice(OfficePojo parentOffice) {
+        this.parentOffice = parentOffice;
+    }
 
     public String getOfficeArea() {
         return officeArea;
@@ -246,31 +256,21 @@ public class OfficePojo implements Serializable {
 
             json.put("department", Econstants.HRTC_DEPARTMENT_ID);
 
-            if (officeParentId != -1){
+            if (officeParentId != -1) {
                 json.put("office", officeParentId);
-            }else{
+            } else {
                 json.put("office", JSONObject.NULL);
             }
 
             json.put("address", address);
             json.put("lgdDistrictCode", lgdDistrictCode);
-            json.put("officeCategory", officeArea);
 
-            if (officeArea.equalsIgnoreCase(Econstants.OFFICE_Type_RURAL)) {
-                json.put("lgdMunicipalCode", JSONObject.NULL);
-                json.put("lgdWardCode", JSONObject.NULL);
-                json.put("lgdBlockCode", lgdBlockCode);
-                json.put("lgdPanchayatCode", lgdPanchayatCode);
-                json.put("lgdVillageCode", lgdVillageCode);
-            }
-            //
-            else if (officeArea.equalsIgnoreCase(Econstants.OFFICE_Type_REVENUE)) {
-                json.put("lgdMunicipalCode", lgdMunicipalCode);
-                json.put("lgdWardCode", lgdWardCode);
-                json.put("lgdBlockCode", JSONObject.NULL);
-                json.put("lgdPanchayatCode", JSONObject.NULL);
-                json.put("lgdVillageCode", JSONObject.NULL);
-            }
+            json.put("lgdMunicipalCode", lgdMunicipalCode != -1 ? lgdMunicipalCode : JSONObject.NULL);
+            json.put("lgdWardCode", lgdWardCode != -1 ? lgdWardCode : JSONObject.NULL);
+
+            json.put("lgdBlockCode", lgdBlockCode != -1 ? lgdBlockCode : JSONObject.NULL);
+            json.put("lgdPanchayatCode", lgdPanchayatCode != -1 ? lgdPanchayatCode : JSONObject.NULL);
+            json.put("lgdVillageCode", lgdVillageCode != -1 ? lgdVillageCode : JSONObject.NULL);
 
             json.put("pinCode", pinCode);
             json.put("sanctionedPosts", sanctionedPosts);
@@ -287,6 +287,9 @@ public class OfficePojo implements Serializable {
     }
 
 
+
+
+
     public JSONObject getJSONToEdit(Context context) {
         Preferences.getInstance().loadPreferences(context); // pass context here
 
@@ -300,31 +303,20 @@ public class OfficePojo implements Serializable {
 
             json.put("department", Econstants.HRTC_DEPARTMENT_ID);
 
-            if (officeParentId != -1){
+            if (officeParentId != -1) {
                 json.put("office", officeParentId);
-            }else{
+            } else {
                 json.put("office", JSONObject.NULL);
             }
 
             json.put("address", address);
             json.put("lgdDistrictCode", lgdDistrictCode);
-            json.put("officeCategory", officeArea);
 
-            if (officeArea.equalsIgnoreCase(Econstants.OFFICE_Type_RURAL)) {
-                json.put("lgdMunicipalCode", JSONObject.NULL);
-                json.put("lgdWardCode", JSONObject.NULL);
-                json.put("lgdBlockCode", lgdBlockCode);
-                json.put("lgdPanchayatCode", lgdPanchayatCode);
-                json.put("lgdVillageCode", lgdVillageCode);
-            }
-            //
-            else if (officeArea.equalsIgnoreCase(Econstants.OFFICE_Type_REVENUE)) {
-                json.put("lgdMunicipalCode", lgdMunicipalCode);
-                json.put("lgdWardCode", lgdWardCode);
-                json.put("lgdBlockCode", JSONObject.NULL);
-                json.put("lgdPanchayatCode", JSONObject.NULL);
-                json.put("lgdVillageCode", JSONObject.NULL);
-            }
+            json.put("lgdMunicipalCode", lgdMunicipalCode != -1 ? lgdMunicipalCode : JSONObject.NULL);
+            json.put("lgdWardCode", lgdWardCode != -1 ? lgdWardCode : JSONObject.NULL);
+            json.put("lgdBlockCode", lgdBlockCode != -1 ? lgdBlockCode : JSONObject.NULL);
+            json.put("lgdPanchayatCode", lgdPanchayatCode != -1 ? lgdPanchayatCode : JSONObject.NULL);
+            json.put("lgdVillageCode", lgdVillageCode != -1 ? lgdVillageCode : JSONObject.NULL);
 
             json.put("pinCode", pinCode);
             json.put("sanctionedPosts", sanctionedPosts);

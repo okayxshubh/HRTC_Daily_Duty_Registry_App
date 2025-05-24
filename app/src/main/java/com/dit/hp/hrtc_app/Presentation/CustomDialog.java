@@ -491,7 +491,7 @@ public class CustomDialog {
                     activity.finish();
                 } else {
                     CustomDialog customDialog = new CustomDialog();
-                    customDialog.showDialog(activity, "Please select an additional charge.");
+                    customDialog.showDialog(activity, "Please select an additional charge to proceed.");
                 }
             });
 

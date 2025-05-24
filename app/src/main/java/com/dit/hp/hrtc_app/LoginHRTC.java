@@ -314,40 +314,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         }
     }
 
-
-    private void getOfficeDetails(int deptId, int empId, int ofcTypeId) {
-        try {
-            if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
-
-                UploadObject object = new UploadObject();
-                object.setUrl("https://himparivarservices.hp.gov.in/sarvatra-api");
-                object.setMethordName("/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
-
-                // JSON Body
-                JSONObject json = new JSONObject();
-                json.put("deptId", aesCrypto.encrypt(String.valueOf(deptId)));
-                json.put("empId", aesCrypto.encrypt(String.valueOf(empId)));
-                json.put("ofcTypeId", aesCrypto.encrypt(String.valueOf(ofcTypeId)));
-
-                String encJsonBody = aesCrypto.encrypt(json.toString());
-                object.setParam(encJsonBody);
-
-                Log.e("JSON Body: ", "JSON Body: " + json.toString());
-                Log.e("JSON Body: ", "JSON Body Enc: " + encJsonBody);
-                object.setTasktype(TaskType.GET_USER_OFFICE_INFO);
-                object.setAPI_NAME(Econstants.API_NAME_HRTC);
-
-                new ShubhAsyncGet(LoginHRTC.this, LoginHRTC.this, TaskType.GET_USER_OFFICE_INFO).execute(object);
-            } else {
-                // Do nothing if CD already shown once
-                CD.showDialog(LoginHRTC.this, Econstants.internetNotAvailable);
-            }
-        } catch (Exception ex) {
-            CD.showDialog(LoginHRTC.this, "Something Bad happened . Please reinstall the application and try again.");
-        }
-    }
-
-
     // Check and Request Storage Permissions (API 29 and below)
     private void checkStoragePermission() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
@@ -374,14 +340,28 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     }
 
     private void requestLocationPermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{
-                        android.Manifest.permission.ACCESS_FINE_LOCATION,
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION
-                },
-                LOCATION_PERMISSION_REQUEST_CODE
-        );
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Check if rationale is needed
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                showPermissionRationaleDialog(
+                        "Location access is required for map and GPS-based features.",
+                        (dialog, which) -> ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                LOCATION_PERMISSION_REQUEST_CODE)
+                );
+            } else {
+                // Directly request permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            getLocation(); // Already granted
+        }
     }
+
 
 
     // Handle Permission Results
@@ -631,16 +611,22 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                             himAccessUserInfo = JsonParse.parseUserInfoPojo(decryptedResponse);
 
                             // Use first object (if needed)
-                            Log.e("Role ID: ", himAccessUserInfo.getRoleId().toString());
-                            Log.e("info", himAccessUserInfo.getEmployeePojo().getEmailId());
+                            Log.e("User Role ID: ", himAccessUserInfo.getRoleId().toString());
+                            Log.e("User App Role ID: ", himAccessUserInfo.getAppRoleId().toString());
+                            Log.e("User Email ID: ", himAccessUserInfo.getEmployeePojo().getEmailId());
+                            Log.e("User Name: ", himAccessUserInfo.getEmployeePojo().getEmployeeName());
+                            Log.e("User Emp ID: ", String.valueOf(himAccessUserInfo.getEmployeePojo().getEmpId()));
+                            Log.e("User Role Name: ", himAccessUserInfo.getRoleName());
 
 
                             // Add other preferences to save here
-                            Preferences.getInstance().roleId = himAccessUserInfo.getRoleId();
+                            Preferences.getInstance().appRoleId = himAccessUserInfo.getAppRoleId();  // App Role ID
+
+                            Preferences.getInstance().roleId = himAccessUserInfo.getAppRoleId();  // Normal Role ID
+                            Preferences.getInstance().roleName = himAccessUserInfo.getRoleName();
                             Preferences.getInstance().emailID = himAccessUserInfo.getEmployeePojo().getEmailId();
                             Preferences.getInstance().empId = himAccessUserInfo.getEmployeePojo().getEmpId();
                             Preferences.getInstance().userName = himAccessUserInfo.getEmployeePojo().getEmployeeName();
-
                             Preferences.getInstance().savePreferences(this);
 
                         } catch (Exception e) {
@@ -687,19 +673,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                             Toast.makeText(this, "No Additional Charges Fetched", Toast.LENGTH_SHORT).show();
                         }
 
-                        // Get Depots
-//                        if (himAccessUserInfo != null) {
-//                            // Call method
-//                            getOfficeDetails(
-//                                    himAccessUserInfo.getMainDepartmentPojo().getDepartmentId(),
-//                                    himAccessUserInfo.getEmployeePojo().getEmpId(),
-//                                    himAccessUserInfo.getMainOfficeTypePojo().getOfficeTypeId());
-//
-//                        } else {
-//                            Toast.makeText(this, "HimAccess User Info Not Fetched", Toast.LENGTH_SHORT).show();
-//                        }
-
-
                     } else {
                         CD.showDialog(LoginHRTC.this, response.getMessage());
                     }
@@ -711,41 +684,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
             }
         }
 
-        // Get Office Details
-        else if (TaskType.GET_USER_OFFICE_INFO == taskType) {
-            SuccessResponse response = null;
-
-            if (responseObject != null) {
-                Log.i("Details", "Response Obj" + responseObject.toString());
-
-                if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
-
-                    response = JsonParse.getSuccessResponse(responseObject.getResponse());
-                    Log.e("Response", response.toString());
-                    Log.e("Response", responseObject.getResponse());
-
-                    if (response.getStatus().equalsIgnoreCase("OK")) {
-
-                        Toast.makeText(this, "Office Details Fetched", Toast.LENGTH_SHORT).show();
-
-                        // Make Office ID as Depot ID... Save in Prefs
-
-//                        Preferences.getInstance().depotId = Integer.parseInt();
-//                        Preferences.getInstance().savePreferences(this);\
-
-                    } else {
-                        CD.showDialog(LoginHRTC.this, response.getMessage());
-                    }
-                } else if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
-                    // Handle HTTP 401 Unauthorized response (session expired)
-                    CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
-                } else {
-                    CD.showDialog(LoginHRTC.this, "Something went wrong..");
-                }
-            } else {
-                CD.showDialog(LoginHRTC.this, "Result is null");
-            }
-        }
 
 
     }

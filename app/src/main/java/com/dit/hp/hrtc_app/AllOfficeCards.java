@@ -1,6 +1,8 @@
 package com.dit.hp.hrtc_app;
 
 import android.content.Intent;
+import android.content.IntentSender;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -44,6 +47,16 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.common.api.ResolvableApiException;
+
+
 public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardClickListeners, ShubhAsyncTaskListenerGet, ShubhAsyncTaskListenerPost {
 
     AESCrypto aesCrypto = new AESCrypto();
@@ -69,6 +82,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
     private static final int UPDATE_REQUEST_CODE = 1;
     private static final int TRANSFER_REQUEST_CODE = 2;
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,9 +102,26 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
         backCard.setOnClickListener(v -> AllOfficeCards.this.finish());
 
         addBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(AllOfficeCards.this, AddOffice.class);
-            startActivity(intent);
-            AllOfficeCards.this.finish();
+            com.google.android.gms.location.LocationRequest locationRequest = com.google.android.gms.location.LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY).setInterval(10000).setFastestInterval(5000);
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest).setAlwaysShow(true); // force dialog
+            SettingsClient client = LocationServices.getSettingsClient(this);
+            Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+            task.addOnSuccessListener(locationSettingsResponse -> {
+                // Location is ON
+                startActivity(new Intent(AllOfficeCards.this, AddOffice.class));
+            });
+
+            task.addOnFailureListener(e -> {
+                if (e instanceof ResolvableApiException) {
+                    try {
+                        // Show Google dialog to enable location
+                        ((ResolvableApiException) e).startResolutionForResult(AllOfficeCards.this, 1001);
+                    } catch (IntentSender.SendIntentException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
         });
 
 
@@ -246,7 +277,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
     @Override
     public void onEditClick(OfficePojo selectedPojo, int position) {
         if (selectedPojo != null) {
-            Intent editIntent = new Intent(this, AddOffice.class);
+            Intent editIntent = new Intent(this, EditOffice.class);
             editIntent.putExtra("OfficeInfo", (Serializable) selectedPojo);
             editIntent.putExtra("EditMode", true);
             startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
@@ -323,7 +354,6 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
         pincodeTV.setText(selectedPojo.getPinCode() != -1 ? String.valueOf(selectedPojo.getPinCode()) : "");
         addressTV.setText(selectedPojo.getAddress() != null ? selectedPojo.getAddress() : "");
 
-
         // Show the dialog
         builder.setPositiveButton("Close", null);
         builder.create().show();
@@ -337,60 +367,8 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
         if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             searchView.setQuery("", false); // Clear Search View
 
-            // Vehicles Service Call
-            try {
-                if (AppStatus.getInstance(AllOfficeCards.this).isOnline()) {
-
-                    UploadObject object = new UploadObject();
-                    object.setUrl(Econstants.base_url);
-                    object.setMethordName("/master-data?");
-                    object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
-                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId))));
-
-                    object.setTasktype(TaskType.GET_VEHICLES);
-                    object.setAPI_NAME(Econstants.API_NAME_HRTC);
-
-                    new ShubhAsyncGet(AllOfficeCards.this, AllOfficeCards.this, TaskType.GET_VEHICLES).execute(object);
-
-                } else {
-                    // Do nothing if CD already shown once
-                    CD.showDialog(AllOfficeCards.this, Econstants.internetNotAvailable);
-                }
-            } catch (Exception ex) {
-                CD.showDialog(AllOfficeCards.this, "Something Bad happened . Please reinstall the application and try again.");
-            }
-
+            fetchRecords(0, Econstants.PAGE_SIZE);
         }
-
-        // Transfer
-        else if (requestCode == TRANSFER_REQUEST_CODE && resultCode == RESULT_OK) {
-            searchView.setQuery("", false); // Clear Search View
-
-            // Vehicles Service Call
-            try {
-                if (AppStatus.getInstance(AllOfficeCards.this).isOnline()) {
-
-                    UploadObject object = new UploadObject();
-                    object.setUrl(Econstants.base_url);
-                    object.setMethordName("/master-data?");
-                    object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
-                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId))));
-
-                    object.setTasktype(TaskType.GET_VEHICLES);
-                    object.setAPI_NAME(Econstants.API_NAME_HRTC);
-
-                    new ShubhAsyncGet(AllOfficeCards.this, AllOfficeCards.this, TaskType.GET_VEHICLES).execute(object);
-
-                } else {
-                    // Do nothing if CD already shown once
-                    CD.showDialog(AllOfficeCards.this, Econstants.internetNotAvailable);
-                }
-            } catch (Exception ex) {
-                CD.showDialog(AllOfficeCards.this, "Something Bad happened . Please reinstall the application and try again.");
-            }
-
-        }
-
     }
 
     @Override

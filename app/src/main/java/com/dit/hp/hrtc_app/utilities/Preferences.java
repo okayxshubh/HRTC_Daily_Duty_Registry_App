@@ -20,6 +20,7 @@ public class Preferences {
     // Key Names
     private final String KEY_USER_NAME = "userName";
     private final String KEY_ROLE_ID = "roleId";
+    private final String KEY_APP_ROLE_ID = "appRoleId";
     private final String KEY_ROLE_NAME = "roleName";
     private final String KEY_DEPOT_ID = "depotId";
     private final String KEY_DEPOT_NAME = "depotName";
@@ -35,6 +36,7 @@ public class Preferences {
     public String depotName = null;
     public String emailID = null;
     public Integer roleId;
+    public Integer appRoleId;
     public String roleName = null;
     public Integer depotId;
     public String userName = null;
@@ -72,6 +74,9 @@ public class Preferences {
         int roleIdValue = preferences.getInt(KEY_ROLE_ID, -1);
         roleId = (roleIdValue == -1) ? null : roleIdValue;
 
+        int appRoleIdValue = preferences.getInt(KEY_APP_ROLE_ID, -1);
+        appRoleId = (appRoleIdValue == -1) ? null : appRoleIdValue;
+
         roleName = preferences.getString(KEY_ROLE_NAME, null);
 
         int depotIdValue = preferences.getInt(KEY_DEPOT_ID, -1);
@@ -98,6 +103,7 @@ public class Preferences {
         editor.putString(KEY_DEPOT_NAME, depotName);
         editor.putString(KEY_USER_EMAIL, emailID);
         editor.putInt(KEY_ROLE_ID, roleId == null ? -1 : roleId);
+        editor.putInt(KEY_APP_ROLE_ID, appRoleId == null ? -1 : appRoleId);
         editor.putString(KEY_ROLE_NAME, roleName);
         editor.putInt(KEY_DEPOT_ID, depotId == null ? -1 : depotId);
         editor.putString(KEY_USER_NAME, userName);

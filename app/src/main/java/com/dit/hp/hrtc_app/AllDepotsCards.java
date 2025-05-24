@@ -116,7 +116,7 @@ public class AllDepotsCards extends AppCompatActivity implements OnDepotCardClic
 
 
         addBtn.setOnClickListener(v -> {
-            if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+            if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                 Intent intent = new Intent(this, AddDepot.class);
                 startActivity(intent);
                 AllDepotsCards.this.finish();
@@ -138,7 +138,7 @@ public class AllDepotsCards extends AppCompatActivity implements OnDepotCardClic
     @Override
     public void onEditClick(DepotPojo selectedPojo, int position) {
 
-        if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+        if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
             // Allow All Unlocked
             if (selectedPojo != null) {
                 Intent editIntent = new Intent(this, EditDepot.class);
@@ -155,7 +155,7 @@ public class AllDepotsCards extends AppCompatActivity implements OnDepotCardClic
     @Override
     public void onDeleteClick(DepotPojo selectedPojo, int position) {
 
-        if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+        if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
             // Allow All Unlocked
             if (selectedPojo != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

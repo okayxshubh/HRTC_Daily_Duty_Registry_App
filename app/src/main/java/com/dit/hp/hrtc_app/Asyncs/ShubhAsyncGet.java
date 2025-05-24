@@ -398,15 +398,16 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
             }
 
 
-            // JSON Body + Him Access Token
+
+
+
+            // OLD
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_USER_OFFICE_INFO.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetDataWithJsonBody(uploadObjects[0]);
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
                 return Data_From_Server;
             }
-
-
 
             // HIM ACCESS STUFF ########################################################################################
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_DEPARTMENT.toString())) {
@@ -485,6 +486,13 @@ public class ShubhAsyncGet extends AsyncTask<UploadObject, Void, ResponsePojoGet
                 return Data_From_Server;
             }
             else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_WARD.toString())) {
+                Log.e("We Here", uploadObjects[0].getMethordName());
+                Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
+                Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());
+                return Data_From_Server;
+            }
+
+            else if (uploadObjects[0].getTasktype().toString().equalsIgnoreCase(TaskType.GET_OFFICE_FOR_ADMIN.toString())) {
                 Log.e("We Here", uploadObjects[0].getMethordName());
                 Data_From_Server = http_manager.GetDataHimAccess(uploadObjects[0]);
                 Log.e("ShubhAsyncGet", "Data from Server: " + uploadObjects[0].getMethordName());

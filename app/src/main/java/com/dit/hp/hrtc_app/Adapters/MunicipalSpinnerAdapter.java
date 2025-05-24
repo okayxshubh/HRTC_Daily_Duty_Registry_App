@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.dit.hp.hrtc_app.Modals.BlockPojo;
 import com.dit.hp.hrtc_app.Modals.MunicipalPojo;
 import com.dit.hp.hrtc_app.Modals.MunicipalPojo;
+import com.dit.hp.hrtc_app.Modals.WardPojo;
 
 import java.util.List;
 
@@ -36,16 +38,17 @@ public class MunicipalSpinnerAdapter extends ArrayAdapter<MunicipalPojo> {
     }
 
 
-    public int getPositionForItem(String name, int id) {
+    public int getPositionForMunicipality(String LGDcode) {
         for (int i = 0; i < values.size(); i++) {
             MunicipalPojo item = values.get(i);
             // Check if both the name and ID match
-            if (item.getMunicipalName().equals(name) && item.getMunicipalId() == id) {
+            if (item.getMunicipalLgdCode().equals(LGDcode)) {
                 return i; // Return the position of the matching entry
             }
         }
         return -1; // Return -1 if no match is found
     }
+
 
 
     // And the "magic" goes here

@@ -20,6 +20,7 @@ import com.dit.hp.hrtc_app.Modals.LocationsPojo;
 import com.dit.hp.hrtc_app.Modals.MunicipalPojo;
 import com.dit.hp.hrtc_app.Modals.OfficeLevel;
 import com.dit.hp.hrtc_app.Modals.OfficePojo;
+import com.dit.hp.hrtc_app.Modals.OfficeSelectionPojo;
 import com.dit.hp.hrtc_app.Modals.OrganisationPojo;
 import com.dit.hp.hrtc_app.Modals.PanchayatPojo;
 import com.dit.hp.hrtc_app.Modals.RoutePojo;
@@ -225,11 +226,6 @@ public class JsonParse {
                         desig.setDesignationId(chargeObj.optInt("desigId"));
                         desig.setDesignationName(chargeObj.optString("desigName"));
                         charge.setDesignationPojo(desig);
-
-//                        OfficeLevel offType = new OfficeLevel();
-//                        offType.setOfficeLevelId(chargeObj.optInt("officeTypeId"));
-//                        offType.setOfficeLevelName(chargeObj.optString("officeTypeName"));
-//                        charge.setOfficeLevelPojo(offType);
 
                         OfficePojo off = new OfficePojo();
                         off.setOfficeId(chargeObj.optInt("officeId"));
@@ -1381,6 +1377,7 @@ public class JsonParse {
         return officeList;
     }
 
+
     public static List<OfficePojo> parseAllOfficeCards(String data) {
         List<OfficePojo> officeList = new ArrayList<>();
 
@@ -1389,26 +1386,29 @@ public class JsonParse {
 
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
-
                 OfficePojo office = new OfficePojo();
 
-                office.setOfficeId(obj.optInt("id"));
+                // Basic Fields
+                office.setOfficeId(obj.optInt("id", -1));
                 office.setOfficeName(obj.optString("officeName", "N/A"));
                 office.setAddress(obj.optString("address", "N/A"));
                 office.setOfficeCategory(obj.optString("officeCategory", "N/A"));
-                office.setOfficeParentId(obj.optInt("office", -1));
-
-                office.setLgdDistrictCode(obj.optInt("lgdDistrictCode", -1));
-                office.setLgdBlockCode(obj.optInt("lgdBlockCode", -1));
-                office.setLgdPanchayatCode(obj.optInt("lgdPanchayatCode", -1));
-                office.setLgdVillageCode(obj.optInt("lgdVillageCode", -1));
-                office.setLgdMunicipalCode(obj.optInt("lgdMunicipalCode", -1));
-                office.setLgdWardCode(obj.optInt("lgdWardCode", -1));
-                office.setRevenueTehsilId(obj.optInt("revenueTehsilId", -1));
-                office.setRevenuePatwarId(obj.optInt("revenuePatwarId", -1));
                 office.setPinCode(obj.optInt("pinCode", -1));
                 office.setSanctionedPosts(obj.optInt("sanctionedPosts", 0));
                 office.setOtherPosts(obj.optInt("otherPosts", 0));
+
+                // LGD Codes
+                office.setLgdDistrictCode(obj.optInt("lgdDistrictCode", -1));
+
+                office.setLgdBlockCode(obj.optInt("lgdBlockCode", -1));
+                office.setLgdPanchayatCode(obj.optInt("lgdPanchayatCode", -1));
+                office.setLgdVillageCode(obj.optInt("lgdVillageCode", -1));
+
+                office.setLgdMunicipalCode(obj.optInt("lgdMunicipalCode", -1));
+                office.setLgdWardCode(obj.optInt("lgdWardCode", -1));
+
+                office.setRevenueTehsilId(obj.optInt("revenueTehsilId", -1));
+                office.setRevenuePatwarId(obj.optInt("revenuePatwarId", -1));
 
                 // Department
                 JSONObject deptObj = obj.optJSONObject("department");
@@ -1437,6 +1437,27 @@ public class JsonParse {
                     office.setOfficeLevelPojo(type);
                 }
 
+                // Parent Office (Recursive Parse)
+                JSONObject parentObj = obj.optJSONObject("office");
+                if (parentObj != null) {
+                    OfficePojo parent = new OfficePojo();
+                    parent.setOfficeId(parentObj.optInt("id", -1));
+                    parent.setOfficeName(parentObj.optString("officeName", "N/A"));
+                    parent.setAddress(parentObj.optString("address", "N/A"));
+                    parent.setOfficeCategory(parentObj.optString("officeCategory", "N/A"));
+                    parent.setPinCode(parentObj.optInt("pinCode", -1));
+
+                    parent.setLgdDistrictCode(parentObj.optInt("lgdDistrictCode", -1));
+                    parent.setLgdBlockCode(parentObj.optInt("lgdBlockCode", -1));
+                    parent.setLgdPanchayatCode(parentObj.optInt("lgdPanchayatCode", -1));
+                    parent.setLgdVillageCode(parentObj.optInt("lgdVillageCode", -1));
+                    parent.setLgdMunicipalCode(parentObj.optInt("lgdMunicipalCode", -1));
+                    parent.setLgdWardCode(parentObj.optInt("lgdWardCode", -1));
+
+                    office.setParentOffice(parent);
+                    office.setOfficeParentId(parent.getOfficeId());
+                }
+
                 officeList.add(office);
             }
         } catch (Exception e) {
@@ -1446,6 +1467,8 @@ public class JsonParse {
         return officeList;
     }
 
+
+    // OLD
 
 
 
@@ -1704,6 +1727,30 @@ public class JsonParse {
             itemList.add(item);
         }
         return itemList;
+    }
+
+
+    // For Super Admin
+    public static List<OfficeSelectionPojo> parseOfficeListForAdmin(String data) {
+        List<OfficeSelectionPojo> officeList = new ArrayList<>();
+
+        try {
+            JSONArray dataArray = new JSONArray(data);
+
+            for (int i = 0; i < dataArray.length(); i++) {
+                JSONObject officeObject = dataArray.getJSONObject(i);
+
+                OfficeSelectionPojo office = new OfficeSelectionPojo();
+                office.setOfficeId(officeObject.optInt("id"));
+                office.setOfficeName(officeObject.optString("office_name"));
+
+                officeList.add(office);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return officeList;
     }
 
 

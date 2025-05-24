@@ -57,7 +57,7 @@ public class OfficeCardsAdapter extends RecyclerView.Adapter<OfficeCardsAdapter.
 
     // ViewHolder for item information
     public static class CardViewHolder extends RecyclerView.ViewHolder {
-        TextView headTV, L2TV;
+        TextView headTV, L2TV, L3TV;
         ImageButton editBtn, deleteBtn;
         CardView cardView;
         ImageView mainImageView;
@@ -66,6 +66,7 @@ public class OfficeCardsAdapter extends RecyclerView.Adapter<OfficeCardsAdapter.
             super(itemView);
             headTV = itemView.findViewById(R.id.headTV);
             L2TV = itemView.findViewById(R.id.L2TV);
+            L3TV = itemView.findViewById(R.id.L3TV);
             mainImageView = itemView.findViewById(R.id.staffTypeImageView);
 
             editBtn = itemView.findViewById(R.id.editBtn);
@@ -90,7 +91,13 @@ public class OfficeCardsAdapter extends RecyclerView.Adapter<OfficeCardsAdapter.
         holder.headTV.setText(selectedPojo.getOfficeName());
 
 
-        holder.L2TV.setText("Department: " + selectedPojo.getDepartmentPojo().getDepartmentName());
+        if (selectedPojo.getParentOffice()!= null && !selectedPojo.getParentOffice().getOfficeName().isEmpty()) {
+            holder.L2TV.setText("Parent Office: " + selectedPojo.getParentOffice().getOfficeName());
+        } else {
+            holder.L2TV.setText("Parent Office: " + "N/A");
+        }
+
+        holder.L3TV.setText("Address: " + selectedPojo.getAddress());
 
         // Setting Logos According to Office types
 //        if (Econstants.isNotEmpty(String.valueOf(selectedPojo.getOfficeParentId()))) {

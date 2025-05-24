@@ -21,14 +21,14 @@
             android:layout_weight="1"
             android:padding="5dp"
             android:paddingStart="20dp"
-            android:text="Choose a depot."
+            android:text="Choose an Office."
             android:textAlignment="textStart"
             android:textStyle="bold"
             android:textColor="@color/darkblue"
             android:textSize="16sp" />
 
         <com.doi.spinnersearchable.SearchableSpinner
-            android:id="@+id/currentDepotSpinner"
+            android:id="@+id/officeSelectionSpinner"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
@@ -37,7 +37,7 @@
             android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/darkblue"
             android:textSize="16sp"
-            app:hintText="Please choose a depot" />
+            app:hintText="Please choose an office" />
 
     </LinearLayout>
 

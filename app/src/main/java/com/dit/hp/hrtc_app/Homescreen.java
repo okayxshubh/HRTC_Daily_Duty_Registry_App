@@ -24,17 +24,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.dit.hp.hrtc_app.Adapters.AddaSpinnerAdapter;
-import com.dit.hp.hrtc_app.Adapters.DepotSpinnerAdapter;
-import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
-import com.dit.hp.hrtc_app.Modals.AddaPojo;
-import com.dit.hp.hrtc_app.Modals.DepotPojo;
+import com.dit.hp.hrtc_app.Adapters.OfficesSelectionSpinnerAdapter;
+import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
+import com.dit.hp.hrtc_app.Modals.OfficeSelectionPojo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
 import com.dit.hp.hrtc_app.Modals.SuccessResponse;
 import com.dit.hp.hrtc_app.Modals.UploadObject;
 import com.dit.hp.hrtc_app.Presentation.CustomDialog;
 import com.dit.hp.hrtc_app.crypto.AESCrypto;
 import com.dit.hp.hrtc_app.enums.TaskType;
-import com.dit.hp.hrtc_app.interfaces.ShubhAsyncTaskListenerGet;
+import com.dit.hp.hrtc_app.interfaces.ShubhAsyncTaskListenerPost;
 import com.dit.hp.hrtc_app.json.JsonParse;
 import com.dit.hp.hrtc_app.utilities.AppStatus;
 import com.dit.hp.hrtc_app.utilities.Econstants;
@@ -42,6 +41,7 @@ import com.dit.hp.hrtc_app.utilities.Preferences;
 import com.doi.spinnersearchable.SearchableSpinner;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -49,25 +49,23 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListenerGet {
+public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListenerPost {
 
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, aboutUsCard;
     ImageButton profileBtn;
     TextView welcomeTV, depotNameTV, addaTV, roleIdTV, bottomTextView;
     ImageView bottomImageView;
     CustomDialog CD = new CustomDialog();
-    List<DepotPojo> pojoListDepots;
 
     // Selections for SuperAdmin n Admin
-    DepotPojo popupSelectionDepot;
-    AddaPojo popupSelectionAdda;
+    OfficeSelectionPojo popupSelectionOffice;
 
     AESCrypto aesCrypto = new AESCrypto();
 
     // FOR custom dialog
-    private DepotSpinnerAdapter depotSpinnerAdapter;
+    private OfficesSelectionSpinnerAdapter officesSelectionSpinnerAdapter;
     private AddaSpinnerAdapter addaSpinnerAdapter;
-    private SearchableSpinner depotSpinner;
+    private SearchableSpinner officeSpinner;
     private SearchableSpinner addaSpinner;
 
     @Override
@@ -78,11 +76,14 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         // Load saved preferences at the very beginning
         Preferences.getInstance().loadPreferences(this);
 
-        Log.i("Homescreen", "Login As: userName " + Preferences.getInstance().userName);
+
+        Log.i("Homescreen", "Login As: App Role ID " + Preferences.getInstance().appRoleId);
         Log.i("Homescreen", "Login As: empId " + Preferences.getInstance().empId);
+        Log.i("Homescreen", "Login As: userName " + Preferences.getInstance().userName);
         Log.i("Homescreen", "Login As: Department Id " + Preferences.getInstance().departmentId);
         Log.i("Homescreen", "Login As: Department Name saved as Depot Name & Code: " + Preferences.getInstance().depotName + " : " + Preferences.getInstance().depotId);
         Log.i("Homescreen", "Login As: RoleName And Role ID" + Preferences.getInstance().roleName + " : " + Preferences.getInstance().roleId);
+
 
 
         roleIdTV = findViewById(R.id.roleIdTV);
@@ -103,15 +104,25 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         // Reload user details to update the UI
         reloadUserDetails();
 
-        if (Preferences.getInstance().roleId != null) {
-            if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
-                bottomTextView.setText("Choose Depot");
+        loadOfficeForAdmin();
+
+        // Apply null check
+        System.out.println(Preferences.getInstance().appRoleId);
+        System.out.println(Preferences.getInstance().appRoleId);
+        if (Preferences.getInstance().appRoleId != -1) {
+
+            int roleId = Preferences.getInstance().appRoleId;
+            if (roleId == 1 || roleId == 2) {
+                bottomTextView.setText("Choose Office");
                 bottomImageView.setImageResource(R.drawable.depot);
                 aboutUsCard.setBackgroundResource(R.drawable.customborder_dialog_green);
                 bottomTextView.setTextColor(Color.WHITE);
-                bottomTextView.setText("Depot: " + Preferences.getInstance().depotName);
+                bottomTextView.setText("Office: " + Preferences.getInstance().depotName);
             }
+        } else {
+            CD.showSessionExpiredDialog(this, "No User role found. Please Login again");
         }
+
 
 
         profileBtn.setOnClickListener(v -> {
@@ -131,7 +142,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
         // Card 1 click listener (Add Daily Record)
         cardView1.setOnClickListener(v -> {
-            if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+            if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                 // SUPER ADMIN CANNOT ADD A RECORD CUZ NO ADDA AVAILABLE FOR SUPER ADMIN
 //                CD.showDialog(this,"Super Admin cannot add a daily record because no specific adda is associated with it");
                 if (isDepotSelected()) {
@@ -145,7 +156,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                     Intent intent = new Intent(Homescreen.this, AddDailyRecord.class);
                     startActivity(intent);  // Directly navigate for normal users
                 } else {
-                    CD.showDialog(this, "You do not have any depot linked with your account. Contact your administrator for further assistance.");
+                    CD.showDialog(this, "You do not have any office linked with your account. Contact your administrator for further assistance.");
                 }
             }
         });
@@ -153,7 +164,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         // Card 2 click listener (Daily Duty Register Cards)
         cardView2.setOnClickListener(v -> {
             // If Super Admin Check if Depot and Adda Available
-            if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+            if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                 if (isDepotSelected()) {
                     Intent intent = new Intent(Homescreen.this, DailyDutyRegisterCards.class);
                     startActivity(intent);
@@ -166,7 +177,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                         Intent intent = new Intent(Homescreen.this, DailyDutyRegisterCards.class);
                         startActivity(intent);  // Directly navigate for normal users
                     } else {
-                        CD.showDialog(this, "You do not have any depot linked with your account. Contact your administrator for further assistance.");
+                        CD.showDialog(this, "You do not have any office linked with your account. Contact your administrator for further assistance.");
                     }
                 } else {
                     CD.showDialog(Homescreen.this, Econstants.internetNotAvailable);
@@ -176,7 +187,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
         // Card 3 click listener (Download Record)
         cardView3.setOnClickListener(v -> {
-            if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+            if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                 if (isDepotSelected()) {
                     Intent intent = new Intent(Homescreen.this, DownloadRecord.class);
                     startActivity(intent);
@@ -188,14 +199,14 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                     Intent intent = new Intent(Homescreen.this, DownloadRecord.class);
                     startActivity(intent);  // Directly navigate for normal users
                 } else {
-                    CD.showDialog(this, "You do not have any depot linked with your account. Contact your administrator for further assistance.");
+                    CD.showDialog(this, "You do not have any office linked with your account. Contact your administrator for further assistance.");
                 }
             }
         });
 
         // Card 4 click listener (Manage Entities)
         cardView4.setOnClickListener(v -> {
-            if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+            if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                 if (isDepotSelected()) {
                     Intent intent = new Intent(Homescreen.this, ManageEntities.class);
                     startActivity(intent);
@@ -213,12 +224,12 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 //            Integer roleId = Preferences.getInstance().roleId;  // ROLE ID COMMING AS 29 FIXX IT
 //            Log.e("ROLE Here: ", "ROLE Here: " + roleId);
 //            if (roleId != null && (roleId == 1 || roleId == 2)) {
-                if (isDepotSelected()) {
-                    Intent intent = new Intent(Homescreen.this, AllOfficeCards.class);
-                    startActivity(intent);
-                } else {
-                    showDepotSelectionPopup();
-                }
+            if (isDepotSelected()) {
+                Intent intent = new Intent(Homescreen.this, AllOfficeCards.class);
+                startActivity(intent);
+            } else {
+                showDepotSelectionPopup();
+            }
 //            } else if (roleId != null) {
 //                CD.showDialog(this, "This privilege is restricted to the Admin. Please contact your administrator for further assistance.");
 //            } else {
@@ -229,7 +240,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
         // About Us Card click listener
         aboutUsCard.setOnClickListener(v -> {
-            if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+            if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                 showDepotSelectionPopup();
             } else {
                 Intent intent = new Intent(Homescreen.this, AboutUs.class);
@@ -239,7 +250,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
         // Depot Location TV click listener
         depotNameTV.setOnClickListener(v -> {
-            if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+            if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                 showDepotSelectionPopup();  // Open depot selection popup for Super Admin
             }
         });
@@ -257,7 +268,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Logout + clear prefs
-                        Intent intent = new Intent(Homescreen.this, LoginHRTC.class);
+                        Intent intent = new Intent(Homescreen.this, Homescreen.class);
                         startActivity(intent);
                         Homescreen.this.finish();
 
@@ -279,59 +290,65 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
     }
 
 
-    private void loadOfficeForAdmin() {
-        // LOAD OFFICES FOR ADMIN
-//    try {
-//        if (AppStatus.getInstance(Homescreen.this).isOnline()) {
-//
-//            UploadObject object = new UploadObject();
-//            object.setUrl(Econstants.sarvatra_url);
-//            object.setMethordName("/office/getPagedOffices?");
-//            object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
-//
-//                            // HARDCODE THIS DEPARTMENT ID FOR HRTC
-//                            + "&deptId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(106))) // Hardcoded ID for HRTC
-//                            + "&empId=" + URLEncoder.encode(aesCrypto.encrypt("0"), "UTF-8")
-//                            + "&page=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(page)))
-
-        /// /                        + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(""), "UTF-8")
-//                            + "&size=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(size)))
-//            );
-//            object.setTasktype(TaskType.GET_OFFICES);
-//            object.setAPI_NAME(Econstants.API_NAME_HRTC);
-//
-//            new ShubhAsyncGet(Homescreen.this, Homescreen.this, TaskType.GET_OFFICES).execute(object);
-//        } else {
-//            // Do nothing if CD already shown once
-//            CD.showDialog(Homescreen.this, Econstants.internetNotAvailable);
-//        }
-//    } catch (Exception ex) {
-//        CD.showDialog(Homescreen.this, "Something Bad happened . Please reinstall the application and try again.");
-//    }
-    }
-
-
-    private void loadDepotsForSuperAdmin() {
-        System.out.println("Loading Depots ABC");
-        // Depot Service Call
+    private void loadSameServiceCallOfficesForAdmin() {
         try {
             if (AppStatus.getInstance(Homescreen.this).isOnline()) {
+
                 UploadObject object = new UploadObject();
-                object.setUrl(Econstants.base_url);
-                object.setMethordName("/master-data?");
-                object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("depot"), "UTF-8"));
-                object.setTasktype(TaskType.GET_DEPOTS);
+                object.setUrl(Econstants.sarvatra_url);
+                object.setMasterName("");
+                object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
+
+
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("deptId", 106);
+                jsonBody.put("empId", 0);
+                jsonBody.put("ofcTypeId", 267);
+
+                object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
+
+                object.setTasktype(TaskType.GET_OFFICE_FOR_ADMIN);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
-                new ShubhAsyncGet(Homescreen.this, Homescreen.this, TaskType.GET_DEPOTS).execute(object);
-
+                new ShubhAsyncPost(Homescreen.this, Homescreen.this, TaskType.GET_OFFICE_FOR_ADMIN).execute(object);
             } else {
+                // Do nothing if CD already shown once
                 CD.showDialog(Homescreen.this, Econstants.internetNotAvailable);
             }
         } catch (Exception ex) {
             CD.showDialog(Homescreen.this, "Something Bad happened . Please reinstall the application and try again.");
         }
+    }
 
+
+    private void loadOfficeForAdmin() {
+        try {
+            if (AppStatus.getInstance(Homescreen.this).isOnline()) {
+
+                UploadObject object = new UploadObject();
+                object.setUrl(Econstants.sarvatra_url);
+                object.setMasterName("");
+                object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
+
+
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("deptId", 106);
+                jsonBody.put("empId", 0);
+                jsonBody.put("ofcTypeId", 267);
+
+                object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
+
+                object.setTasktype(TaskType.GET_OFFICE_FOR_ADMIN);
+                object.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+                new ShubhAsyncPost(Homescreen.this, Homescreen.this, TaskType.GET_OFFICE_FOR_ADMIN).execute(object);
+            } else {
+                // Do nothing if CD already shown once
+                CD.showDialog(Homescreen.this, Econstants.internetNotAvailable);
+            }
+        } catch (Exception ex) {
+            CD.showDialog(Homescreen.this, "Something Bad happened . Please reinstall the application and try again.");
+        }
     }
 
 
@@ -344,7 +361,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         builder.setView(dialogView);
 
         TextView titleTextView = new TextView(this);
-        titleTextView.setText("Select Depot");
+        titleTextView.setText("Select Office");
         titleTextView.setTextSize(20);  // You can adjust the size
         titleTextView.setTypeface(Typeface.DEFAULT_BOLD);  // Set bold font
         titleTextView.setTextColor(Color.BLACK);  // Set text color to black
@@ -352,13 +369,12 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         titleTextView.setPadding(0, 30, 0, 30);  // Optional padding for spacing
         builder.setCustomTitle(titleTextView);
 
-        depotSpinner = dialogView.findViewById(R.id.currentDepotSpinner);
-//        addaSpinner = dialogView.findViewById(R.id.currentAddaSpinner);
+        officeSpinner = dialogView.findViewById(R.id.officeSelectionSpinner);
 
-        depotSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        officeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                popupSelectionDepot = (DepotPojo) parent.getItemAtPosition(position);
+                popupSelectionOffice = (OfficeSelectionPojo) parent.getItemAtPosition(position);
             }
 
             @Override
@@ -370,9 +386,9 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
         builder.setPositiveButton("Select", (dialog, which) -> {
 
-            if (popupSelectionDepot != null) {
-                Preferences.getInstance().depotId = popupSelectionDepot.getId();
-                Preferences.getInstance().depotName = popupSelectionDepot.getDepotName();
+            if (popupSelectionOffice != null) {
+                Preferences.getInstance().depotId = popupSelectionOffice.getOfficeId();
+                Preferences.getInstance().depotName = popupSelectionOffice.getOfficeName();
                 Preferences.getInstance().savePreferences(Homescreen.this);
                 reloadUserDetails();
                 bottomTextView.setText("Depot: " + Preferences.getInstance().depotName);
@@ -395,8 +411,8 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         // Show the dialog
         alertDialog.show();
 
-        // Load depots dynamically
-        loadDepotsForSuperAdmin();
+        // Load offices for selection
+        loadOfficeForAdmin();
 
         // Dim the background
         WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
@@ -407,7 +423,6 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
     // Utility method to check if depot is selected
     private boolean isDepotSelected() {
         String depotName = Preferences.getInstance().depotName;
-        // Ensure depotName and depotId are not null, empty, or "null"
         return depotName != null && !depotName.trim().isEmpty() && !depotName.equalsIgnoreCase("null") && Preferences.getInstance().depotId != -1;
     }
 
@@ -430,10 +445,9 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
     @Override
     public void onTaskCompleted(ResponsePojoGet result, TaskType taskType) throws JSONException {
         // Get Depots
-        if (TaskType.GET_DEPOTS == taskType) {
+        if (TaskType.GET_OFFICE_FOR_ADMIN == taskType) {
             SuccessResponse response = null;
-            List<DepotPojo> pojoListDepots = new ArrayList<>();
-            Log.i("AddBusDetails", "Task type is fetching depots..");
+            List<OfficeSelectionPojo> pojoList = new ArrayList<>();
 
             if (result != null) {
                 Log.i("Depots: ", "Response Obj" + result.toString());
@@ -443,21 +457,32 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                     Log.e("Response", response.toString());
 
                     if (response.getStatus().equalsIgnoreCase("OK")) {
-                        pojoListDepots = JsonParse.parseDecryptedDepotsInfo(response.getData());
 
-                        if (pojoListDepots.size() > 0) {
-                            Log.e("Reports Data", pojoListDepots.toString());
+                        if (!(response.getData().equalsIgnoreCase("No records found"))) {
+                            pojoList = JsonParse.parseOfficeListForAdmin(response.getData());
+                        } else {
+                            pojoList.clear();
+                        }
 
-                            depotSpinnerAdapter = new DepotSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoListDepots);
-                            depotSpinner.setAdapter(depotSpinnerAdapter);
+                        if (pojoList.size() > 0) {
+                            Log.e("Reports Data", pojoList.toString());
 
+                            officesSelectionSpinnerAdapter = new OfficesSelectionSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
+                            if (officeSpinner != null) {
+                                officeSpinner.setAdapter(officesSelectionSpinnerAdapter);
+                            } else {
+                                Log.e("SpinnerError", "officeSpinner is null. Check XML or findViewById.");
+                            }
+
+
+                            // Show Selection
                             if (Preferences.getInstance().depotName != null) {
                                 // Preselect Depot If Available
-                                depotSpinner.post(() -> {
-                                    if (depotSpinnerAdapter != null) {
-                                        int itemPosition = depotSpinnerAdapter.getPositionForDepot(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
+                                officeSpinner.post(() -> {
+                                    if (officesSelectionSpinnerAdapter != null) {
+                                        int itemPosition = officesSelectionSpinnerAdapter.getPositionForOffice(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
                                         if (itemPosition != -1) {
-                                            depotSpinner.setSelectedItemByIndex(itemPosition);
+                                            officeSpinner.setSelectedItemByIndex(itemPosition);
                                         } else {
                                             Log.e("Error", "Depot not found in adapter.");
                                         }
@@ -465,10 +490,8 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                                 });
                             }
 
-
                         } else {
-                            CD.showDialog(Homescreen.this, "No Data Found");
-                            pojoListDepots.clear();
+//                            CD.showDialog(Homescreen.this, "No offices found for selection");
                         }
 
                     } else {

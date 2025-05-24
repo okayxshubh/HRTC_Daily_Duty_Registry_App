@@ -165,7 +165,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
 
 
         // Make depot locked for all other employees
-        if(Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2){
+        if(Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2){
             depotSpinner.setEnabled(true);
         } else {
             depotSpinner.setEnabled(false);

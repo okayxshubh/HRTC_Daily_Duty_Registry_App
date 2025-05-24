@@ -112,7 +112,7 @@ public class AllAddaCards extends AppCompatActivity implements OnAddaCardClickLi
         });
 
         addBtn.setOnClickListener(v -> {
-            if (Preferences.getInstance().roleId != null && Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+            if (Preferences.getInstance().roleId != null && Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
                 Intent intent = new Intent(this, AddAdda.class);
                 startActivity(intent);
                 AllAddaCards.this.finish();
@@ -232,7 +232,7 @@ public class AllAddaCards extends AppCompatActivity implements OnAddaCardClickLi
 
     @Override
     public void onEditClick(AddaPojo selectedPojo, int position) {
-        if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+        if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
             // Allow All Unlocked
             if (selectedPojo != null) {
                 Intent editIntent = new Intent(this, AddAdda.class);
@@ -248,7 +248,7 @@ public class AllAddaCards extends AppCompatActivity implements OnAddaCardClickLi
 
     @Override
     public void onDeleteClick(AddaPojo selectedPojo, int position) {
-        if (Preferences.getInstance().roleId == 1 || Preferences.getInstance().roleId == 2) {
+        if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
             // Allow All Unlocked
             if (selectedPojo != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
