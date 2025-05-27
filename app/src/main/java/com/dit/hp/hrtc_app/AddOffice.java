@@ -84,6 +84,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
     EditText departmentName, addressET, depotCode;
     String encryptedBody;
     TextView headTV, locationTV;
+    LinearLayout layoutLocationTV;
     ImageButton locationBtn;
 
     CustomDialog CD = new CustomDialog();
@@ -127,7 +128,6 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
     private SamplePresenter samplePresenter;
     private ProgressDialog progressDialog;
 
-
     String selectedArea;
     LinearLayout ruralLinearLayout, urbarnLinearLayout, distLL;
 
@@ -145,6 +145,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
         samplePresenter = new SamplePresenter(this);
         locationBtn = findViewById(R.id.getLocationBtn);
+        layoutLocationTV = findViewById(R.id.layoutLocationTV);
 
         // EDIT MODE
         Intent getIntent = getIntent();
@@ -221,15 +222,13 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
         back = findViewById(R.id.backBtn);
         proceed = findViewById(R.id.proceedBtn);
 
-        getLocation(); // Automatically Fetch Location
-
 
         mainImageView.setOnClickListener(view -> {
             launchCamera();
         });
 
 
-        if (isEditMode) {
+        if (!isEditMode) {
             locationBtn.setClickable(true);
         } else {
             locationBtn.setClickable(false);
@@ -602,8 +601,8 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
         proceed.setOnClickListener(v -> {
             if (AppStatus.getInstance(AddOffice.this).isOnline()) {
 
-                if (mainImageView.getDrawable() != null && photoFilePath == null && photoFileName == null) {
-                    CD.showDialog(AddOffice.this, "Please click photo of the asset to proceed");
+                if (actualImage == null) {
+                    CD.showDialog(AddOffice.this, "Please click photo of the office to proceed");
                     return;
                 }
 
@@ -678,6 +677,16 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 }
 
 
+
+                // Location Must Be Fetched
+                if (GLOBAL_LOCATION_STR == null && GLOBAL_LOCATION_STR.toLowerCase().contains("couldn't get location")) {
+                    CD.showDialog(AddOffice.this, "Please enable location and wait till location is fetched");
+                    getLocation();
+                    return;
+                }
+
+
+                // ADDING VALUES
                 officeValuesToAdd.setOfficeName(officeName.getText().toString());
                 officeValuesToAdd.setAddress(addressET.getText().toString());
                 officeValuesToAdd.setPinCode(Integer.parseInt(pincode.getText().toString()));
@@ -763,7 +772,6 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
             CD.showDialog(AddOffice.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
-
 
     private void serviceCallMunicipal(String selectedDistID) {
         try {
@@ -1006,7 +1014,9 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
                     actualImage = new File(imgFile.getPath());
                     mainImageView.setImageBitmap(BitmapFactory.decodeFile(actualImage.getPath()));
-                    mainImageView.setPadding(5,5,5,5);
+                    mainImageView.setPadding(5, 5, 5, 5);
+
+                    getLocation(); // Automatically Fetch Location.. When Image Clicked
 
 //                    Disposable compressedImage1 = new Compressor(this)
 //                            .compressToFileAsFlowable(actualImage)

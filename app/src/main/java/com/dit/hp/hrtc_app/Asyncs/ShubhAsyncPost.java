@@ -211,14 +211,6 @@ public class ShubhAsyncPost extends AsyncTask<UploadObject, Void, ResponsePojoGe
         }
 
 
-
-
-
-
-
-
-
-
         return responseObject;
     }
 

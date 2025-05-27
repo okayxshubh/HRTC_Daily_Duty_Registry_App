@@ -124,7 +124,7 @@ public class EditOffice extends AppCompatActivity implements ShubhAsyncTaskListe
 
 
     String selectedArea;
-    LinearLayout ruralLinearLayout, urbarnLinearLayout, distLL;
+    LinearLayout ruralLinearLayout, urbarnLinearLayout, distLL, locationTVLinearLayout;
 
     OfficePojo officeValuesToAdd = new OfficePojo();
     OfficePojo receivedOfficeToEdit;
@@ -139,6 +139,8 @@ public class EditOffice extends AppCompatActivity implements ShubhAsyncTaskListe
 
 
         locationBtn = findViewById(R.id.getLocationBtn);
+        locationTVLinearLayout = findViewById(R.id.locationTVLinearLayout);
+        locationTVLinearLayout.setVisibility(View.GONE);
 
         // EDIT MODE
         Intent getIntent = getIntent();
@@ -552,7 +554,6 @@ public class EditOffice extends AppCompatActivity implements ShubhAsyncTaskListe
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedOfficeLevel = (OfficeLevel) parent.getItemAtPosition(position);
                 officeValuesToAdd.setOfficeLevelPojo(selectedOfficeLevel);
-
             }
 
             @Override

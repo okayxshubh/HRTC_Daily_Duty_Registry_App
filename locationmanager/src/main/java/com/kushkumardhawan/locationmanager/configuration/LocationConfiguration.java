@@ -1,9 +1,5 @@
 package com.kushkumardhawan.locationmanager.configuration;
 
-
-
-
-
 import androidx.annotation.Nullable;
 
 import com.kushkumardhawan.locationmanager.providers.locationprovider.DefaultLocationProvider;

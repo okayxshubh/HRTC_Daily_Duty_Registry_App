@@ -123,7 +123,7 @@
             android:background="@drawable/search_view_background"
             android:elevation="4dp"
             android:iconifiedByDefault="false"
-            android:queryHint="Search by route"
+            android:queryHint="Search by route name"
             android:textColor="@color/black"
             android:textColorHint="@color/gray" />
 

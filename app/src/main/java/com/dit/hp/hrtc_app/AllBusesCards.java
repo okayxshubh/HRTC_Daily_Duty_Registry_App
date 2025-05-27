@@ -150,7 +150,7 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
         fetchRecords(currentPage, pageSize);
     }
 
-    // Vehicles Service Call
+    // Office Service Call
     private void fetchRecords(int page, int size) {
         try {
             if (AppStatus.getInstance(AllBusesCards.this).isOnline()) {
@@ -373,41 +373,12 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
 
         }
 
-        // Transfer
-        else if (requestCode == TRANSFER_REQUEST_CODE && resultCode == RESULT_OK) {
-            searchView.setQuery("", false); // Clear Search View
-
-            // Vehicles Service Call
-            try {
-                if (AppStatus.getInstance(AllBusesCards.this).isOnline()) {
-
-                    UploadObject object = new UploadObject();
-                    object.setUrl(Econstants.base_url);
-                    object.setMethordName("/master-data?");
-                    object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
-                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId))));
-
-                    object.setTasktype(TaskType.GET_VEHICLES);
-                    object.setAPI_NAME(Econstants.API_NAME_HRTC);
-
-                    new ShubhAsyncGet(AllBusesCards.this, AllBusesCards.this, TaskType.GET_VEHICLES).execute(object);
-
-                } else {
-                    // Do nothing if CD already shown once
-                    CD.showDialog(AllBusesCards.this, Econstants.internetNotAvailable);
-                }
-            } catch (Exception ex) {
-                CD.showDialog(AllBusesCards.this, "Something Bad happened . Please reinstall the application and try again.");
-            }
-
-        }
-
     }
 
     @Override
     public void onTaskCompleted(ResponsePojoGet result, TaskType taskType) throws JSONException {
 
-        // Vehicles
+        //
         if (TaskType.GET_VEHICLES == taskType) {
             SuccessResponse response = null;
             pojoList = null;

@@ -121,8 +121,9 @@ public class ManageEntities extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         // Logout + clear prefs
                         Intent intent = new Intent(ManageEntities.this, LoginHRTC.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                        ManageEntities.this.finish();
+                        finish();
 
                         // Clear
                         SharedPreferences preferences = getSharedPreferences("com.dit.himachal.hrtc.app", Context.MODE_PRIVATE);

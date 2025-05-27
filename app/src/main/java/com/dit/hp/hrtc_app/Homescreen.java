@@ -76,14 +76,12 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         // Load saved preferences at the very beginning
         Preferences.getInstance().loadPreferences(this);
 
-
         Log.i("Homescreen", "Login As: App Role ID " + Preferences.getInstance().appRoleId);
         Log.i("Homescreen", "Login As: empId " + Preferences.getInstance().empId);
         Log.i("Homescreen", "Login As: userName " + Preferences.getInstance().userName);
         Log.i("Homescreen", "Login As: Department Id " + Preferences.getInstance().departmentId);
         Log.i("Homescreen", "Login As: Department Name saved as Depot Name & Code: " + Preferences.getInstance().depotName + " : " + Preferences.getInstance().depotId);
         Log.i("Homescreen", "Login As: RoleName And Role ID" + Preferences.getInstance().roleName + " : " + Preferences.getInstance().roleId);
-
 
 
         roleIdTV = findViewById(R.id.roleIdTV);
@@ -114,7 +112,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
             int roleId = Preferences.getInstance().appRoleId;
             if (roleId == 1 || roleId == 2) {
                 bottomTextView.setText("Choose Office");
-                bottomImageView.setImageResource(R.drawable.depot);
+                bottomImageView.setImageResource(R.drawable.sub_office);
                 aboutUsCard.setBackgroundResource(R.drawable.customborder_dialog_green);
                 bottomTextView.setTextColor(Color.WHITE);
                 bottomTextView.setText("Office: " + Preferences.getInstance().depotName);
@@ -122,7 +120,6 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         } else {
             CD.showSessionExpiredDialog(this, "No User role found. Please Login again");
         }
-
 
 
         profileBtn.setOnClickListener(v -> {
@@ -221,20 +218,20 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         // Offices
         cardView5.setOnClickListener(v -> {
 
-//            Integer roleId = Preferences.getInstance().roleId;  // ROLE ID COMMING AS 29 FIXX IT
-//            Log.e("ROLE Here: ", "ROLE Here: " + roleId);
-//            if (roleId != null && (roleId == 1 || roleId == 2)) {
-            if (isDepotSelected()) {
-                Intent intent = new Intent(Homescreen.this, AllOfficeCards.class);
-                startActivity(intent);
+            Integer appRoleId = Preferences.getInstance().appRoleId;  // App ROLE ID
+            Log.e("ROLE Here: ", "ROLE Here: " + appRoleId);
+            if (appRoleId != null && (appRoleId == 1 || appRoleId == 2)) {
+                if (isDepotSelected()) {
+                    Intent intent = new Intent(Homescreen.this, AllOfficeCards.class);
+                    startActivity(intent);
+                } else {
+                    showDepotSelectionPopup();
+                }
+            } else if (appRoleId != null) {
+                CD.showDialog(this, "This privilege is restricted to the Admin. Please contact your administrator for further assistance.");
             } else {
-                showDepotSelectionPopup();
+                CD.showDialog(this, "User role not found. Please login again.");
             }
-//            } else if (roleId != null) {
-//                CD.showDialog(this, "This privilege is restricted to the Admin. Please contact your administrator for further assistance.");
-//            } else {
-//                CD.showDialog(this, "User role not found. Please login again.");
-//            }
 
         });
 
@@ -268,9 +265,11 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Logout + clear prefs
-                        Intent intent = new Intent(Homescreen.this, Homescreen.class);
+                        Intent intent = new Intent(Homescreen.this, LoginHRTC.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                        Homescreen.this.finish();
+                        finish();
+
 
                         // Clear
                         SharedPreferences preferences = getSharedPreferences("com.dit.himachal.hrtc.app", Context.MODE_PRIVATE);
@@ -290,35 +289,36 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
     }
 
 
-    private void loadSameServiceCallOfficesForAdmin() {
-        try {
-            if (AppStatus.getInstance(Homescreen.this).isOnline()) {
-
-                UploadObject object = new UploadObject();
-                object.setUrl(Econstants.sarvatra_url);
-                object.setMasterName("");
-                object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
-
-
-                JSONObject jsonBody = new JSONObject();
-                jsonBody.put("deptId", 106);
-                jsonBody.put("empId", 0);
-                jsonBody.put("ofcTypeId", 267);
-
-                object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
-
-                object.setTasktype(TaskType.GET_OFFICE_FOR_ADMIN);
-                object.setAPI_NAME(Econstants.API_NAME_HRTC);
-
-                new ShubhAsyncPost(Homescreen.this, Homescreen.this, TaskType.GET_OFFICE_FOR_ADMIN).execute(object);
-            } else {
-                // Do nothing if CD already shown once
-                CD.showDialog(Homescreen.this, Econstants.internetNotAvailable);
-            }
-        } catch (Exception ex) {
-            CD.showDialog(Homescreen.this, "Something Bad happened . Please reinstall the application and try again.");
-        }
-    }
+//    private void loadSameServiceCallOfficesForAdmin() {
+//        try {
+//            if (AppStatus.getInstance(Homescreen.this).isOnline()) {
+//
+//                UploadObject object = new UploadObject();
+//                object.setUrl(Econstants.sarvatra_url);
+//                object.setMasterName("");
+//                object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
+//
+//
+//                JSONObject jsonBody = new JSONObject();
+//                jsonBody.put("deptId", 106);
+//                jsonBody.put("empId", 0);
+////                jsonBody.put("empId", Preferences.getInstance().empId);
+//                jsonBody.put("ofcTypeId", 267);
+//
+//                object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
+//
+//                object.setTasktype(TaskType.GET_OFFICE_FOR_ADMIN);
+//                object.setAPI_NAME(Econstants.API_NAME_HRTC);
+//
+//                new ShubhAsyncPost(Homescreen.this, Homescreen.this, TaskType.GET_OFFICE_FOR_ADMIN).execute(object);
+//            } else {
+//                // Do nothing if CD already shown once
+//                CD.showDialog(Homescreen.this, Econstants.internetNotAvailable);
+//            }
+//        } catch (Exception ex) {
+//            CD.showDialog(Homescreen.this, "Something Bad happened . Please reinstall the application and try again.");
+//        }
+//    }
 
 
     private void loadOfficeForAdmin() {
@@ -333,7 +333,8 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("deptId", 106);
-                jsonBody.put("empId", 0);
+//                jsonBody.put("empId", 0);
+                jsonBody.put("empId", Preferences.getInstance().empId);
                 jsonBody.put("ofcTypeId", 267);
 
                 object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
@@ -391,10 +392,10 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                 Preferences.getInstance().depotName = popupSelectionOffice.getOfficeName();
                 Preferences.getInstance().savePreferences(Homescreen.this);
                 reloadUserDetails();
-                bottomTextView.setText("Depot: " + Preferences.getInstance().depotName);
+                bottomTextView.setText("Office: " + Preferences.getInstance().depotName);
 
             } else {
-                CD.showDialog(this, "No depot selected");
+                CD.showDialog(this, "No office selected");
             }
 
 
@@ -430,7 +431,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
         // Welcome Message
         String userName = Preferences.getInstance().userName != null ? Preferences.getInstance().userName : "Guest";
-        welcomeTV.setText("Welcome " + userName + " !");
+        welcomeTV.setText("Welcome " + userName);
 
         // Depot
         String depotName = Preferences.getInstance().depotName;
@@ -484,7 +485,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                                         if (itemPosition != -1) {
                                             officeSpinner.setSelectedItemByIndex(itemPosition);
                                         } else {
-                                            Log.e("Error", "Depot not found in adapter.");
+                                            Log.e("Error", "Office not found in adapter.");
                                         }
                                     }
                                 });

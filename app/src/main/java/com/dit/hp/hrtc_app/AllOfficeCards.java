@@ -43,6 +43,7 @@ import org.json.JSONException;
 
 import java.io.Serializable;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -230,7 +231,6 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
         isLoading = false;
     }
 
-
     // Modify your searchStaff method as follows
     private void searchItem(String query) {
         try {
@@ -261,17 +261,16 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
     // Update RecyclerView with new data
     private void updateData(List<OfficePojo> newData) {
         if (cardsAdapter == null) {
-            // Initialize adapter if it's the first time
             cardsAdapter = new OfficeCardsAdapter(newData, this);
             recyclerView.setAdapter(cardsAdapter);
         } else {
-            // Clear previous data and add new items
-            cardsAdapter.clearItems();
-            cardsAdapter.addItems(newData);
+            cardsAdapter.clearItems();  // clear old list
+            cardsAdapter.addItems(newData);  // add only found items
         }
-        cardsAdapter.notifyDataSetChanged();  // Notify the adapter of data change
-        isLoading = false;  // Reset loading flag
+        cardsAdapter.notifyDataSetChanged();
+        isLoading = false;
     }
+
 
     // Interface method for edit button + Cannot edit old date records
     @Override
@@ -280,7 +279,10 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
             Intent editIntent = new Intent(this, EditOffice.class);
             editIntent.putExtra("OfficeInfo", (Serializable) selectedPojo);
             editIntent.putExtra("EditMode", true);
-            startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
+            startActivity(editIntent);
+            AllOfficeCards.this.finish();
+//            startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
+
         } else {
             Log.e("onEditClick", "OfficePojo is null!");
         }
@@ -373,8 +375,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
 
     @Override
     public void onTaskCompleted(ResponsePojoGet result, TaskType taskType) throws JSONException {
-
-        // Vehicles
+        //
         if (TaskType.GET_OFFICES == taskType) {
             SuccessResponse response = null;
             pojoList = null;
@@ -396,7 +397,7 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
                         if (pojoList.size() > 0) {
                             Log.e("Reports Data: ", pojoList.toString());
 
-                            addMoreData(pojoList); // Add More Data on Scroll + Keep the old data
+                            addMoreData(pojoList);
 
                         } else {
                             CD.showDialog(AllOfficeCards.this, "No Offices Found");
@@ -418,34 +419,36 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
             }
         }
 
-        // SEARCH ITEM
         else if (TaskType.GET_OFFICES_SEARCH == taskType) {
             SuccessResponse response = null;
 
-            if (result != null) {
-                if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
-                    response = JsonParse.getDecryptedSuccessResponse(result.getResponse());
+            if (result != null && result.getResponseCode().equalsIgnoreCase(String.valueOf(HttpsURLConnection.HTTP_OK))) {
+                response = JsonParse.getDecryptedSuccessResponse(result.getResponse());
 
-                    if ("OK".equalsIgnoreCase(response.getStatus())) {
-                        pojoList.clear();  // Clear previous results
-                        pojoList = JsonParse.parseAllOfficeCards(response.getData());
+                if ("OK".equalsIgnoreCase(response.getStatus())) {
+                    List<OfficePojo> searchedList = JsonParse.parseAllOfficeCards(response.getData());
 
-                        if (!pojoList.isEmpty()) {
-                            updateData(pojoList);  // Update RecyclerView with search results
-                        } else {
-                            // Clear RecyclerView when no staff is found
-                            pojoList.clear();
-                            updateData(pojoList);
-                        }
-
+                    if (!searchedList.isEmpty()) {
+                        updateData(searchedList);  // Show only searched results
                     } else {
-                        CD.showDialog(this, response.getMessage());
+                        cardsAdapter.clearItems(); // Clear RecyclerView
+                        cardsAdapter.notifyDataSetChanged();
+
+                        // Optional..Show toast
                     }
+
                 } else {
-                    CD.showDialog(this, "Unable to fetch data");
+                    cardsAdapter.clearItems();
+                    cardsAdapter.notifyDataSetChanged();
+                    CD.showDialog(this, response.getMessage());
                 }
+            } else {
+                cardsAdapter.clearItems();
+                cardsAdapter.notifyDataSetChanged();
+                CD.showDialog(this, "Unable to fetch data");
             }
         }
+
 
         // REMOVE VEHICLE
         else if (TaskType.DELETE_OFFICE == taskType) {

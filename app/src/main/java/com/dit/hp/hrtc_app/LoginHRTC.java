@@ -43,7 +43,6 @@ import com.dit.hp.hrtc_app.utilities.Econstants;
 import com.dit.hp.hrtc_app.utilities.Preferences;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -78,6 +77,9 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 101;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 102;
 
+    private static final int ALL_PERMISSION_REQUEST_CODE = 9999;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,14 +105,13 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 //        userName.setText("Admin");
 //        password.setText("Admin@1234");
 
-        // Check Permissions During Login
-        checkStoragePermission();
 
-        checkNotificationPermission();
+        // Location Permission
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestLocationPermission();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestAllPermissions();
         }
+
 
         // NEW HIM ACCESS
         signInBtn.setOnClickListener(v -> {
@@ -362,6 +363,19 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         }
     }
 
+    private void showSettingsDialog(String permission) {
+        new AlertDialog.Builder(this)
+                .setTitle("Permission Required")
+                .setMessage("Permission " + permission + " denied permanently. Please enable it from settings.")
+                .setPositiveButton("Open Settings", (dialog, which) -> {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.fromParts("package", getPackageName(), null));
+                    startActivity(intent);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
 
 
     // Handle Permission Results
@@ -445,16 +459,52 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     }
 
 
+    private void requestAllPermissions() {
+        List<String> permissionsToRequest = new ArrayList<>();
+
+        // Location
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        // Notifications (API 33+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS);
+        }
+
+        // Storage (API < 30)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+        }
+
+        if (!permissionsToRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    permissionsToRequest.toArray(new String[0]),
+                    ALL_PERMISSION_REQUEST_CODE);
+        } else {
+            // All Permissions Granted Do Nothing
+        }
+    }
+
+
+
     // Custom method to encode Params.. when params are not JSON.. PUT Request to edit
     private String buildParams(Map<String, String> params) {
-        StringBuilder paramBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (paramBuilder.length() > 0) {
-                paramBuilder.append("&");
+            if (stringBuilder.length() > 0) {
+                stringBuilder.append("&");
             }
-            paramBuilder.append(entry.getKey()).append("=").append(entry.getValue());
+            stringBuilder.append(entry.getKey()).append("=").append(entry.getValue());
         }
-        return paramBuilder.toString();
+        return stringBuilder.toString();
     }
 
 
@@ -583,6 +633,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
                 } else {
 //                    CD.showDialog(LoginHRTC.this, "Not able to get token");
+                    Toast.makeText(this, "Not able to get JWT token", Toast.LENGTH_SHORT).show();
                     Log.e("Not able to get token", "Not able to get token HRTC JWT");
                 }
             } else {
@@ -683,7 +734,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                 CD.showDialog(LoginHRTC.this, "Result is null");
             }
         }
-
 
 
     }

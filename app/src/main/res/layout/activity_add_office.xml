@@ -123,6 +123,7 @@
                             android:textStyle="bold" />
 
                         <LinearLayout
+                            android:id="@+id/layoutLocationTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/home_white_bg"
