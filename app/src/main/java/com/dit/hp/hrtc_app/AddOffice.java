@@ -1,5 +1,7 @@
 package com.dit.hp.hrtc_app;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -22,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -73,8 +76,12 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import id.zelory.compressor.Compressor;
 import in.balakrishnan.easycam.CameraBundleBuilder;
 import in.balakrishnan.easycam.CameraControllerActivity;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AddOffice extends LocationBaseActivity implements SamplePresenter.SampleView, ShubhAsyncTaskListenerPost, ShubhAsyncTaskListenerGet {
 
@@ -235,6 +242,7 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
         }
 
         locationBtn.setOnClickListener(v -> {
+            Toast.makeText(this, "Getting Location", LENGTH_SHORT).show();
             // Request Permission & Get Location
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -677,10 +685,15 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 }
 
 
-
                 // Location Must Be Fetched
-                if (GLOBAL_LOCATION_STR == null && GLOBAL_LOCATION_STR.toLowerCase().contains("couldn't get location")) {
-                    CD.showDialog(AddOffice.this, "Please enable location and wait till location is fetched");
+                if (GLOBAL_LOCATION_STR == null) {
+                    CD.showDialog(AddOffice.this, "Please enable location and press get location button. Wait to get location and then proceed.");
+                    getLocation();
+                    return;
+                }
+
+                if (GLOBAL_LOCATION_STR != null && GLOBAL_LOCATION_STR.toLowerCase().contains("couldn't get location")) {
+                    CD.showDialog(AddOffice.this, "Please enable location and click fetch location button.");
                     getLocation();
                     return;
                 }
@@ -715,11 +728,8 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                     officeValuesToAdd.setLgdWardCode(Integer.parseInt(selectedWard.getWardLgdCode()));
                 }
 
-                if (isEditMode) {
-                    showEditConfirmationDialog("Office");
-                } else {
-                    showAddConfirmationDialog("Office");
-                }
+
+                showAddConfirmationDialog("Office");
 
 
             } else {
@@ -951,52 +961,6 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                 .show();
     }
 
-    private void showEditConfirmationDialog(String selectedEntity) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add " + selectedEntity)
-                .setMessage("Are you sure you want to edit this " + selectedEntity + " ?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    if (AppStatus.getInstance(AddOffice.this).isOnline()) {
-
-                        UploadObject uploadObject = new UploadObject();
-                        // We can use Enums / Econstant to store these values of url and method names
-                        try {
-                            uploadObject.setUrl(Econstants.sarvatra_url);
-                            uploadObject.setMethordName("/master-data?masterName=");
-                            uploadObject.setMasterName(URLEncoder.encode(aesCrypto.encrypt("office"), "UTF-8")
-                                    + "&id=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(receivedOfficeToEdit.getOfficeId()))));
-
-                            uploadObject.setTasktype(TaskType.EDIT_OFFICE);
-                            uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        Log.i("JSON Body", " " + officeValuesToAdd.getJSONToEdit(this).toString());
-
-
-                        try {
-                            encryptedBody = aesCrypto.encrypt(officeValuesToAdd.getJSONToEdit(this).toString());
-                        } catch (Exception e) {
-                            Log.e("Encryption Error", e.getMessage());
-                        }
-
-                        uploadObject.setParam(encryptedBody);
-                        Log.i("JSON JSON Body:", "Enc JSON Body:" + encryptedBody);
-                        Log.i("Object", "Complete Object: " + uploadObject.toString());
-
-                        Log.e("URL: ", "URL: " + uploadObject.getUrl() + uploadObject.getMethordName() + uploadObject.getMasterName() + uploadObject.getParam());
-
-                        new ShubhAsyncPost(AddOffice.this, AddOffice.this, TaskType.EDIT_OFFICE).execute(uploadObject);
-
-                    } else {
-                        CD.addCompleteEntityDialog(AddOffice.this, "Internet not Available. Please Connect to the Internet and try again.");
-                    }
-
-                })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1018,58 +982,34 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
                     getLocation(); // Automatically Fetch Location.. When Image Clicked
 
-//                    Disposable compressedImage1 = new Compressor(this)
-//                            .compressToFileAsFlowable(actualImage)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe(
-//                                    file -> {
-//                                        compressedImage = file;
-//                                        if (compressedImage != null) {
-//                                            Log.d("Compressed Image", compressedImage.getPath());
-//
-//                                            // ✅ Set the photo file path
-//                                            photoFilePath = compressedImage.getPath();
-//                                            photoFileName = compressedImage.getName();
-//
-//                                            mainImageView.setImageBitmap(BitmapFactory.decodeFile(compressedImage.getAbsolutePath()));
-//                                            mainImageView.setPadding(5, 5, 5, 5);
-//                                            Toast.makeText(getApplicationContext(), "One Image Clicked.", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    },
-//                                    throwable -> Log.e("ERROR", throwable.getMessage())
-//                            );
+                    Luban.with(this)
+                            .load(actualImage)
+                            .ignoreBy(200) // Ignore if file size < 200KB
+                            .setCompressListener(new OnCompressListener() {
+                                @Override
+                                public void onStart() {
+                                    // Compression started
+                                }
+
+                                @Override
+                                public void onSuccess(File file) {
+                                    compressedImage = file;
+                                    photoFilePath = file.getPath();
+                                    photoFileName = file.getName();
+
+                                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                                    mainImageView.setPadding(5, 5, 5, 5);
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    Log.e("LubanError", e.getMessage());
+                                }
+                            }).launch();
+
                 }
             }
         }
-
-//        if (data != null && resultCode == Activity.RESULT_OK && requestCode == 1560) {
-//            String[] resultArray = data.getStringArrayExtra("resultData");
-//
-//            if (resultArray == null || resultArray.length == 0) {
-//                CD.showDialog(AddOffice.this, "Image not Clicked");
-//            } else {
-//                actualImage = new File(resultArray[0]);
-//                mainImageView.setImageBitmap(BitmapFactory.decodeFile(resultArray[0]));
-//
-//                Disposable disposable = new Compressor(this)
-//                        .compressToFileAsFlowable(actualImage)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(
-//                                file -> {
-//                                    compressedImage = file;
-//                                    photoFilePath = compressedImage.getPath();
-//                                    photoFileName = compressedImage.getName();
-//
-//                                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(photoFilePath));
-//                                    mainImageView.setPadding(5, 5, 5, 5);
-//                                    Toast.makeText(getApplicationContext(), "One Image Clicked.", Toast.LENGTH_SHORT).show();
-//                                },
-//                                throwable -> Log.e("Compressor Error", "Error compressing image", throwable)
-//                        );
-//            }
-//        }
     }
 
 

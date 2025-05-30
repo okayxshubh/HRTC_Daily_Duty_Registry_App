@@ -20,7 +20,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.dit.hp.hrtc_app.Adapters.AddaSpinnerAdapter;
@@ -49,7 +48,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListenerPost {
+public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskListenerPost {
 
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, aboutUsCard;
     ImageButton profileBtn;
@@ -68,10 +67,21 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
     private SearchableSpinner officeSpinner;
     private SearchableSpinner addaSpinner;
 
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_homescreen; // layout for this screen
+    }
+
+    @Override
+    protected int getNavMenuId() {
+        return R.id.nav_home; // the nav menu item to highlight
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homescreen);
 
         // Load saved preferences at the very beginning
         Preferences.getInstance().loadPreferences(this);
@@ -80,7 +90,7 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         Log.i("Homescreen", "Login As: empId " + Preferences.getInstance().empId);
         Log.i("Homescreen", "Login As: userName " + Preferences.getInstance().userName);
         Log.i("Homescreen", "Login As: Department Id " + Preferences.getInstance().departmentId);
-        Log.i("Homescreen", "Login As: Department Name saved as Depot Name & Code: " + Preferences.getInstance().depotName + " : " + Preferences.getInstance().depotId);
+        Log.i("Homescreen", "Login As: Office Name & ID saved as Depot Name & Depot ID: " + Preferences.getInstance().depotName + " : " + Preferences.getInstance().depotId);
         Log.i("Homescreen", "Login As: RoleName And Role ID" + Preferences.getInstance().roleName + " : " + Preferences.getInstance().roleId);
 
 
@@ -104,11 +114,11 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
         loadOfficeForAdmin();
 
+
         // Apply null check
         System.out.println(Preferences.getInstance().appRoleId);
         System.out.println(Preferences.getInstance().appRoleId);
         if (Preferences.getInstance().appRoleId != -1) {
-
             int roleId = Preferences.getInstance().appRoleId;
             if (roleId == 1 || roleId == 2) {
                 bottomTextView.setText("Choose Office");
@@ -252,7 +262,6 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
             }
         });
 
-
     }
 
 
@@ -269,7 +278,6 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
-
 
                         // Clear
                         SharedPreferences preferences = getSharedPreferences("com.dit.himachal.hrtc.app", Context.MODE_PRIVATE);
@@ -289,38 +297,6 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
     }
 
 
-//    private void loadSameServiceCallOfficesForAdmin() {
-//        try {
-//            if (AppStatus.getInstance(Homescreen.this).isOnline()) {
-//
-//                UploadObject object = new UploadObject();
-//                object.setUrl(Econstants.sarvatra_url);
-//                object.setMasterName("");
-//                object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
-//
-//
-//                JSONObject jsonBody = new JSONObject();
-//                jsonBody.put("deptId", 106);
-//                jsonBody.put("empId", 0);
-////                jsonBody.put("empId", Preferences.getInstance().empId);
-//                jsonBody.put("ofcTypeId", 267);
-//
-//                object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
-//
-//                object.setTasktype(TaskType.GET_OFFICE_FOR_ADMIN);
-//                object.setAPI_NAME(Econstants.API_NAME_HRTC);
-//
-//                new ShubhAsyncPost(Homescreen.this, Homescreen.this, TaskType.GET_OFFICE_FOR_ADMIN).execute(object);
-//            } else {
-//                // Do nothing if CD already shown once
-//                CD.showDialog(Homescreen.this, Econstants.internetNotAvailable);
-//            }
-//        } catch (Exception ex) {
-//            CD.showDialog(Homescreen.this, "Something Bad happened . Please reinstall the application and try again.");
-//        }
-//    }
-
-
     private void loadOfficeForAdmin() {
         try {
             if (AppStatus.getInstance(Homescreen.this).isOnline()) {
@@ -333,8 +309,8 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
 
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("deptId", 106);
-//                jsonBody.put("empId", 0);
-                jsonBody.put("empId", Preferences.getInstance().empId);
+                jsonBody.put("empId", 0);
+//                jsonBody.put("empId", Preferences.getInstance().empId);
                 jsonBody.put("ofcTypeId", 267);
 
                 object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
@@ -536,10 +512,12 @@ public class Homescreen extends AppCompatActivity implements ShubhAsyncTaskListe
         reloadUserDetails(); // Reload details to update UI
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
         Preferences.getInstance().loadPreferences(this); // Ensure preferences are reloaded
         reloadUserDetails(); // Reload details to update UI
     }
+
 }

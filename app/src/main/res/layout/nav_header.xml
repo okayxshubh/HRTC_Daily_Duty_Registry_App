@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@drawable/hrtc_faded_bg"
+    android:gravity="bottom|start"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1.8"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/profileB"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/drawable_round_white_bg"
+                android:contentDescription="Profile Image"
+                android:elevation="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user" />
+
+            <TextView
+                android:id="@+id/headerNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your Name"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/headerRoleTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:textStyle="bold"
+                android:text="Admin: HRTC"
+                android:textColor="#CCFFFFFF"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/headerOfficeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:textStyle="bold"
+                android:text="Office Shimla"
+                android:textColor="#CCFFFFFF"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:orientation="vertical"
+            android:layout_gravity="bottom|end"
+            android:gravity="bottom">
+
+<!--            <Button-->
+<!--                android:id="@+id/nav_head_btn"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:layout_marginTop="80dp"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:background="@drawable/themes"-->
+<!--                android:shadowColor="@color/black"-->
+<!--                android:shadowRadius="@integer/material_motion_duration_long_2"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="10sp"-->
+<!--                android:textStyle="bold" />-->
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

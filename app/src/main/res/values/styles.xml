@@ -8,10 +8,13 @@
         <item name="colorAccent">@color/hrtc_green</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/hrtc_green</item>
     </style>
+
 
 
     <!--For Hints in Login Screen-->

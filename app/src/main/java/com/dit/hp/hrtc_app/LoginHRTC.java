@@ -1,5 +1,6 @@
 package com.dit.hp.hrtc_app;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static androidx.constraintlayout.motion.widget.Debug.getLocation;
 
 import android.Manifest;
@@ -161,54 +162,14 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         });
 
         forgotPassBtn.setOnClickListener(v -> {
-            CD.showDialog(this, "Please visit https://himaccess.hp.gov.in for account creation and password reset.");
-//            Intent intent = new Intent(LoginHRTC.this, ResetPassword.class);
-//            startActivity(intent);
+            showVisitConfimationDialog();
+//            CD.showDialog(this, "Please visit https://himaccess.hp.gov.in for creating an account or resetting password.");
         });
 
     }
 
 
     // Custom methods
-
-    // OLD HRTC LOGIN Without HIM-ACCESS
-//    public void normalHRTCLogin(String oldUserID, String oldPassword) {
-//        if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
-//            UploadObject uploadObject = new UploadObject();
-//            uploadObject.setUrl(Econstants.eparivar_url);
-//            uploadObject.setMethordName(Econstants.loginMethod);
-//            uploadObject.setMasterName("");
-//            uploadObject.setTasktype(TaskType.LOGIN_HRTC);
-//            uploadObject.setAPI_NAME(Econstants.API_NAME_HRTC);
-//
-//            Map<String, String> params = new HashMap<>();
-//            try {
-//                // Encrypt user credentials
-//                String encrypteduserName = aesCrypto.encrypt(oldUserID);
-//                String encryptedPassword = aesCrypto.encrypt(oldPassword);
-//
-//                // Add encrypted + encoded data to params
-//                params.put("username", URLEncoder.encode(encrypteduserName, "UTF-8"));
-//                params.put("password", URLEncoder.encode(encryptedPassword, "UTF-8"));
-//
-//                // Encode Params for PUT Request
-//                String encParams = buildParams(params); // Method to build params to append in URL
-//                Log.i("Login Params: ", encParams);
-//
-//                uploadObject.setParam(encParams);
-//
-//            } catch (Exception e) {
-//                Log.e("Encryption Error", e.getMessage());
-//            }
-//
-//            new ShubhAsyncPost(LoginHRTC.this, LoginHRTC.this, TaskType.LOGIN_HRTC).execute(uploadObject);
-//            Log.i("JSON For Login: ", uploadObject.getParam());
-//
-//        } else {
-//            CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
-//        }
-//    }
-
 
     // Get Token.. Without JWT
     public void getHimAccessToken(String email) {
@@ -280,6 +241,20 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
             CD.showDialog(LoginHRTC.this, "Internet not Available. Please Connect to the Internet and try again.");
         }
     }
+
+
+   public void showVisitConfimationDialog(){
+       new AlertDialog.Builder(this)
+               .setTitle("Visit HimAccess?")
+               .setMessage("Visit https://himaccess.hp.gov.in to reset your password or register?")
+               .setPositiveButton("Visit", (dialog, which) -> {
+                   Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://himaccess.hp.gov.in"));
+                   startActivity(browserIntent);
+               })
+               .setNegativeButton("No", null)
+               .show();
+   }
+
 
 
     // Get User Details..
@@ -377,7 +352,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     }
 
 
-
     // Handle Permission Results
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -445,7 +419,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                 }
                 break;
         }
-
     }
 
     // Helper function to show rationale dialog
@@ -492,7 +465,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
             // All Permissions Granted Do Nothing
         }
     }
-
 
 
     // Custom method to encode Params.. when params are not JSON.. PUT Request to edit
@@ -559,10 +531,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         getHimAccessToken(himAccessUser.getMail()); // Get Token
                         getHRTCToken(himAccessUser.getMail()); // Get HimAccess Token
 
-                        // Save Basic Prefs
-                        Preferences.getInstance().savePreferences(this);
-
-
                     } else if (successResponse.getStatus().equals(Integer.toString(HttpsURLConnection.HTTP_GONE))) {
                         Log.i("Login Response Invalid ID/Pass", successResponse.getData());
                         CD.showDialog(this, "Please enter correct username and password");
@@ -602,6 +570,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
                         tokenInfo = JsonParse.parseTokenInfo(response.getData());
                         Preferences.getInstance().tokenHimAccess = tokenInfo.getToken();
+                        Preferences.getInstance().savePreferences(this);
 
                         getUserDetails();
 
@@ -633,7 +602,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
                 } else {
 //                    CD.showDialog(LoginHRTC.this, "Not able to get token");
-                    Toast.makeText(this, "Not able to get JWT token", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Not able to get JWT token", LENGTH_SHORT).show();
                     Log.e("Not able to get token", "Not able to get token HRTC JWT");
                 }
             } else {
@@ -721,7 +690,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                             CD.showAdditionalChargeDialog(this, additionalChargeList);
 
                         } else {
-                            Toast.makeText(this, "No Additional Charges Fetched", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "No Additional Charges Fetched", LENGTH_SHORT).show();
                         }
 
                     } else {

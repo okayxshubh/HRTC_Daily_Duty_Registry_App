@@ -1,0 +1,305 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+    <!-- Top Section: Header Image -->
+    <RelativeLayout
+        android:id="@+id/top_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/navyblue"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#B7FFFFFF"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/hrtcBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="centerCrop"
+                android:src="@drawable/hrtc" />
+
+            <TextView
+                android:id="@+id/HeadTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/raleway_semibold"
+                android:gravity="center"
+                android:letterSpacing="0.025"
+                android:text="Mark Attendance"
+                android:textColor="@color/hrtc_green"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/logOutB"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/hp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <!-- Body Section: Scrollable Content -->
+    <LinearLayout
+        android:id="@+id/body_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <!--BODY-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="#FFFF"
+                    android:elevation="5dp"
+                    android:orientation="vertical">
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/mainImageView"
+                            android:layout_width="200dp"
+                            android:layout_height="220dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/outline_round_tv"
+                            android:scaleType="centerInside"
+                            android:padding="60dp"
+                            android:src="@drawable/camera"
+                            android:tooltipText="Click Asset Photo" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:padding="0dp"
+                            android:text="Perform Face Authentication"
+                            android:textColor="@color/green"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutLocationTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/home_white_bg"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:id="@+id/locationTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="10dp"
+                                android:layout_weight="0.8"
+                                android:background="@drawable/outline_round_tv"
+                                android:fontFamily="@font/raleway_semibold"
+                                android:gravity="center"
+                                android:focusable="false"
+                                android:hint="Location Appears Here"
+                                android:inputType="phone"
+                                android:minHeight="48dp"
+                                android:padding="8dp"
+                                android:singleLine="false"
+                                android:textAlignment="center"
+                                android:textColor="#13914f"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <ImageButton
+                                android:id="@+id/getLocationBtn"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_weight="0.2"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:contentDescription="Get Location"
+                                android:padding="8dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/location" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/hrtc_green"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:gravity="center|center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="Basic Details"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginTop="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/pincodeLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Username"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+
+                    <EditText
+                        android:id="@+id/pincode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:hint="Username Appears Here"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:textColor="#13914f"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="#fff"
+                    android:elevation="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/addressLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Remarks (if any)"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/addressET"
+                        android:layout_width="match_parent"
+                        android:minHeight="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:hint="Remarks (if any)"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:textColor="#13914f"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+
+    <!-- Bottom Section: Buttons -->
+    <LinearLayout
+        android:id="@+id/bottom_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="0.2"
+        android:background="#FFFF"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/red"
+            android:text="Back"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/proceedBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:text="Proceed"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

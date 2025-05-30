@@ -331,6 +331,38 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <!-- AttendanceHome -->
+        <activity
+            android:name=".AttendanceHome"
+            android:alwaysRetainTaskState="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <!-- SalaryHome -->
+        <activity
+            android:name=".SalaryHome"
+            android:alwaysRetainTaskState="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".ProfileScreen"
+            android:alwaysRetainTaskState="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+
+
+
 
     </application>
 

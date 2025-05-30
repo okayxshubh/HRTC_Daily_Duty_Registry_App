@@ -20,11 +20,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dit.hp.hrtc_app.Adapters.ConductorSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.DepotSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.DriverSpinnerAdapter;
+import com.dit.hp.hrtc_app.Adapters.OfficesSelectionSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.RouteSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.VehicleSpinnerAdapter;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
 import com.dit.hp.hrtc_app.Modals.DepotPojo;
+import com.dit.hp.hrtc_app.Modals.OfficeSelectionPojo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
 import com.dit.hp.hrtc_app.Modals.RoutePojo;
 import com.dit.hp.hrtc_app.Modals.StaffPojo;
@@ -68,9 +70,11 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private DriverSpinnerAdapter driverSpinnerAdapter;
     private ConductorSpinnerAdapter conductorSpinnerAdapter;
     private RouteSpinnerAdapter routeSpinnerAdapter;
+    private OfficesSelectionSpinnerAdapter officesSelectionSpinnerAdapter;
+    
 
     DepotPojo oldDepotSelection;
-    DepotPojo newDepotSelection;
+    OfficeSelectionPojo newDepotSelection;
     StaffPojo driverToTransfer;
     StaffPojo conductorToTransfer;
     VehiclePojo vehicleToTransfer;
@@ -547,7 +551,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
         newDepotSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                newDepotSelection = (DepotPojo) parent.getItemAtPosition(position);
+                newDepotSelection = (OfficeSelectionPojo) parent.getItemAtPosition(position);
             }
 
             @Override
@@ -572,10 +576,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                     if (vehicleToTransfer != null || driverToTransfer != null || conductorToTransfer != null || routeToTransfer != null) {
 
                         // 4. Check if new depot is selected and valid
-                        if (newDepotSelection != null && !newDepotSelection.getDepotName().equalsIgnoreCase("-")) {
+                        if (newDepotSelection != null && !newDepotSelection.getOfficeName().equalsIgnoreCase("-")) {
 
                             // 5. Ensure old and new depots are not the same
-                            if (!oldDepotSelection.getDepotName().equalsIgnoreCase(newDepotSelection.getDepotName()) || oldDepotSelection.getId() != newDepotSelection.getId()) {
+                            if (!oldDepotSelection.getDepotName().equalsIgnoreCase(newDepotSelection.getOfficeName()) || oldDepotSelection.getId() != newDepotSelection.getOfficeId()) {
 
                                 // 6. Check internet status
                                 if (AppStatus.getInstance(TransferHome.this).isOnline()) {
@@ -586,7 +590,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                                     }
 
                                     if (newDepotSelection != null) {
-                                        Log.i("OldDepot", "Old Depot: " + newDepotSelection.getDepotName());
+                                        Log.i("OldDepot", "New Depot: " + newDepotSelection.getOfficeName());
                                     }
 
                                     // 3. Check if any of the items (vehicle, conductor, driver, route) is selected
@@ -829,7 +833,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private void handleDriverTransfer(UploadObject object) {
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("depot", newDepotSelection.getId());
+            jsonParam.put("depot", newDepotSelection.getOfficeId());
 
             String encryptedParam = aesCrypto.encrypt(jsonParam.toString());
             object.setParam(encryptedParam);
@@ -846,7 +850,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private void handleConductorTransfer(UploadObject object) {
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("depot", newDepotSelection.getId());
+            jsonParam.put("depot", newDepotSelection.getOfficeId());
 
             String encryptedParam = aesCrypto.encrypt(jsonParam.toString());
             object.setParam(encryptedParam);
@@ -863,7 +867,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private void handleRouteTransfer(UploadObject object) {
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("depot", newDepotSelection.getId());
+            jsonParam.put("depot", newDepotSelection.getOfficeId());
 
             String encryptedParam = aesCrypto.encrypt(jsonParam.toString());
             object.setParam(encryptedParam);
@@ -881,7 +885,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private void handleVehicleTransfer(UploadObject object) {
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("depot", newDepotSelection.getId());
+            jsonParam.put("depot", newDepotSelection.getOfficeId());
 
             String encryptedParam = aesCrypto.encrypt(jsonParam.toString());
             object.setParam(encryptedParam);
@@ -894,12 +898,110 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
         }
     }
 
+    // Load n Preselect
+    private void loadOfficeForSpinner() {
+        try {
+            if (AppStatus.getInstance(TransferHome.this).isOnline()) {
+
+                UploadObject object = new UploadObject();
+                object.setUrl(Econstants.sarvatra_url);
+                object.setMasterName("");
+                object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
+
+
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("deptId", 106);
+                jsonBody.put("empId", 0);
+//                jsonBody.put("empId", Preferences.getInstance().empId);
+                jsonBody.put("ofcTypeId", 267);
+
+                object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
+
+                object.setTasktype(TaskType.GET_OFFICE_FOR_ADMIN);
+                object.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+                new ShubhAsyncPost(TransferHome.this, TransferHome.this, TaskType.GET_OFFICE_FOR_ADMIN).execute(object);
+            } else {
+                // Do nothing if CD already shown once
+                CD.showDialog(TransferHome.this, Econstants.internetNotAvailable);
+            }
+        } catch (Exception ex) {
+            CD.showDialog(TransferHome.this, "Something Bad happened . Please reinstall the application and try again.");
+        }
+    }
+
 
     @Override
     public void onTaskCompleted(ResponsePojoGet result, TaskType taskType) throws JSONException {
 
+
+        // Get OFFICES
+        if (TaskType.GET_OFFICE_FOR_ADMIN == taskType) {
+            SuccessResponse response = null;
+            List<OfficeSelectionPojo> pojoList = new ArrayList<>();
+
+            if (result != null) {
+                Log.i("Depots: ", "Response Obj" + result.toString());
+
+                if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
+                    response = JsonParse.getDecryptedSuccessResponse(result.getResponse());
+                    Log.e("Response", response.toString());
+
+                    if (response.getStatus().equalsIgnoreCase("OK")) {
+
+                        if (!(response.getData().equalsIgnoreCase("No records found"))) {
+                            pojoList = JsonParse.parseOfficeListForAdmin(response.getData());
+                        } else {
+                            pojoList.clear();
+                        }
+
+                        if (pojoList.size() > 0) {
+                            Log.e("Reports Data", pojoList.toString());
+
+                            officesSelectionSpinnerAdapter = new OfficesSelectionSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
+                            if (newDepotSpinner != null) {
+                                newDepotSpinner.setAdapter(officesSelectionSpinnerAdapter);
+                            } else {
+                                Log.e("SpinnerError", "officeSpinner is null. Check XML or findViewById.");
+                            }
+
+
+                            // Show Selection
+                            if (Preferences.getInstance().depotName != null) {
+                                // Preselect Depot If Available
+                                newDepotSpinner.post(() -> {
+                                    if (officesSelectionSpinnerAdapter != null) {
+                                        int itemPosition = officesSelectionSpinnerAdapter.getPositionForOffice(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
+                                        if (itemPosition != -1) {
+                                            newDepotSpinner.setSelectedItemByIndex(itemPosition);
+                                        } else {
+                                            Log.e("Error", "Office not found in adapter.");
+                                        }
+                                    }
+                                });
+                            }
+
+                        } else {
+//                            CD.showDialog(TransferHome.this, "No offices found for selection");
+                        }
+
+                    } else {
+                        CD.showDialog(TransferHome.this, response.getMessage());
+                    }
+                } else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
+                    // Handle HTTP 401 Unauthorized response (session expired)
+                    CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
+                } else {
+                    CD.showDialog(TransferHome.this, "Not able to fetch data");
+                }
+            } else {
+                CD.showDialog(TransferHome.this, "Result is null");
+            }
+        }
+        
+        
         // Get depots
-        if (TaskType.GET_DEPOTS == taskType) {
+        else if (TaskType.GET_DEPOTS == taskType) {
             SuccessResponse response = null;
             List<DepotPojo> pojoList = null;
             Log.i("BusDetails", "Task type is fetching vehicles..");
@@ -1283,8 +1385,9 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
             }
         }
 
-
     }
+
+
 
 }
 

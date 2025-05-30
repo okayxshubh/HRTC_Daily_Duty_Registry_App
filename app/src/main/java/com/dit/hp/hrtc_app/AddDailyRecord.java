@@ -928,7 +928,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
 
 
                         } else {
-                            CD.showDialog(AddDailyRecord.this, "No Stops Found");
+//                            CD.showDialog(AddDailyRecord.this, "No Stops Found");
                         }
                     } else {
                         CD.showDialog(AddDailyRecord.this, response.getMessage());
@@ -982,7 +982,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
 
 
                         } else {
-                            CD.showDialog(AddDailyRecord.this, "No Stops Found");
+//                            CD.showDialog(AddDailyRecord.this, "No Stops Found");
                         }
                     } else {
                         CD.showDialog(AddDailyRecord.this, response.getMessage());
@@ -1053,7 +1053,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
                             relievingDriverSpinner.setAdapter(driverSpinnerAdapter);
 
                         } else {
-                            CD.showDialog(AddDailyRecord.this, "No Drivers Found");
+//                            CD.showDialog(AddDailyRecord.this, "No Drivers Found");
                             pojoListDriver.clear();
                         }
 
@@ -1064,7 +1064,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
                             conductorSpinner.setAdapter(conductorSpinnerAdapter);
                             relievingConductorSpinner.setAdapter(conductorSpinnerAdapter);
                         } else {
-                            CD.showDialog(AddDailyRecord.this, "No Conductors Found");
+//                            CD.showDialog(AddDailyRecord.this, "No Conductors Found");
                         }
 
                     } else {
@@ -1106,7 +1106,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
                             vehicleNumberSpinner.setAdapter(vehicleSpinnerAdapter);
 
                         } else {
-                            CD.showDialog(AddDailyRecord.this, "No Vehicles Found");
+//                            CD.showDialog(AddDailyRecord.this, "No Vehicles Found");
                         }
                     } else {
                         CD.showDialog(AddDailyRecord.this, response.getMessage());
