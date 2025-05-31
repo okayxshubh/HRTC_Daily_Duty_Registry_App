@@ -194,7 +194,7 @@
                         android:layout_weight="1"
                         android:padding="5dp"
                         android:paddingStart="20dp"
-                        android:text="Associated Depot"
+                        android:text="Associated Office"
                         android:textAlignment="textStart"
                         android:textColor="@color/darkblue"
                         android:textSize="16sp" />
@@ -209,7 +209,7 @@
                         android:fontFamily="@font/raleway_semibold"
                         android:textColor="@color/darkblue"
                         android:textSize="16sp"
-                        app:hintText="Please Select Associated Depot" />
+                        app:hintText="Please Select Associated Office" />
 
                 </LinearLayout>
 

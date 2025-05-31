@@ -53,7 +53,6 @@ public class AllConductorsCards extends AppCompatActivity implements OnConductor
     RecyclerView recyclerView;
     TextView filterDateTextView;
     ConductorsCardsAdapter cardsAdapter; // global bus adapter..
-    String depotIdStr;
     CardView backCard;
 
 
@@ -79,7 +78,6 @@ public class AllConductorsCards extends AppCompatActivity implements OnConductor
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 //####################################   SERVICE CALLS   ########################################
-        depotIdStr = String.valueOf(Preferences.getInstance().depotId);
 
         // Get Conductor Service Call
         try {
@@ -89,7 +87,7 @@ public class AllConductorsCards extends AppCompatActivity implements OnConductor
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId))));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId))));
                 object.setTasktype(TaskType.GET_DRIVERS);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -271,7 +269,7 @@ public class AllConductorsCards extends AppCompatActivity implements OnConductor
                     object.setUrl(Econstants.base_url);
                     object.setMethordName("/master-data?");
                     object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
-                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId))));
+                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId))));
                     object.setTasktype(TaskType.GET_DRIVERS);
                     object.setAPI_NAME(Econstants.API_NAME_HRTC);
 

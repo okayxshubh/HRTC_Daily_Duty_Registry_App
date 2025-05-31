@@ -34,7 +34,7 @@ public class ManageEntities extends AppCompatActivity {
         depotLocationTV = findViewById(R.id.depotLocationTV);
         profileBtn = findViewById(R.id.profileB);
 
-        cardView1 = findViewById(R.id.cardView1);
+//        cardView1 = findViewById(R.id.cardView1);
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
         cardView6 = findViewById(R.id.cardView6);
@@ -62,10 +62,10 @@ public class ManageEntities extends AppCompatActivity {
 
         });
 
-        cardView1.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllDepotsCards.class);
-            startActivity(intent);
-        });
+//        cardView1.setOnClickListener(v -> {
+//            Intent intent = new Intent(this, AllDepotsCards.class);
+//            startActivity(intent);
+//        });
 
         cardView2.setOnClickListener(v -> {
             Intent intent = new Intent(this, AllBusesCards.class);
@@ -109,8 +109,8 @@ public class ManageEntities extends AppCompatActivity {
         roleIdTV.setText(roleName != null && !roleName.isEmpty() ? "Role: " + roleName : "No Role Available");
 
         // Depot
-        String depotName = Preferences.getInstance().depotName;
-        depotLocationTV.setText(depotName != null && !depotName.isEmpty() ? "Office: " + depotName : "No Info Available");
+        String regionalOfficeName = Preferences.getInstance().regionalOfficeName;
+        depotLocationTV.setText(regionalOfficeName != null && !regionalOfficeName.isEmpty() ? "Office: " + regionalOfficeName : "No Info Available");
     }
 
 

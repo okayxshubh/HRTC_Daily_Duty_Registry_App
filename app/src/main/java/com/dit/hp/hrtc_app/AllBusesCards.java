@@ -161,9 +161,11 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
                         + "&page=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(page)))
                         + "&size=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(size)))
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8"));
                 object.setTasktype(TaskType.GET_VEHICLES);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+                System.out.println("REGIONAL OFFICE ID: " + String.valueOf(Preferences.getInstance().regionalOfficeId));
 
                 isLoading = true;  // Set loading flag
                 new ShubhAsyncGet(AllBusesCards.this, AllBusesCards.this, TaskType.GET_VEHICLES).execute(object);
@@ -197,7 +199,7 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");  // Adjust based on actual endpoint
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8")
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8")
                         + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(query), "UTF-8"));
                 object.setTasktype(TaskType.GET_VEHICLE_SEARCH);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
@@ -356,7 +358,7 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
                     object.setUrl(Econstants.base_url);
                     object.setMethordName("/master-data?");
                     object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
-                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId))));
+                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId))));
 
                     object.setTasktype(TaskType.GET_VEHICLES);
                     object.setAPI_NAME(Econstants.API_NAME_HRTC);

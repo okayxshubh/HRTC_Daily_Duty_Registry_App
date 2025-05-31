@@ -179,7 +179,7 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
                                 String encryptedBody = null;
                                 JSONObject jsonObject = new JSONObject();
                                 jsonObject.put("dutyDate", date.getText().toString());
-                                jsonObject.put("depot", Preferences.getInstance().depotId);
+                                jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
 
                                 Log.i("JSON Body", "JSON Body: " + jsonObject.toString());
 

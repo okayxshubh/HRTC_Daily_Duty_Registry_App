@@ -630,7 +630,7 @@ public class EditStaff extends AppCompatActivity implements ShubhAsyncTaskListen
                             JSONObject jsonObject = new JSONObject();
 
                             jsonObject.put("empName", updatedFirstName.getText().toString().trim() + " " + updatedLastName.getText().toString());
-                            jsonObject.put("depot", Preferences.getInstance().depotId);
+                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
 
                             //Staff Type
                             if (selectedSpinnerStaffType == null) {

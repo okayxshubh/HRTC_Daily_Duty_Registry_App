@@ -38,8 +38,6 @@ dependencies {
     implementation project(path: ':spinnersearchable')
 
 
-    // Other Compressor
-    implementation 'top.zibin:Luban:1.1.8'
 
     // Compressor (latest version)
     implementation libs.compressor

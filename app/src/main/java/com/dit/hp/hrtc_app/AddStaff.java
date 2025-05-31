@@ -19,14 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dit.hp.hrtc_app.Adapters.CasteSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.EmploymentTypeSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.GenderSpinnerAdapter;
-import com.dit.hp.hrtc_app.Adapters.RelationSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.StaffTypeSpinnerAdapter;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
 import com.dit.hp.hrtc_app.Modals.CastePojo;
 import com.dit.hp.hrtc_app.Modals.EmploymentTypePojo;
 import com.dit.hp.hrtc_app.Modals.GenderPojo;
-import com.dit.hp.hrtc_app.Modals.RelationPojo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
 import com.dit.hp.hrtc_app.Modals.StaffTypePojo;
 import com.dit.hp.hrtc_app.Modals.SuccessResponse;
@@ -439,7 +437,7 @@ public class AddStaff extends AppCompatActivity implements ShubhAsyncTaskListene
     private void showAddConfirmationDialog(String selectedEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add " + selectedEntity)
-                .setMessage("Are you sure you want to add the selected " + selectedEntity + " to the depot " + Preferences.getInstance().depotName + "?")
+                .setMessage("Are you sure you want to add the selected " + selectedEntity + " to the office " + Preferences.getInstance().regionalOfficeName + "?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     if (AppStatus.getInstance(AddStaff.this).isOnline()) {
                         UploadObject uploadObject = new UploadObject();
@@ -459,7 +457,7 @@ public class AddStaff extends AppCompatActivity implements ShubhAsyncTaskListene
 
                         try {
                             jsonObject.put("empName", staffFirstName.getText().toString().trim() + " " + staffLastName.getText().toString());
-                            jsonObject.put("depot", Preferences.getInstance().depotId);
+                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
                             jsonObject.put("staffType", selectedSpinnerStaffType.getStaffTypeId());
 
                             jsonObject.put("dateOfBirth", dob.getText().toString());

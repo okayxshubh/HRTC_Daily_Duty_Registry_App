@@ -84,6 +84,7 @@ public class SalaryHome extends BaseDrawerActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        setHeading("Pay Slip"); // Custom Method in BaseDrawerActivity
         Preferences.getInstance().loadPreferences(this); // Ensure preferences are reloaded
         reloadUserDetails(); // Reload details to update UI
     }
@@ -91,6 +92,7 @@ public class SalaryHome extends BaseDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        setHeading("Pay Slip"); // Custom Method in BaseDrawerActivity
         Preferences.getInstance().loadPreferences(this); // Ensure preferences are reloaded
         reloadUserDetails(); // Reload details to update UI
     }

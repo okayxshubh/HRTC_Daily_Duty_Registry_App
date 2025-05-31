@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card_bg"
@@ -21,109 +20,124 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <ScrollView
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TableLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/card_bg"
-            android:elevation="5dp"
-            android:stretchColumns="1">
+            android:layout_height="match_parent">
 
-            <TableRow android:elevation="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Office ID:"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/officeId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp" />
-            </TableRow>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/card_bg"
+                android:elevation="5dp"
+                android:stretchColumns="1">
 
-            <TableRow android:elevation="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Office Name:"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/officeName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp" />
-            </TableRow>
+                <TableRow android:elevation="5dp">
 
-            <TableRow android:elevation="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Office Type: "
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/officeType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp" />
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="Parent Office:"
+                        android:textStyle="bold" />
 
-            <TableRow android:elevation="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="HOD/HOO Designation: "
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/designationTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp" />
-            </TableRow>
+                    <TextView
+                        android:id="@+id/parentOffice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp" />
+                </TableRow>
 
-            <TableRow android:elevation="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Pin-Code: "
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/pincodeTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp" />
-            </TableRow>
+                <TableRow android:elevation="5dp">
 
-            <TableRow android:elevation="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Address: "
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/addressTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp" />
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="Office Name:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/officeName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="Office Type: "
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/officeType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="HOD/HOO Designation: "
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/designationTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="Pin-Code: "
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/pincodeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp" />
+                </TableRow>
+
+                <TableRow android:elevation="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="Address: "
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/addressTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp" />
+                </TableRow>
 
 
+            </TableLayout>
 
-
-
-        </TableLayout>
-
-    </ScrollView>
+        </ScrollView>
+    </HorizontalScrollView>
 
 
 </LinearLayout>

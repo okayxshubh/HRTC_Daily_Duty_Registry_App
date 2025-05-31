@@ -268,57 +268,56 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
         // AREA Preselect + All Service Calls for Preselection
         if (isEditMode) {
-            serviceCallDistrict(); // Call 1
+            serviceCallDistrict(); // Always call district first
 
-            if (receivedOfficeToEdit.getLgdBlockCode() != -1 || receivedOfficeToEdit.getLgdBlockCode() != 0) {
-                areaSpinner.post(() -> {
-                    int defaultItemPosition = areaAdapter.getPosition(Econstants.OFFICE_Type_REVENUE);
-                    if (defaultItemPosition != -1) {
-                        areaSpinner.setSelectedItemByIndex(defaultItemPosition);
+            int blockCode = receivedOfficeToEdit.getLgdBlockCode();
+            int municipalCode = receivedOfficeToEdit.getLgdMunicipalCode();
 
-                        System.out.println("Block Code: " + receivedOfficeToEdit.getLgdBlockCode());
-                        System.out.println("Municipal Code: " + receivedOfficeToEdit.getLgdMunicipalCode());
-                        System.out.println("Ward Code: " + receivedOfficeToEdit.getLgdWardCode());
-                        System.out.println("District Code: " + receivedOfficeToEdit.getLgdDistrictCode());
-                        System.out.println("Panchayat Code: " + receivedOfficeToEdit.getLgdPanchayatCode());
-                        System.out.println("Village Code: " + receivedOfficeToEdit.getLgdVillageCode());
+            System.out.println(blockCode);
+            System.out.println(municipalCode);
 
-                        System.out.println("Calling Seervices Municipality n Ward");
-                        serviceCallMunicipal(String.valueOf(receivedOfficeToEdit.getLgdDistrictCode()));
-                        serviceCallWard(String.valueOf(receivedOfficeToEdit.getLgdMunicipalCode()));
-                        // ############################## ALL SERVICE CALLS ########################################
-
-                    } else {
-                        Log.e("Error", "Item not found in adapter RURAL: " + receivedOfficeToEdit.getLgdMunicipalCode());
-                    }
-                });
-
-            } else if (receivedOfficeToEdit.getLgdMunicipalCode() != -1 || receivedOfficeToEdit.getLgdMunicipalCode() != 0) {
+            // Check if REVENUE (RURAL) area
+            if (blockCode != -1 && blockCode != 0) {
                 areaSpinner.post(() -> {
                     int defaultItemPosition = areaAdapter.getPosition(Econstants.OFFICE_Type_RURAL);
                     if (defaultItemPosition != -1) {
                         areaSpinner.setSelectedItemByIndex(defaultItemPosition);
 
-                        System.out.println("Block Code: " + receivedOfficeToEdit.getLgdBlockCode());
-                        System.out.println("Municipal Code: " + receivedOfficeToEdit.getLgdMunicipalCode());
-                        System.out.println("Ward Code: " + receivedOfficeToEdit.getLgdWardCode());
+                        System.out.println("Block Code: " + blockCode);
                         System.out.println("District Code: " + receivedOfficeToEdit.getLgdDistrictCode());
                         System.out.println("Panchayat Code: " + receivedOfficeToEdit.getLgdPanchayatCode());
                         System.out.println("Village Code: " + receivedOfficeToEdit.getLgdVillageCode());
 
-                        System.out.println("Calling Block Panchayat Village n Ward");
+                        // Load Rural data
                         serviceCallBlock(String.valueOf(receivedOfficeToEdit.getLgdDistrictCode()));
-                        serviceCallPanchayat(String.valueOf(receivedOfficeToEdit.getLgdBlockCode()));
+                        serviceCallPanchayat(String.valueOf(blockCode));
                         serviceCallVillage(String.valueOf(receivedOfficeToEdit.getLgdPanchayatCode()));
-                        // ############################## ALL SERVICE CALLS ########################################
-
                     } else {
-                        Log.e("Error", "Item not found in adapter REVENUE: " + receivedOfficeToEdit.getLgdMunicipalCode());
+                        Log.e("Error", "Item not found in adapter: " + Econstants.OFFICE_Type_RURAL);
+                    }
+                });
+
+                // Check if URBAN (MUNICIPAL) area
+            } else if (municipalCode != -1 && municipalCode != 0) {
+                areaSpinner.post(() -> {
+                    int defaultItemPosition = areaAdapter.getPosition(Econstants.OFFICE_Type_REVENUE);
+                    if (defaultItemPosition != -1) {
+                        areaSpinner.setSelectedItemByIndex(defaultItemPosition);
+
+                        System.out.println("Municipal Code: " + municipalCode);
+                        System.out.println("District Code: " + receivedOfficeToEdit.getLgdDistrictCode());
+                        System.out.println("Ward Code: " + receivedOfficeToEdit.getLgdWardCode());
+
+                        // Load Urban data
+                        serviceCallMunicipal(String.valueOf(receivedOfficeToEdit.getLgdDistrictCode()));
+                        serviceCallWard(String.valueOf(municipalCode));
+                    } else {
+                        Log.e("Error", "Item not found in adapter: " + Econstants.OFFICE_Type_REVENUE);
                     }
                 });
 
             } else {
-                Log.e("Selected Area", "Area Cannot Be Preselected");
+                Log.e("Selected Area", "Area cannot be preselected");
             }
         }
 
@@ -982,30 +981,30 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
                     getLocation(); // Automatically Fetch Location.. When Image Clicked
 
-                    Luban.with(this)
-                            .load(actualImage)
-                            .ignoreBy(200) // Ignore if file size < 200KB
-                            .setCompressListener(new OnCompressListener() {
-                                @Override
-                                public void onStart() {
-                                    // Compression started
-                                }
-
-                                @Override
-                                public void onSuccess(File file) {
-                                    compressedImage = file;
-                                    photoFilePath = file.getPath();
-                                    photoFileName = file.getName();
-
-                                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-                                    mainImageView.setPadding(5, 5, 5, 5);
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    Log.e("LubanError", e.getMessage());
-                                }
-                            }).launch();
+//                    Luban.with(this)
+//                            .load(actualImage)
+//                            .ignoreBy(200) // Ignore if file size < 200KB
+//                            .setCompressListener(new OnCompressListener() {
+//                                @Override
+//                                public void onStart() {
+//                                    // Compression started
+//                                }
+//
+//                                @Override
+//                                public void onSuccess(File file) {
+//                                    compressedImage = file;
+//                                    photoFilePath = file.getPath();
+//                                    photoFileName = file.getName();
+//
+//                                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+//                                    mainImageView.setPadding(5, 5, 5, 5);
+//                                }
+//
+//                                @Override
+//                                public void onError(Throwable e) {
+//                                    Log.e("LubanError", e.getMessage());
+//                                }
+//                            }).launch();
 
                 }
             }

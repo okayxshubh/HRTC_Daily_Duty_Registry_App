@@ -50,7 +50,6 @@ import javax.net.ssl.HttpsURLConnection;
 public class AddRoute extends AppCompatActivity implements ShubhAsyncTaskListenerGet, ShubhAsyncTaskListenerPost {
     AESCrypto aesCrypto = new AESCrypto();
     Button back, proceed;
-    int depotId;
     String userNameStr;
     EditText newRouteName, distance, requiredTime;
     TextView departureTime;
@@ -110,7 +109,6 @@ public class AddRoute extends AppCompatActivity implements ShubhAsyncTaskListene
         back = findViewById(R.id.backBtn);
         proceed = findViewById(R.id.proceedBtn);
 
-        depotId = Preferences.getInstance().depotId;
         userNameStr = Preferences.getInstance().userName;
         distance = findViewById(R.id.serviceKms);
         requiredTime = findViewById(R.id.requiredTime);
@@ -451,7 +449,7 @@ public class AddRoute extends AppCompatActivity implements ShubhAsyncTaskListene
                             jsonObject.put("distance", distance.getText().toString());
                             jsonObject.put("journeyHours", requiredTime.getText().toString());
                             jsonObject.put("startTime", departureTime.getText().toString());
-                            jsonObject.put("depot", Preferences.getInstance().depotId);
+                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
 
                             jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
@@ -515,7 +513,7 @@ public class AddRoute extends AppCompatActivity implements ShubhAsyncTaskListene
                             jsonObject.put("distance", distance.getText().toString());
                             jsonObject.put("journeyHours", requiredTime.getText().toString());
                             jsonObject.put("startTime", departureTime.getText().toString());
-                            jsonObject.put("depot", Preferences.getInstance().depotId);
+                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
                             jsonObject.put("updatedBy", Preferences.getInstance().empId);
 
                         } catch (JSONException e) {

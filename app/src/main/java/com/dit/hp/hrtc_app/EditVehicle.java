@@ -272,7 +272,7 @@ public class EditVehicle extends AppCompatActivity implements ShubhAsyncTaskList
                             jsonObject.put("iotFirm", firmNameET.getText().toString().trim());
                             jsonObject.put("capacity", Integer.parseInt(vehicleCapacity.getText().toString().trim()));
 
-                            jsonObject.put("depot", Preferences.getInstance().depotId);
+                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
                             jsonObject.put("updatedBy", Preferences.getInstance().empId);
 
                             Log.i("EditVehicle", "Vehicle to add: " + jsonObject.toString());

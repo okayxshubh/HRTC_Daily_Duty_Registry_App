@@ -1,8 +1,6 @@
 package com.dit.hp.hrtc_app;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -76,35 +74,40 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
 
             Intent intent = null;
-            String heading = null;
 
             if (id == R.id.nav_home) {
                 intent = new Intent(this, Homescreen.class);
-                heading = "Homescreen";
             } else if (id == R.id.nav_profile) {
                 intent = new Intent(this, ProfileScreen.class);
-                heading = "Profile";
             } else if (id == R.id.nav_attendance) {
                 intent = new Intent(this, AttendanceHome.class);
-                heading = "Attendance";
             } else if (id == R.id.nav_payslip) {
                 intent = new Intent(this, SalaryHome.class);
-                heading = "Pay Slip";
             } else if (id == R.id.nav_logout) {
                 showLogoutConfirmationDialog();
                 return true;
             }
 
-            if (heading != null) headingTV.setText(heading);
             if (intent != null) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
             }
 
+
+
             return true;
         });
 
     }
+
+
+    // Custom Method to change top heading
+    protected void setHeading(String title) {
+        if (headingTV != null) {
+            headingTV.setText(title);
+        }
+    }
+
 
     private void reloadUserDetails() {
         Preferences pref = Preferences.getInstance();
@@ -120,30 +123,22 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
 
     private void openScreen(int id) {
         Intent intent = null;
-        String msg = "";
 
         if (id == R.id.nav_home) {
+
             intent = new Intent(this, Homescreen.class);
-            msg = "Homescreen";
-            headingTV.setText(msg);
         }
         //
         else if (id == R.id.nav_profile) {
             intent = new Intent(this, ProfileScreen.class);
-            msg = "Profile";
-            headingTV.setText(msg);
         }
         //
         else if (id == R.id.nav_attendance) {
             intent = new Intent(this, AttendanceHome.class);
-            msg = "Attendance";
-            headingTV.setText(msg);
         }
         //
         else if (id == R.id.nav_payslip) {
             intent = new Intent(this, SalaryHome.class);
-            msg = "Pay Slip";
-            headingTV.setText(msg);
         }
         //
         else if (id == R.id.nav_settings) {
@@ -170,13 +165,13 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         new android.app.AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to logout as the current user?")
                 .setPositiveButton("Yes", (dialog, id) -> {
-                    SharedPreferences preferences = getSharedPreferences("com.dit.himachal.hrtc.app", Context.MODE_PRIVATE);
-                    preferences.edit().clear().apply();
+                    Preferences.getInstance().clearPreferences(this);
 
                     Intent intent = new Intent(BaseDrawerActivity.this, LoginHRTC.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
+
                 })
                 .setNegativeButton("No", null)
                 .create()

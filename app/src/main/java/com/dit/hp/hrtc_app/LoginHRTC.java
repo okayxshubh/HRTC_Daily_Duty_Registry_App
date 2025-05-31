@@ -86,8 +86,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_login);
 
-        Preferences.getInstance().loadPreferences(this);
-
+        Preferences.getInstance().clearPreferences(this);
 
         userName = findViewById(R.id.userName);
         password = findViewById(R.id.password);
@@ -96,9 +95,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
         userName.setText("bhupendersingh.thakur@himaccess.hp.gov.in");
         password.setText("Test@123");
-
-//        userName.setText("gaurang.shamjibhai@himaccess.hp.gov.in");
-//        password.setText("gaurang.shamjibhai@himaccess.hp.gov.in");
 
 //        userName.setText("ghadiyagaurang.shamjibhai@himaccess.hp.gov.in");
 //        password.setText("test@123");
@@ -541,9 +537,13 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
                 } else if (successResponse.getStatus().equalsIgnoreCase("NOT_FOUND")) {
                     CD.showDialog(this, "Please enter correct username and password");
-                } else if (successResponse.getStatus().equalsIgnoreCase("BAD_REQUEST")) {
+                }
+                //
+                else if (successResponse.getStatus().equalsIgnoreCase("BAD_REQUEST")) {
                     CD.showDialog(this, successResponse.getMessage());
-                } else {
+                }
+                //
+                else {
                     Log.i("LoginHRTC", "Response is null");
                     CD.showDialog(this, "Something went wrong. Check your connection.");
                 }
@@ -638,12 +638,20 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                             Log.e("User Emp ID: ", String.valueOf(himAccessUserInfo.getEmployeePojo().getEmpId()));
                             Log.e("User Role Name: ", himAccessUserInfo.getRoleName());
 
-
                             // Add other preferences to save here
                             Preferences.getInstance().appRoleId = himAccessUserInfo.getAppRoleId();  // App Role ID
 
+                            Preferences.getInstance().dateOfBirth = himAccessUser.getDateOfBirth();
+                            Preferences.getInstance().mobileNumber = himAccessUser.getMobile();
+                            Preferences.getInstance().userName = himAccessUser.getDateOfBirth();
+
+                            Preferences.getInstance().departmentId = himAccessUserInfo.getMainDepartmentPojo().getDepartmentId();
+                            Preferences.getInstance().officeTypeName = himAccessUserInfo.getMainOfficeLevelPojo().getOfficeLevelName();
+                            Preferences.getInstance().designationName = himAccessUserInfo.getMainDesignationPojo().getDesignationName();
+
                             Preferences.getInstance().roleId = himAccessUserInfo.getAppRoleId();  // Normal Role ID
                             Preferences.getInstance().roleName = himAccessUserInfo.getRoleName();
+
                             Preferences.getInstance().emailID = himAccessUserInfo.getEmployeePojo().getEmailId();
                             Preferences.getInstance().empId = himAccessUserInfo.getEmployeePojo().getEmpId();
                             Preferences.getInstance().userName = himAccessUserInfo.getEmployeePojo().getEmployeeName();
@@ -670,7 +678,6 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         // Parse Additional Charges + Original Charge
                         Set<Long> seenOfficeIds = new HashSet<>();
                         List<AdditonalChargePojo> fetchedAdditonalCharges = himAccessUserInfo.getAdditionalChargeDetailDTO();
-
 
                         // Check if Additional Charges Fetched
                         if (fetchedAdditonalCharges != null) {
@@ -705,6 +712,19 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         }
 
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Preferences.getInstance().clearPreferences(this);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Preferences.getInstance().clearPreferences(this);
     }
 
 

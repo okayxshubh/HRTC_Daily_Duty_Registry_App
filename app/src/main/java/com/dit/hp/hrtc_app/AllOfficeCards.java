@@ -110,7 +110,8 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
 
             task.addOnSuccessListener(locationSettingsResponse -> {
                 // Location is ON
-                startActivity(new Intent(AllOfficeCards.this, AddOffice.class));
+                Intent intent = new Intent(AllOfficeCards.this, AddOffice.class);
+                startActivityForResult(intent, UPDATE_REQUEST_CODE);
             });
 
             task.addOnFailureListener(e -> {
@@ -191,7 +192,6 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
                                 + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Econstants.HRTC_DEPARTMENT_PARENT_ID))) // Hardcoded ID for HRTC
 //                                + "&empId=" + URLEncoder.encode(aesCrypto.encrypt("0"), "UTF-8")
                                 + "&page=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(page)))
-//                        + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(""), "UTF-8")
                                 + "&size=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(size)))
                 );
                 object.setTasktype(TaskType.GET_OFFICES);
@@ -340,16 +340,14 @@ public class AllOfficeCards extends AppCompatActivity implements OnOfficeCardCli
         builder.setView(dialogView);
 
         // Find views in the dialog layout
-        TextView officeId = dialogView.findViewById(R.id.officeId);
         TextView officeName = dialogView.findViewById(R.id.officeName);
         TextView officeType = dialogView.findViewById(R.id.officeType);
         TextView designationTV = dialogView.findViewById(R.id.designationTV);
         TextView pincodeTV = dialogView.findViewById(R.id.pincodeTV);
         TextView addressTV = dialogView.findViewById(R.id.addressTV);
+        TextView parentOffice = dialogView.findViewById(R.id.parentOffice);
 
-        if (selectedPojo.getOfficeId() != -1) {
-            officeId.setText(String.valueOf(selectedPojo.getOfficeId()));
-        }
+        parentOffice.setText(selectedPojo.getParentOffice() != null && selectedPojo.getParentOffice().getOfficeName() != null ? selectedPojo.getParentOffice().getOfficeName() : "N/A");
         officeName.setText(selectedPojo.getOfficeName() != null ? selectedPojo.getOfficeName() : "");
         officeType.setText(selectedPojo.getOfficeLevelPojo() != null && selectedPojo.getOfficeLevelPojo().getOfficeLevelName() != null ? selectedPojo.getOfficeLevelPojo().getOfficeLevelName() : "");
         designationTV.setText(selectedPojo.getDesignationPojo() != null && selectedPojo.getDesignationPojo().getDesignationName() != null ? selectedPojo.getDesignationPojo().getDesignationName() : "");

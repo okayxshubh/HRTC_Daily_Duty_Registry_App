@@ -215,7 +215,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("route"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8"));
                 object.setTasktype(TaskType.GET_ROUTES);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -236,7 +236,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId))));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId))));
                 object.setTasktype(TaskType.GET_VEHICLES);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -258,7 +258,7 @@ public class AddDailyRecord extends AppCompatActivity implements ShubhAsyncTaskL
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8"));
                 object.setTasktype(TaskType.GET_STAFF);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 

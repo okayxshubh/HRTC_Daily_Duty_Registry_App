@@ -15,12 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dit.hp.hrtc_app.Adapters.DepotSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.LocationSpinnerAdapter;
+import com.dit.hp.hrtc_app.Adapters.OfficesSelectionSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.StaffSpinnerAdapter;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
 import com.dit.hp.hrtc_app.Modals.AddaPojo;
 import com.dit.hp.hrtc_app.Modals.DepotPojo;
 import com.dit.hp.hrtc_app.Modals.LocationsPojo;
+import com.dit.hp.hrtc_app.Modals.OfficeSelectionPojo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
 import com.dit.hp.hrtc_app.Modals.StaffPojo;
 import com.dit.hp.hrtc_app.Modals.SuccessResponse;
@@ -52,18 +54,19 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
     Button back, proceed;
     EditText addaName, remarks;
     String encryptedBody;
-    TextView addaNameLabel, addaLocationLabel, titleTV;
+    TextView addaNameLabel, addaLocationLabel, titleTV, oldDepotLabel;
 
     CustomDialog CD = new CustomDialog();
 
     SearchableSpinner locationSpinner, addaInchargeSpinner, depotSpinner;
-    private DepotSpinnerAdapter depotSpinnerAdapter;
+    private OfficesSelectionSpinnerAdapter officesSelectionSpinnerAdapter;
     private LocationSpinnerAdapter locationSpinnerAdapter;
     private StaffSpinnerAdapter staffSpinnerAdapter;
 
     LocationsPojo selectedLocation;
-    DepotPojo selectedDepot;
+    OfficeSelectionPojo selectedOffice;
     StaffPojo selectedAddaIncharge;
+
 
     AddaPojo receievedAddaDetailsToEdit;
 
@@ -83,6 +86,10 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
 
         addaLocationLabel = findViewById(R.id.addaLocationLabel);
         addaLocationLabel.setText(Html.fromHtml("Adda Location <font color='#FF0000'>*</font>"));
+
+        oldDepotLabel = findViewById(R.id. oldDepotLabel);
+        oldDepotLabel.setText(Html.fromHtml("Associated Office <font color='#FF0000'>*</font>"));
+
 
         titleTV = findViewById(R.id.titleTextView);
         addaName = findViewById(R.id.addaName);
@@ -116,24 +123,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
             CD.showDialog(AddAdda.this, "Something Bad happened . Please reinstall the application and try again.");
         }
 
-        // Depot Service Call
-        try {
-            if (AppStatus.getInstance(AddAdda.this).isOnline()) {
-                UploadObject object = new UploadObject();
-                object.setUrl(Econstants.base_url);
-                object.setMethordName("/master-data?");
-                object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("depot"), "UTF-8"));
-                object.setTasktype(TaskType.GET_DEPOTS);
-                object.setAPI_NAME(Econstants.API_NAME_HRTC);
-
-                new ShubhAsyncGet(AddAdda.this, AddAdda.this, TaskType.GET_DEPOTS).execute(object);
-
-            } else {
-                CD.showDialog(AddAdda.this, Econstants.internetNotAvailable);
-            }
-        } catch (Exception ex) {
-            CD.showDialog(AddAdda.this, "Something Bad happened . Please reinstall the application and try again.");
-        }
+        loadRegionalOfficesForSpinner();
 
 //        ##########################################################################################
 
@@ -174,10 +164,10 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
         depotSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedDepot = (DepotPojo) parent.getItemAtPosition(position);
+                selectedOffice = (OfficeSelectionPojo) parent.getItemAtPosition(position);
 
                 // CALL STAFF ACC TO SELECTED DEPOT
-                makeStaffServiceCall(selectedDepot.getId());
+                makeStaffServiceCall(selectedOffice.getOfficeId());
             }
 
             @Override
@@ -209,7 +199,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
             if (AppStatus.getInstance(AddAdda.this).isOnline()) {
                 if (Econstants.isNotEmpty(addaName.getText().toString())) {
                     if (selectedLocation != null) {
-                        if (selectedDepot != null) {
+                        if (selectedOffice != null) {
                             if (selectedAddaIncharge != null) {
 
                                 if (isEditMode) {
@@ -287,7 +277,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
                             jsonObject.put("addaName", addaName.getText().toString());
                             jsonObject.put("location", selectedLocation.getId());
                             jsonObject.put("staff", selectedAddaIncharge.getId());
-                            jsonObject.put("depot", selectedDepot.getId());
+                            jsonObject.put("depot", selectedOffice.getOfficeId());
                             jsonObject.put("remarks", remarks.getText().toString());
                             jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
@@ -345,7 +335,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
                             jsonObject.put("addaName", addaName.getText().toString());
                             jsonObject.put("location", selectedLocation.getId());
                             jsonObject.put("staff", selectedAddaIncharge.getId());
-                            jsonObject.put("depot", selectedDepot.getId());
+                            jsonObject.put("depot", selectedOffice.getOfficeId());
                             jsonObject.put("remarks", remarks.getText().toString());
                             jsonObject.put("updateBy", Preferences.getInstance().empId);
 
@@ -376,6 +366,36 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
+    private void loadRegionalOfficesForSpinner() {
+        try {
+            if (AppStatus.getInstance(AddAdda.this).isOnline()) {
+
+                UploadObject object = new UploadObject();
+                object.setUrl(Econstants.sarvatra_url);
+                object.setMasterName("");
+                object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
+
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("deptId", 106);
+                jsonBody.put("empId", 0);
+                jsonBody.put("ofcTypeId", Econstants.REGIONAL_OFFICE_ID);
+
+                object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
+
+                object.setTasktype(TaskType.GET_OFFICE_FOR_ADMIN);
+                object.setAPI_NAME(Econstants.API_NAME_HRTC);
+
+                new ShubhAsyncPost(AddAdda.this, AddAdda.this, TaskType.GET_OFFICE_FOR_ADMIN).execute(object);
+            } else {
+                // Do nothing if CD already shown once
+                CD.showDialog(AddAdda.this, Econstants.internetNotAvailable);
+            }
+        } catch (Exception ex) {
+            CD.showDialog(AddAdda.this, "Something Bad happened . Please reinstall the application and try again.");
+        }
+    }
+    
 
 
     @Override
@@ -439,13 +459,13 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
         }
 
         // Get depots
-        else if (TaskType.GET_DEPOTS == taskType) {
+        else if (TaskType.GET_OFFICE_FOR_ADMIN == taskType) {
             SuccessResponse response = null;
-            List<DepotPojo> pojoList = null;
+            List<OfficeSelectionPojo> pojoList = null;
             Log.i("BusDetails", "Task type is fetching vehicles..");
 
             if (responseObject != null) {
-                Log.i("Depots", "Response Obj" + responseObject.toString());
+                Log.i("Offices", "Response Obj" + responseObject.toString());
 
                 if (responseObject.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
                     response = JsonParse.getDecryptedSuccessResponse(responseObject.getResponse());
@@ -454,22 +474,22 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
 
                     if (response.getStatus().equalsIgnoreCase("OK")) {
 
-                        pojoList = JsonParse.parseDecryptedDepotsInfo(response.getData());
+                        pojoList = JsonParse.parseOfficeListForAdmin(response.getData());
                         Log.i("pojoList", pojoList.toString());
 
                         if (pojoList.size() > 0) {
                             Log.e("Markers Size", String.valueOf(pojoList.size()));
                             Log.e("Reports Data", pojoList.toString());
 
-                            depotSpinnerAdapter = new DepotSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
-                            depotSpinner.setAdapter(depotSpinnerAdapter);
+                            officesSelectionSpinnerAdapter = new OfficesSelectionSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
+                            depotSpinner.setAdapter(officesSelectionSpinnerAdapter);
 
 
                             // PRESELECT SPINNER
                             if (isEditMode && receievedAddaDetailsToEdit != null){
                                 // Preselect
                                 depotSpinner.post(() -> {
-                                    int oldItemPosition = depotSpinnerAdapter.getPositionForDepot(receievedAddaDetailsToEdit.getDepot().getDepotName(), receievedAddaDetailsToEdit.getDepot().getId());
+                                    int oldItemPosition = officesSelectionSpinnerAdapter.getPositionForOffice(receievedAddaDetailsToEdit.getDepot().getDepotName(), receievedAddaDetailsToEdit.getDepot().getId());
                                     if (oldItemPosition != -1) {
                                         depotSpinner.setSelectedItemByIndex(oldItemPosition);
                                     } else {

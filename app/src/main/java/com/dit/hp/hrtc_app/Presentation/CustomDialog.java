@@ -280,6 +280,7 @@ public class CustomDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                activity.setResult(Activity.RESULT_OK);
                 activity.finish();
             }
         });

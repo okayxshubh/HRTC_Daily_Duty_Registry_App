@@ -154,7 +154,7 @@ public class AllStaffCards extends AppCompatActivity implements OnStaffCardClick
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");  // Adjust based on actual endpoint
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8")
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8")
                         + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(query), "UTF-8"));
                 object.setTasktype(TaskType.GET_STAFF_SEARCH);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
@@ -179,7 +179,7 @@ public class AllStaffCards extends AppCompatActivity implements OnStaffCardClick
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
                         + "&page=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(page)))
                         + "&size=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(size)))
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8"));
                 object.setTasktype(TaskType.GET_STAFF);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 

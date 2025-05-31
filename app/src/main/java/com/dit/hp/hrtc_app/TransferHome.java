@@ -18,14 +18,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dit.hp.hrtc_app.Adapters.ConductorSpinnerAdapter;
-import com.dit.hp.hrtc_app.Adapters.DepotSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.DriverSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.OfficesSelectionSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.RouteSpinnerAdapter;
 import com.dit.hp.hrtc_app.Adapters.VehicleSpinnerAdapter;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncGet;
 import com.dit.hp.hrtc_app.Asyncs.ShubhAsyncPost;
-import com.dit.hp.hrtc_app.Modals.DepotPojo;
 import com.dit.hp.hrtc_app.Modals.OfficeSelectionPojo;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
 import com.dit.hp.hrtc_app.Modals.RoutePojo;
@@ -58,22 +56,22 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     AESCrypto aesCrypto = new AESCrypto();
     Button back, transfer;
 
-    SearchableSpinner oldDepotSpinner, newDepotSpinner, vehicleNumberSpinner, driverSpinner, conductorSpinner, routeSpinner;
+    SearchableSpinner oldOfficeSpinner, newOfficeSpinner, vehicleNumberSpinner, driverSpinner, conductorSpinner, routeSpinner;
     LinearLayout currentDepotLayout, driverLayout, conductorLayout, vehicleLayout, routeLayout, allotNewDepotLayout;
 
     TextView oldDepotLabel, newDepotLabel, vehicleLabel, driverLabel, conductorLabel, routeLabel, entityLabel;
     Spinner entitySpinner;
 
     // Global Adapters.. Set Values in them in onTaskCompleted()
-    private DepotSpinnerAdapter depotSpinnerAdapter;
+    private OfficesSelectionSpinnerAdapter officeSpinnerAdapter;
     private VehicleSpinnerAdapter vehicleSpinnerAdapter;
     private DriverSpinnerAdapter driverSpinnerAdapter;
     private ConductorSpinnerAdapter conductorSpinnerAdapter;
     private RouteSpinnerAdapter routeSpinnerAdapter;
     private OfficesSelectionSpinnerAdapter officesSelectionSpinnerAdapter;
-    
 
-    DepotPojo oldDepotSelection;
+
+    OfficeSelectionPojo oldDepotSelection;
     OfficeSelectionPojo newDepotSelection;
     StaffPojo driverToTransfer;
     StaffPojo conductorToTransfer;
@@ -93,7 +91,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 
         // Spinners
         vehicleNumberSpinner = findViewById(R.id.vehicleNumberSpinner);
-        newDepotSpinner = findViewById(R.id.newDepotSpinner);
+        newOfficeSpinner = findViewById(R.id.newDepotSpinner);
 
         // Layouts
         driverLayout = findViewById(R.id.driverToTransferLayout);
@@ -108,10 +106,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
         vehicleLabel.setText(Html.fromHtml("Vehicle To Transfer <font color='#FF0000'>*</font>"));
 
         oldDepotLabel = findViewById(R.id.oldDepotLabel);
-        oldDepotLabel.setText(Html.fromHtml("Current Depot <font color='#FF0000'>*</font>"));
+        oldDepotLabel.setText(Html.fromHtml("Current Office <font color='#FF0000'>*</font>"));
 
         newDepotLabel = findViewById(R.id.newDepotLabel);
-        newDepotLabel.setText(Html.fromHtml("Allot New Depot <font color='#FF0000'>*</font>"));
+        newDepotLabel.setText(Html.fromHtml("Allot New Office <font color='#FF0000'>*</font>"));
 
         driverLabel = findViewById(R.id.driverLabel);
         driverLabel.setText(Html.fromHtml("Driver To Transfer <font color='#FF0000'>*</font>"));
@@ -129,7 +127,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
         entityLabel.setText(Html.fromHtml("Please Select Entity to Transfer <font color='#FF0000'>*</font>"));
 
 
-        oldDepotSpinner = findViewById(R.id.currentDepotSpinner);
+        oldOfficeSpinner = findViewById(R.id.currentDepotSpinner);
         driverSpinner = findViewById(R.id.driverSpinner);
         conductorSpinner = findViewById(R.id.conductorSpinner);
         routeSpinner = findViewById(R.id.routeSpinner);
@@ -148,23 +146,25 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 // ###########################################  SERVICE CALLS  ##############################################################
 
         // Depot Service Call
-        try {
-            if (AppStatus.getInstance(TransferHome.this).isOnline()) {
-                UploadObject object = new UploadObject();
-                object.setUrl(Econstants.base_url);
-                object.setMethordName("/master-data?");
-                object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("depot"), "UTF-8"));
-                object.setTasktype(TaskType.GET_DEPOTS);
-                object.setAPI_NAME(Econstants.API_NAME_HRTC);
+//        try {
+//            if (AppStatus.getInstance(TransferHome.this).isOnline()) {
+//                UploadObject object = new UploadObject();
+//                object.setUrl(Econstants.base_url);
+//                object.setMethordName("/master-data?");
+//                object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("depot"), "UTF-8"));
+//                object.setTasktype(TaskType.GET_DEPOTS);
+//                object.setAPI_NAME(Econstants.API_NAME_HRTC);
+//
+//                new ShubhAsyncGet(TransferHome.this, TransferHome.this, TaskType.GET_DEPOTS).execute(object);
+//
+//            } else {
+//                CD.showDialog(TransferHome.this, Econstants.internetNotAvailable);
+//            }
+//        } catch (Exception ex) {
+//            CD.showDialog(TransferHome.this, "Something Bad happened . Please reinstall the application and try again.");
+//        }
 
-                new ShubhAsyncGet(TransferHome.this, TransferHome.this, TaskType.GET_DEPOTS).execute(object);
-
-            } else {
-                CD.showDialog(TransferHome.this, Econstants.internetNotAvailable);
-            }
-        } catch (Exception ex) {
-            CD.showDialog(TransferHome.this, "Something Bad happened . Please reinstall the application and try again.");
-        }
+        loadRegionalOfficesForSpinner(); // Only regional offices has inventory items
 
 // ########################################################################################################################
 
@@ -179,10 +179,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 if (selectedEntityStr.equalsIgnoreCase("Driver")) {
 
                     // Depot Refresh
-                    if (depotSpinnerAdapter != null) {
+                    if (officeSpinnerAdapter != null) {
 
-                        oldDepotSpinner.clearSelection();
-                        newDepotSpinner.clearSelection();
+                        oldOfficeSpinner.clearSelection();
+                        newOfficeSpinner.clearSelection();
                         driverSpinner.clearSelection();
                         conductorSpinner.clearSelection();
                         vehicleNumberSpinner.clearSelection();
@@ -197,15 +197,15 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 
 
                         // Preselect Depot Acc to Preferences
-                        oldDepotSpinner.post(() -> {
-                            int oldItemPosition = depotSpinnerAdapter.getPositionForDepot(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
+                        oldOfficeSpinner.post(() -> {
+                            int oldItemPosition = officeSpinnerAdapter.getPositionForOffice(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
                             if (oldItemPosition != -1) {
-                                oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
+                                oldOfficeSpinner.setSelectedItemByIndex(oldItemPosition);
 
                                 if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
-                                    oldDepotSpinner.setEnabled(true);
+                                    oldOfficeSpinner.setEnabled(true);
                                 } else {
-                                    oldDepotSpinner.setEnabled(true);
+                                    oldOfficeSpinner.setEnabled(true);
                                 }
                             } else {
                                 Log.e("Error", "Item Position not found in adapter.");
@@ -226,10 +226,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 } else if (selectedEntityStr.equalsIgnoreCase("Conductor")) {
 
                     // Depot Refresh
-                    if (depotSpinnerAdapter != null) {
+                    if (officeSpinnerAdapter != null) {
 
-                        oldDepotSpinner.clearSelection();
-                        newDepotSpinner.clearSelection();
+                        oldOfficeSpinner.clearSelection();
+                        newOfficeSpinner.clearSelection();
                         driverSpinner.clearSelection();
                         conductorSpinner.clearSelection();
                         vehicleNumberSpinner.clearSelection();
@@ -244,15 +244,15 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 
 
                         // Preselect Depot Acc to Preferences
-                        oldDepotSpinner.post(() -> {
-                            int oldItemPosition = depotSpinnerAdapter.getPositionForDepot(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
+                        oldOfficeSpinner.post(() -> {
+                            int oldItemPosition = officeSpinnerAdapter.getPositionForOffice(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
                             if (oldItemPosition != -1) {
-                                oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
+                                oldOfficeSpinner.setSelectedItemByIndex(oldItemPosition);
 
                                 if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
-                                    oldDepotSpinner.setEnabled(true);
+                                    oldOfficeSpinner.setEnabled(true);
                                 } else {
-                                    oldDepotSpinner.setEnabled(true);
+                                    oldOfficeSpinner.setEnabled(true);
                                 }
                             } else {
                                 Log.e("Error", "Item Position not found in adapter.");
@@ -272,10 +272,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 } else if (selectedEntityStr.equalsIgnoreCase("Vehicle")) {
 
                     // Depot Refresh
-                    if (depotSpinnerAdapter != null) {
+                    if (officeSpinnerAdapter != null) {
 
-                        oldDepotSpinner.clearSelection();
-                        newDepotSpinner.clearSelection();
+                        oldOfficeSpinner.clearSelection();
+                        newOfficeSpinner.clearSelection();
                         driverSpinner.clearSelection();
                         conductorSpinner.clearSelection();
                         vehicleNumberSpinner.clearSelection();
@@ -290,15 +290,15 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 
 
                         // Preselect Depot Acc to Preferences
-                        oldDepotSpinner.post(() -> {
-                            int oldItemPosition = depotSpinnerAdapter.getPositionForDepot(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
+                        oldOfficeSpinner.post(() -> {
+                            int oldItemPosition = officeSpinnerAdapter.getPositionForOffice(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
                             if (oldItemPosition != -1) {
-                                oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
+                                oldOfficeSpinner.setSelectedItemByIndex(oldItemPosition);
 
                                 if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
-                                    oldDepotSpinner.setEnabled(true);
+                                    oldOfficeSpinner.setEnabled(true);
                                 } else {
-                                    oldDepotSpinner.setEnabled(true);
+                                    oldOfficeSpinner.setEnabled(true);
                                 }
                             } else {
                                 Log.e("Error", "Item Position not found in adapter.");
@@ -318,10 +318,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 } else if (selectedEntityStr.equalsIgnoreCase("Route")) {
 
                     // Depot Refresh
-                    if (depotSpinnerAdapter != null) {
+                    if (officeSpinnerAdapter != null) {
 
-                        oldDepotSpinner.clearSelection();
-                        newDepotSpinner.clearSelection();
+                        oldOfficeSpinner.clearSelection();
+                        newOfficeSpinner.clearSelection();
                         driverSpinner.clearSelection();
                         conductorSpinner.clearSelection();
                         vehicleNumberSpinner.clearSelection();
@@ -336,15 +336,15 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 
 
                         // Preselect Depot Acc to Preferences
-                        oldDepotSpinner.post(() -> {
-                            int oldItemPosition = depotSpinnerAdapter.getPositionForDepot(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
+                        oldOfficeSpinner.post(() -> {
+                            int oldItemPosition = officeSpinnerAdapter.getPositionForOffice(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
                             if (oldItemPosition != -1) {
-                                oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
+                                oldOfficeSpinner.setSelectedItemByIndex(oldItemPosition);
 
                                 if (Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2) {
-                                    oldDepotSpinner.setEnabled(true);
+                                    oldOfficeSpinner.setEnabled(true);
                                 } else {
-                                    oldDepotSpinner.setEnabled(true);
+                                    oldOfficeSpinner.setEnabled(true);
                                 }
                             } else {
                                 Log.e("Error", "Item Position not found in adapter.");
@@ -363,7 +363,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 
                 } else {
 
-                    newDepotSpinner.clearSelection();
+                    newOfficeSpinner.clearSelection();
                     driverSpinner.clearSelection();
                     conductorSpinner.clearSelection();
                     vehicleNumberSpinner.clearSelection();
@@ -393,10 +393,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
         });
 
         // Old Depot Spinner
-        oldDepotSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        oldOfficeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                oldDepotSelection = (DepotPojo) parent.getItemAtPosition(position);
+                oldDepotSelection = (OfficeSelectionPojo) parent.getItemAtPosition(position);
 
                 if (selectedEntityStr.equalsIgnoreCase("Driver")) {
                     driverLayout.setVisibility(View.VISIBLE);
@@ -548,7 +548,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
         });
 
 
-        newDepotSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        newOfficeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 newDepotSelection = (OfficeSelectionPojo) parent.getItemAtPosition(position);
@@ -563,7 +563,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 
         // Back Btn
         back.setOnClickListener(v -> TransferHome.this.finish());
-        
+
         // Transfer Btn
         transfer.setOnClickListener(v -> {
             // 1. Check if an entity is selected
@@ -579,14 +579,14 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                         if (newDepotSelection != null && !newDepotSelection.getOfficeName().equalsIgnoreCase("-")) {
 
                             // 5. Ensure old and new depots are not the same
-                            if (!oldDepotSelection.getDepotName().equalsIgnoreCase(newDepotSelection.getOfficeName()) || oldDepotSelection.getId() != newDepotSelection.getOfficeId()) {
+                            if (!oldDepotSelection.getOfficeName().equalsIgnoreCase(newDepotSelection.getOfficeName()) || oldDepotSelection.getOfficeId() != newDepotSelection.getOfficeId()) {
 
                                 // 6. Check internet status
                                 if (AppStatus.getInstance(TransferHome.this).isOnline()) {
                                     // Proceed with the transfer logic (e.g., call service or display confirmation dialog)
 
                                     if (oldDepotSelection != null) {
-                                        Log.i("OldDepot", "Old Depot: " + oldDepotSelection.getDepotName());
+                                        Log.i("OldDepot", "Old Depot: " + oldDepotSelection.getOfficeName());
                                     }
 
                                     if (newDepotSelection != null) {
@@ -646,8 +646,6 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     }
 
 
-
-
     // Service Call Custom Methods
     private void makeRouteServiceCall() {
         // Route Service call
@@ -657,7 +655,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("route"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(oldDepotSelection.getId())), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(oldDepotSelection.getOfficeId())), "UTF-8"));
                 object.setTasktype(TaskType.GET_ROUTES);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -681,7 +679,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(oldDepotSelection.getId())), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(oldDepotSelection.getOfficeId())), "UTF-8"));
                 object.setTasktype(TaskType.GET_DRIVERS);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -704,7 +702,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(oldDepotSelection.getId())), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(oldDepotSelection.getOfficeId())), "UTF-8"));
                 object.setTasktype(TaskType.GET_CONDUCTORS);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -728,7 +726,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("vehicle"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(oldDepotSelection.getId()))));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(oldDepotSelection.getOfficeId()))));
 
                 object.setTasktype(TaskType.GET_VEHICLES);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
@@ -898,8 +896,8 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
         }
     }
 
-    // Load n Preselect
-    private void loadOfficeForSpinner() {
+    // Load n Preselect Offices for Inventory
+    private void loadRegionalOfficesForSpinner() {
         try {
             if (AppStatus.getInstance(TransferHome.this).isOnline()) {
 
@@ -908,12 +906,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 object.setMasterName("");
                 object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
 
-
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("deptId", 106);
                 jsonBody.put("empId", 0);
-//                jsonBody.put("empId", Preferences.getInstance().empId);
-                jsonBody.put("ofcTypeId", 267);
+                jsonBody.put("ofcTypeId", Econstants.REGIONAL_OFFICE_ID);
 
                 object.setParam(aesCrypto.encrypt(jsonBody.toString())); // Put in encypted JSON
 
@@ -934,77 +930,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     @Override
     public void onTaskCompleted(ResponsePojoGet result, TaskType taskType) throws JSONException {
 
-
-        // Get OFFICES
+        // Get depots
         if (TaskType.GET_OFFICE_FOR_ADMIN == taskType) {
             SuccessResponse response = null;
-            List<OfficeSelectionPojo> pojoList = new ArrayList<>();
-
-            if (result != null) {
-                Log.i("Depots: ", "Response Obj" + result.toString());
-
-                if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_OK))) {
-                    response = JsonParse.getDecryptedSuccessResponse(result.getResponse());
-                    Log.e("Response", response.toString());
-
-                    if (response.getStatus().equalsIgnoreCase("OK")) {
-
-                        if (!(response.getData().equalsIgnoreCase("No records found"))) {
-                            pojoList = JsonParse.parseOfficeListForAdmin(response.getData());
-                        } else {
-                            pojoList.clear();
-                        }
-
-                        if (pojoList.size() > 0) {
-                            Log.e("Reports Data", pojoList.toString());
-
-                            officesSelectionSpinnerAdapter = new OfficesSelectionSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
-                            if (newDepotSpinner != null) {
-                                newDepotSpinner.setAdapter(officesSelectionSpinnerAdapter);
-                            } else {
-                                Log.e("SpinnerError", "officeSpinner is null. Check XML or findViewById.");
-                            }
-
-
-                            // Show Selection
-                            if (Preferences.getInstance().depotName != null) {
-                                // Preselect Depot If Available
-                                newDepotSpinner.post(() -> {
-                                    if (officesSelectionSpinnerAdapter != null) {
-                                        int itemPosition = officesSelectionSpinnerAdapter.getPositionForOffice(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
-                                        if (itemPosition != -1) {
-                                            newDepotSpinner.setSelectedItemByIndex(itemPosition);
-                                        } else {
-                                            Log.e("Error", "Office not found in adapter.");
-                                        }
-                                    }
-                                });
-                            }
-
-                        } else {
-//                            CD.showDialog(TransferHome.this, "No offices found for selection");
-                        }
-
-                    } else {
-                        CD.showDialog(TransferHome.this, response.getMessage());
-                    }
-                } else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
-                    // Handle HTTP 401 Unauthorized response (session expired)
-                    CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
-                } else {
-                    CD.showDialog(TransferHome.this, "Not able to fetch data");
-                }
-            } else {
-                CD.showDialog(TransferHome.this, "Result is null");
-            }
-        }
-        
-        
-        // Get depots
-        else if (TaskType.GET_DEPOTS == taskType) {
-            SuccessResponse response = null;
-            List<DepotPojo> pojoList = null;
-            Log.i("BusDetails", "Task type is fetching vehicles..");
+            List<OfficeSelectionPojo> pojoList = null;
 
             if (result != null) {
                 Log.i("Depots", "Response Obj" + result.toString());
@@ -1016,32 +945,28 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
 
                     if (response.getStatus().equalsIgnoreCase("OK")) {
 
-                        pojoList = JsonParse.parseDecryptedDepotsInfo(response.getData());
+                        pojoList = JsonParse.parseOfficeListForAdmin(response.getData());
                         Log.i("pojoList", pojoList.toString());
 
                         if (pojoList.size() > 0) {
                             Log.e("Markers Size", String.valueOf(pojoList.size()));
                             Log.e("Reports Data", pojoList.toString());
 
-                            depotSpinnerAdapter = new DepotSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
-                            newDepotSpinner.setAdapter(depotSpinnerAdapter);
-                            oldDepotSpinner.setAdapter(depotSpinnerAdapter);
+                            officeSpinnerAdapter = new OfficesSelectionSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
+                            newOfficeSpinner.setAdapter(officeSpinnerAdapter);
+                            oldOfficeSpinner.setAdapter(officeSpinnerAdapter);
 
 
                             // Preselect old depot if not Super ADMIN
                             Log.i("roleId: ", "roleId: " + Preferences.getInstance().roleId);
 
                             // Preselect + Lock Depot Spinner
-                            oldDepotSpinner.post(() -> {
-                                int oldItemPosition = depotSpinnerAdapter.getPositionForDepot(Preferences.getInstance().depotName, Preferences.getInstance().depotId);
+                            oldOfficeSpinner.post(() -> {
+                                int oldItemPosition = officeSpinnerAdapter.getPositionForOffice(Preferences.getInstance().regionalOfficeName, Preferences.getInstance().regionalOfficeId);
                                 if (oldItemPosition != -1) {
-                                    oldDepotSpinner.setSelectedItemByIndex(oldItemPosition);
+                                    oldOfficeSpinner.setSelectedItemByIndex(oldItemPosition);
                                     // Unlocked for Super Admin and Admin only
-                                    if(Preferences.getInstance().appRoleId == 1 || Preferences.getInstance().appRoleId == 2){
-                                        oldDepotSpinner.setEnabled(true);
-                                    } else{
-                                        oldDepotSpinner.setEnabled(true);
-                                    }
+                                    oldOfficeSpinner.setEnabled(true);
                                 } else {
                                     Log.e("Error", "Item Position not found in adapter.");
                                 }
@@ -1174,7 +1099,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                             routeSpinnerAdapter = new RouteSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             routeSpinner.setAdapter(routeSpinnerAdapter);
                             routeSpinner.setVisibility(View.VISIBLE);
-                            
+
 
                         } else {
                             CD.showDialog(TransferHome.this, "No Routes Found");
@@ -1236,8 +1161,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 } else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
                     // Handle HTTP 401 Unauthorized response (session expired)
                     CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
-                }
-                else {
+                } else {
                     CD.showDialog(TransferHome.this, "Response is not OK");
                 }
             } else {
@@ -1268,13 +1192,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 else if (successResponse.getStatus().equalsIgnoreCase("FAILED")) {
                     Log.e("TransferVehicle", successResponse.getMessage());
                     CD.showDismissActivityDialog(TransferHome.this, "Error: " + successResponse.getMessage());
-                }
-                else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
+                } else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
                     // Handle HTTP 401 Unauthorized response (session expired)
                     CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
-                }
-
-                else {
+                } else {
                     Log.i("TransferVehicle", "Response is null");
                     CD.showDialog(this, successResponse.getMessage());
                 }
@@ -1308,12 +1229,10 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 else if (successResponse.getStatus().equalsIgnoreCase("FAILED")) {
                     Log.e("TransferHome", successResponse.getMessage());
                     CD.showDismissActivityDialog(TransferHome.this, "Error: " + successResponse.getMessage());
-                }
-                else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
+                } else if (result.getResponseCode().equalsIgnoreCase(Integer.toString(HttpsURLConnection.HTTP_UNAUTHORIZED))) {
                     // Handle HTTP 401 Unauthorized response (session expired)
                     CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
-                }
-                else {
+                } else {
                     Log.i("TransferHome", "Response is null");
                     CD.showDialog(this, successResponse.getMessage());
                 }
@@ -1386,7 +1305,6 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
         }
 
     }
-
 
 
 }

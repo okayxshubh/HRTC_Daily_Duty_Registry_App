@@ -35,16 +35,9 @@ public class Econstants {
     public static final String HRTC_DEPARTMENT_NAME = "Himachal Road Transport Corporation";
     public static final Integer HRTC_DEPARTMENT_ID = 106;
 
-
-
-
     public static final String loginMethod = "/login/Auth?";
 
     public static final Integer HRTC_DEPARTMENT_PARENT_ID = 106;
-
-
-
-//    public static final String base_url = "http://192.168.0.172:8081"; // DIT Wifi + DIT PC
 
 
     public static final String base_url = "https://himstaging1.hp.gov.in/hrtc"; // Staging
@@ -52,9 +45,14 @@ public class Econstants {
 
     public static final String eparivar_url = "https://himparivarservices.hp.gov.in/ldap";    // For login purpose
 
-    public static final String sarvatra_url = "https://himstaging1.hp.gov.in/sarvatra-api";   //  Staging HIM ACCESS
-//    public static final String sarvatra_url = "https://himparivarservices.hp.gov.in/sarvatra-api";  //  Production HIM ACCESS
 
+    public static final String sarvatra_url = "https://himstaging1.hp.gov.in/sarvatra-api"; public static final Integer REGIONAL_OFFICE_ID = 369;  //Staging HIM ACCESS + Staging Regional Office ID
+//    public static final String sarvatra_url = "https://himparivarservices.hp.gov.in/sarvatra-api"; public static final Integer REGIONAL_OFFICE_ID = 267; //  Production HIM ACCESS + Production Regional Office ID
+
+    // Regional Office just Like Depot with all the items
+
+
+    // Live 267
 
     public static final String appUniqueCode = "HRTCDDR";
     public static final String serviceId = "3";
@@ -64,15 +62,7 @@ public class Econstants {
     public static final String getUserDetails = "/getUserDetails?";
 
 
-
 //    public static final String abc = "https://himstaging2.hp.gov.in/sarvatra/GovLogin?service_id=3&app_unique=HRTCDDR&app=Himparivar"; //
-
-
-
-
-
-
-
 
 
     public static ResponsePojoGet createOfflineObject(String url, String requestParams, String response, String Code, String functionName) {

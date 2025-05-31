@@ -48,12 +48,12 @@ public class AttendanceHome extends BaseDrawerActivity {
         // Reload user details to update the UI
         reloadUserDetails();
 
-        // Card 1 click listener (Add Daily Record)
+        // Card 1 click listener
         cardView1.setOnClickListener(v -> {
             CD.showDialog(this, "Coming Soon..");
         });
 
-        // Card 2 click listener (Daily Duty Register Cards)
+        // Card 2 click listener
         cardView2.setOnClickListener(v -> {
             CD.showDialog(this, "Coming Soon..");
         });
@@ -72,7 +72,7 @@ public class AttendanceHome extends BaseDrawerActivity {
 
         // Depot
         String depotName = Preferences.getInstance().depotName;
-        depotNameTV.setText(depotName != null && !depotName.isEmpty() ? "Office: " + depotName : "No Info Available");
+        depotNameTV.setText(depotName != null && !depotName.isEmpty() ? "Depot: " + depotName : "No Info Available");
 
         // Role
         String roleName = Preferences.getInstance().roleName;
@@ -84,6 +84,7 @@ public class AttendanceHome extends BaseDrawerActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        setHeading("Attendance"); // Custom Method in BaseDrawerActivity
         Preferences.getInstance().loadPreferences(this); // Ensure preferences are reloaded
         reloadUserDetails(); // Reload details to update UI
     }
@@ -91,6 +92,7 @@ public class AttendanceHome extends BaseDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        setHeading("Attendance"); // Custom Method in BaseDrawerActivity
         Preferences.getInstance().loadPreferences(this); // Ensure preferences are reloaded
         reloadUserDetails(); // Reload details to update UI
     }

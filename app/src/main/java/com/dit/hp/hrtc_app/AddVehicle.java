@@ -224,7 +224,7 @@ public class AddVehicle extends AppCompatActivity implements ShubhAsyncTaskListe
     private void showAddConfirmationDialog(String selectedEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add " + selectedEntity)
-                .setMessage("Are you sure you want to add the selected " + selectedEntity + " to the depot " + Preferences.getInstance().depotName + "?")
+                .setMessage("Are you sure you want to add the selected " + selectedEntity + " to the office " + Preferences.getInstance().regionalOfficeName + "?")
                 .setPositiveButton("Yes", (dialog, which) -> {
 
                     if (AppStatus.getInstance(AddVehicle.this).isOnline()) {
@@ -251,7 +251,7 @@ public class AddVehicle extends AppCompatActivity implements ShubhAsyncTaskListe
                             jsonObject.put("iotFirm", firmNameET.getText().toString().trim());
                             jsonObject.put("capacity", Integer.parseInt(vehicleCapacity.getText().toString().trim()));
 
-                            jsonObject.put("depot", Preferences.getInstance().depotId);
+                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
                             jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
                             Log.i("AddVehicle", "Vehicle to add: " + jsonObject.toString());

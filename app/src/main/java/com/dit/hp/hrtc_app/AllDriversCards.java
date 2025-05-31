@@ -88,7 +88,7 @@ public class AllDriversCards extends AppCompatActivity implements OnDriverEditCl
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8"));
                 object.setTasktype(TaskType.GET_DRIVERS);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -264,7 +264,7 @@ public class AllDriversCards extends AppCompatActivity implements OnDriverEditCl
                     object.setUrl(Econstants.base_url);
                     object.setMethordName("/master-data?");
                     object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("staff"), "UTF-8")
-                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8"));
+                            + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8"));
                     object.setTasktype(TaskType.GET_DRIVERS);
                     object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
