@@ -65,11 +65,11 @@
                 android:radius="10dp">
 
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/loginHeadCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp">
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:id="@+id/loginHeadCard"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:cardCornerRadius="16dp">-->
 
                     <!-- Logo and Title Container -->
                     <LinearLayout
@@ -97,7 +97,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20dp"
                             android:fontFamily="@font/raleway_semibold"
-                            android:text="HRTC \nLogin"
+                            android:text="User Login HRTC"
                             android:textAlignment="center"
                             android:textAllCaps="true"
                             android:textColor="@color/hrtc_green"
@@ -105,7 +105,7 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+<!--                </androidx.cardview.widget.CardView>-->
 
 
                 <!-- ID and Password Input Fields -->

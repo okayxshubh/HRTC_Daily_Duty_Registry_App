@@ -38,9 +38,8 @@ dependencies {
     implementation project(path: ':spinnersearchable')
 
 
-
     // Compressor (latest version)
-    implementation libs.compressor
+//    implementation libs.compressor
     // RxJava and RxAndroid
     implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'

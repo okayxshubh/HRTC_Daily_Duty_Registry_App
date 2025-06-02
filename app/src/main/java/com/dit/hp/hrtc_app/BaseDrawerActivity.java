@@ -83,7 +83,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 intent = new Intent(this, AttendanceHome.class);
             } else if (id == R.id.nav_payslip) {
                 intent = new Intent(this, SalaryHome.class);
-            } else if (id == R.id.nav_logout) {
+            }else if (id == R.id.nav_settings) {
+                intent = new Intent(this, Settings.class);
+            }
+            else if (id == R.id.nav_logout) {
                 showLogoutConfirmationDialog();
                 return true;
             }

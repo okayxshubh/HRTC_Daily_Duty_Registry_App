@@ -76,12 +76,8 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import id.zelory.compressor.Compressor;
 import in.balakrishnan.easycam.CameraBundleBuilder;
 import in.balakrishnan.easycam.CameraControllerActivity;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AddOffice extends LocationBaseActivity implements SamplePresenter.SampleView, ShubhAsyncTaskListenerPost, ShubhAsyncTaskListenerGet {
 

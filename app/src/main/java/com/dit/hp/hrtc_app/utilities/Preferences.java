@@ -51,11 +51,15 @@ public class Preferences {
     private final String KEY_TOKEN = "token";
     private final String KEY_TOKEN_HIMACCESS = "tokenHimAccess";
 
+    private final String KEY_DARK_MODE = "darkModeKey";
+
 
 
 //    ###############################################################################################
 
     // Instance Variables
+    public Boolean isDarkMode = false; // Default to false
+
     public Integer appRoleId;
     public Integer empId;
 
@@ -115,6 +119,8 @@ public class Preferences {
 
         preferences = context.getSharedPreferences(preferenceName, Activity.MODE_PRIVATE);
 
+        isDarkMode = preferences.getBoolean(KEY_DARK_MODE, false);
+
         // Load values and handle `-1` as `null` for integers
         int empIdValue = preferences.getInt(KEY_EMP_ID, -1);
         empId = (empIdValue == -1) ? null : empIdValue;
@@ -167,6 +173,9 @@ public class Preferences {
 
         preferences = context.getSharedPreferences(preferenceName, Activity.MODE_PRIVATE);
         editor = preferences.edit();
+
+        // Dark Mode
+        editor.putBoolean(KEY_DARK_MODE, isDarkMode != null && isDarkMode);
 
         // Save integer values and handle null
         editor.putInt(KEY_EMP_ID, empId == null ? -1 : empId);

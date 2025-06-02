@@ -380,7 +380,7 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
     @Override
     public void onTaskCompleted(ResponsePojoGet result, TaskType taskType) throws JSONException {
 
-        //
+        // GET_VEHICLES
         if (TaskType.GET_VEHICLES == taskType) {
             SuccessResponse response = null;
             pojoList = null;

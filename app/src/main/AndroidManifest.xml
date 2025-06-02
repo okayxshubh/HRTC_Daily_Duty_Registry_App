@@ -39,14 +39,15 @@
         <!-- Splash -->
         <activity
             android:name=".SplashScreen"
-            android:exported="true">
-
+            android:exported="true"
+            android:launchMode="singleTop">
             <!--First Activity To Launch-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <!-- MainScreen -->
         <activity
@@ -353,6 +354,15 @@
 
         <activity
             android:name=".ProfileScreen"
+            android:alwaysRetainTaskState="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".Settings"
             android:alwaysRetainTaskState="true"
             android:exported="true"
             android:launchMode="singleTop"
