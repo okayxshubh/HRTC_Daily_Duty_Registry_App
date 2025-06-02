@@ -831,7 +831,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private void handleDriverTransfer(UploadObject object) {
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("depot", newDepotSelection.getOfficeId());
+            jsonParam.put("depotId", newDepotSelection.getOfficeId());
 
             String encryptedParam = aesCrypto.encrypt(jsonParam.toString());
             object.setParam(encryptedParam);
@@ -848,7 +848,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private void handleConductorTransfer(UploadObject object) {
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("depot", newDepotSelection.getOfficeId());
+            jsonParam.put("depotId", newDepotSelection.getOfficeId());
 
             String encryptedParam = aesCrypto.encrypt(jsonParam.toString());
             object.setParam(encryptedParam);
@@ -865,7 +865,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private void handleRouteTransfer(UploadObject object) {
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("depot", newDepotSelection.getOfficeId());
+            jsonParam.put("depotId", newDepotSelection.getOfficeId());
 
             String encryptedParam = aesCrypto.encrypt(jsonParam.toString());
             object.setParam(encryptedParam);
@@ -883,7 +883,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
     private void handleVehicleTransfer(UploadObject object) {
         try {
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("depot", newDepotSelection.getOfficeId());
+            jsonParam.put("depotId", newDepotSelection.getOfficeId());
 
             String encryptedParam = aesCrypto.encrypt(jsonParam.toString());
             object.setParam(encryptedParam);
@@ -907,7 +907,7 @@ public class TransferHome extends AppCompatActivity implements ShubhAsyncTaskLis
                 object.setMethordName("/api/getData?Tagname=" + URLEncoder.encode(aesCrypto.encrypt("getOffice"), "UTF-8"));
 
                 JSONObject jsonBody = new JSONObject();
-                jsonBody.put("deptId", 106);
+                jsonBody.put("deptId", Econstants.HRTC_DEPARTMENT_PARENT_ID);
                 jsonBody.put("empId", 0);
                 jsonBody.put("ofcTypeId", Econstants.REGIONAL_OFFICE_ID);
 

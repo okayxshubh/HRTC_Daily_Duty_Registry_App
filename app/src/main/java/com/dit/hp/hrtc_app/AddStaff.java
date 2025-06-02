@@ -457,7 +457,7 @@ public class AddStaff extends AppCompatActivity implements ShubhAsyncTaskListene
 
                         try {
                             jsonObject.put("empName", staffFirstName.getText().toString().trim() + " " + staffLastName.getText().toString());
-                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
+                            jsonObject.put("depotId", Preferences.getInstance().regionalOfficeId);
                             jsonObject.put("staffType", selectedSpinnerStaffType.getStaffTypeId());
 
                             jsonObject.put("dateOfBirth", dob.getText().toString());

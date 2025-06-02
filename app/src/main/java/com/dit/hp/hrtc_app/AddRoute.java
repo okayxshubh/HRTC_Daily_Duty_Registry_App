@@ -449,7 +449,7 @@ public class AddRoute extends AppCompatActivity implements ShubhAsyncTaskListene
                             jsonObject.put("distance", distance.getText().toString());
                             jsonObject.put("journeyHours", requiredTime.getText().toString());
                             jsonObject.put("startTime", departureTime.getText().toString());
-                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
+                            jsonObject.put("depotId", Preferences.getInstance().regionalOfficeId);
 
                             jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
@@ -513,7 +513,7 @@ public class AddRoute extends AppCompatActivity implements ShubhAsyncTaskListene
                             jsonObject.put("distance", distance.getText().toString());
                             jsonObject.put("journeyHours", requiredTime.getText().toString());
                             jsonObject.put("startTime", departureTime.getText().toString());
-                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
+                            jsonObject.put("depotId", Preferences.getInstance().regionalOfficeId);
                             jsonObject.put("updatedBy", Preferences.getInstance().empId);
 
                         } catch (JSONException e) {
