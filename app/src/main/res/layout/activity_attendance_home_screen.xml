@@ -123,53 +123,53 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-                <androidx.cardview.widget.CardView
-                    android:clickable="true"
-                    android:elevation="12dp"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:id="@+id/cardView1"
-                    android:layout_height="128dp"
-                    android:layout_margin="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_width="128dp"
-                    app:cardCornerRadius="20dp">
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:clickable="true"-->
+<!--                    android:elevation="12dp"-->
+<!--                    android:focusable="true"-->
+<!--                    android:foreground="?android:attr/selectableItemBackground"-->
+<!--                    android:id="@+id/cardView1"-->
+<!--                    android:layout_height="128dp"-->
+<!--                    android:layout_margin="8dp"-->
+<!--                    android:layout_marginEnd="16dp"-->
+<!--                    android:layout_width="128dp"-->
+<!--                    app:cardCornerRadius="20dp">-->
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent">
+<!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_width="match_parent">-->
 
-                        <ImageView
-                            android:id="@+id/image_view1"
-                            android:layout_height="50dp"
-                            android:layout_width="50dp"
-                            android:src="@drawable/view_attendance"
-                            app:layout_constraintBottom_toTopOf="@+id/textView1"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+<!--                        <ImageView-->
+<!--                            android:id="@+id/image_view1"-->
+<!--                            android:layout_height="50dp"-->
+<!--                            android:layout_width="50dp"-->
+<!--                            android:src="@drawable/view_attendance"-->
+<!--                            app:layout_constraintBottom_toTopOf="@+id/textView1"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintHorizontal_bias="0.5"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <TextView
-                            android:fontFamily="@font/raleway_semibold"
-                            android:gravity="center"
-                            android:id="@+id/textView1"
-                            android:layout_height="wrap_content"
-                            android:layout_width="match_parent"
-                            android:text="View Attendance"
-                            android:textAllCaps="true"
-                            android:textColor="@color/green"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/image_view1" />
+<!--                        <TextView-->
+<!--                            android:fontFamily="@font/raleway_semibold"-->
+<!--                            android:gravity="center"-->
+<!--                            android:id="@+id/textView1"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:text="View Attendance"-->
+<!--                            android:textAllCaps="true"-->
+<!--                            android:textColor="@color/green"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:textStyle="bold"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintHorizontal_bias="0.5"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toBottomOf="@+id/image_view1" />-->
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                </androidx.cardview.widget.CardView>
+<!--                </androidx.cardview.widget.CardView>-->
 
                 <androidx.cardview.widget.CardView
                     android:clickable="true"

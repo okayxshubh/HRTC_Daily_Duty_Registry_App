@@ -21,8 +21,12 @@
     <color name="blue">#0091D7</color>
 
 
+    <!--FOR highlighting.. Edit Stop-->
+    <color name="selected_background">#A6A6A6</color>
 
-    <!--FOR highlighting-->
-    <color name="selected_background">#A6A6A6</color> <!-- Yellow, or choose your preferred color -->
+
+    <color name="dark_card">#2C2C2C</color>
+    <color name="dark_hint">#AAAAAA</color>
+
 
 </resources>

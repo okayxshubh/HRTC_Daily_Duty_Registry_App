@@ -12,8 +12,8 @@ android {
         targetSdk 34
 
         // Version Codes here
-        versionCode 4
-        versionName "v4.0"
+        versionCode 5
+        versionName "v5.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -28,6 +28,25 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
+
+    // Add This to ignore cuz multiple libs have the same file
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'LICENSE-EPL-1.0.txt'
+        exclude 'LICENSE-EDL-1.0.txt'
+    }
+
 }
 
 dependencies {
@@ -37,9 +56,9 @@ dependencies {
     implementation project(path: ':locationmanager')
     implementation project(path: ':spinnersearchable')
 
-
     // Compressor (latest version)
 //    implementation libs.compressor
+
     // RxJava and RxAndroid
     implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
@@ -47,12 +66,21 @@ dependencies {
 
     // Add Office Location Needs to be turned on
     implementation libs.play.services.location
-//    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
+
+    // Attendance Module Face Auth Requirements
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8' // Parsing
+    implementation group: 'javax.xml.stream', name: 'stax-api', version: '1.0-2'  // Parsing XML Along with Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5' // Use the latest version available
+    implementation('com.thoughtworks.xstream:xstream:1.4.7') {
+        exclude group: 'xmlpull', module: 'xmlpull'
+    }
 
 
     // Excel Download
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
+
 
     implementation libs.appcompat
     implementation libs.material

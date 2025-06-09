@@ -151,6 +151,7 @@ public class AllAddaCards extends AppCompatActivity implements OnAddaCardClickLi
         try {
             if (AppStatus.getInstance(this).isOnline()) {
                 UploadObject object = new UploadObject();
+//                object.setUrl("http://192.168.0.172:8081/hrtc");
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data/paginated?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("adda"), "UTF-8")
@@ -400,7 +401,7 @@ public class AllAddaCards extends AppCompatActivity implements OnAddaCardClickLi
                     // Handle HTTP 401 Unauthorized response (session expired)
                     CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
                 } else {
-                    CD.showDialog(AllAddaCards.this, "Not able to fetch data");
+                    CD.showDialog(AllAddaCards.this, result.getResponse());
                 }
             } else {
 //                CD.showDialog(AddBusDetails.this, "Result is null");

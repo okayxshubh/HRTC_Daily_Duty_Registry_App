@@ -112,10 +112,10 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
                         formattedDate = String.format("%02d-%02d-%04d", selectedDay, selectedMonth + 1, selectedYear);
                         date.setText(formattedDate);
                         downloadExcelFileName = "DailyDutyRegister_Excel_"
-                                + Preferences.getInstance().depotId
+                                + Preferences.getInstance().regionalOfficeId
                                 + "_" + selectedDay + (selectedMonth + 1) + selectedYear + ".xlsx";
                         downloadPDFFileName = "DailyDutyRegister_PDF_"
-                                + Preferences.getInstance().depotId
+                                + Preferences.getInstance().regionalOfficeId
                                 + "_" + selectedDay + (selectedMonth + 1) + selectedYear + ".pdf";
                     },
                     year,
@@ -162,7 +162,7 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
     private void showExcelDownloadConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to download the excel sheet for"
-                        + (("\nDepot Name: " + Preferences.getInstance().depotName)
+                        + (("\nName: " + Preferences.getInstance().regionalOfficeName)
                         + "\nDate: " + date.getText().toString()))
 
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -179,7 +179,7 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
                                 String encryptedBody = null;
                                 JSONObject jsonObject = new JSONObject();
                                 jsonObject.put("dutyDate", date.getText().toString());
-                                jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
+                                jsonObject.put("depot", Preferences.getInstance().regionalOfficeId); // dd/mm/yyyy
 
                                 Log.i("JSON Body", "JSON Body: " + jsonObject.toString());
 
@@ -511,7 +511,8 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
                     // Handle HTTP 401 Unauthorized response (session expired)
                     CD.showSessionExpiredDialog(this, "Session Expired. Please login again.");
                 } else {
-                    CD.showDialog(DownloadRecord.this, "Something went wrong");
+                    Log.e("Download Response", "Download Response: " + result.getResponse());
+                    CD.showDialog(DownloadRecord.this, result.getResponse());
                 }
             } else {
                 CD.showDialog(DownloadRecord.this, "Result from server is null. Check your connection");

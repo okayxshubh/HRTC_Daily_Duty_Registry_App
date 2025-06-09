@@ -630,7 +630,7 @@ public class EditStaff extends AppCompatActivity implements ShubhAsyncTaskListen
                             JSONObject jsonObject = new JSONObject();
 
                             jsonObject.put("empName", updatedFirstName.getText().toString().trim() + " " + updatedLastName.getText().toString());
-                            jsonObject.put("depot", Preferences.getInstance().regionalOfficeId);
+                            jsonObject.put("depotId", Preferences.getInstance().regionalOfficeId);
 
                             //Staff Type
                             if (selectedSpinnerStaffType == null) {
@@ -958,7 +958,7 @@ public class EditStaff extends AppCompatActivity implements ShubhAsyncTaskListen
                     Log.i("Add Entity Response", successResponse.getData());
 
 
-                    CD.showDismissActivityDialog(this, successResponse.getMessage()); // Dialog that dismisses activity
+                    CD.addCompleteEntityDialog(this, successResponse.getMessage()); // Dialog that dismisses activity
                     Intent resultIntent = new Intent();
                     setResult(RESULT_OK, resultIntent);
 

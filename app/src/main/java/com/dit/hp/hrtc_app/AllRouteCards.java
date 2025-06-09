@@ -285,7 +285,6 @@ public class AllRouteCards extends AppCompatActivity implements OnRouteEditClick
         TextView startLocation = dialogView.findViewById(R.id.startLocation);
         TextView endLocation = dialogView.findViewById(R.id.endLocation);
         TextView routeType = dialogView.findViewById(R.id.routeType);
-        TextView depotName = dialogView.findViewById(R.id.depotName);
 
         // Set data for the dialog views
         routeId.setText(String.valueOf(selectedPojo.getRouteId())); // Assuming routeId is an integer
@@ -301,11 +300,6 @@ public class AllRouteCards extends AppCompatActivity implements OnRouteEditClick
         // Set route type (if available)
         if (selectedPojo.getRouteTypePojo() != null) {
             routeType.setText(selectedPojo.getRouteTypePojo().getRouteTypeName());
-        }
-
-        // Set depot information (if available)
-        if (selectedPojo.getDepotPojo() != null) {
-            depotName.setText(selectedPojo.getDepotPojo().getDepotName());
         }
 
         // Build dialog

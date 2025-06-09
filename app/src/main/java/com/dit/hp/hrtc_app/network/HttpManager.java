@@ -3,6 +3,8 @@ package com.dit.hp.hrtc_app.network;
 
 import android.util.Log;
 
+import com.dit.hp.hrtc_app.AttendanceModule.aadhaar_util.modal.FaceAuthObjectRequest;
+import com.dit.hp.hrtc_app.AttendanceModule.aadhaar_util.modal.FaceAuthObjectResponse;
 import com.dit.hp.hrtc_app.Modals.ResponsePojoGet;
 import com.dit.hp.hrtc_app.Modals.UploadObject;
 import com.dit.hp.hrtc_app.utilities.Econstants;
@@ -263,8 +265,6 @@ public class HttpManager {
 
         return response;
     }
-
-
 
 
     // Without JWT Token
@@ -1288,6 +1288,88 @@ public class HttpManager {
         }
         return response;
     }
+
+
+    // Attendance Module / Face Auth Implemented
+    public FaceAuthObjectResponse eKYCViaFaceAuth(FaceAuthObjectRequest data) {
+
+        URL url_ = null;
+        HttpURLConnection conn_ = null;
+        StringBuilder sb = null;
+        JSONStringer userJson = null;
+        String URL = null;
+        FaceAuthObjectResponse response = null;
+        try {
+            URL = data.getUrl() + data.getMethordName();
+
+            url_ = new URL(URL);
+            conn_ = (HttpURLConnection) url_.openConnection();
+
+            conn_.setUseCaches(false);
+            conn_.setDoInput(true);
+            conn_.setDoOutput(true);
+            conn_.setRequestMethod("POST");
+            conn_.setRequestProperty("Content-Type", "text/plain; charset=ISO-8859-1");
+            conn_.setFollowRedirects(true);
+            conn_.setConnectTimeout(120000);
+            conn_.setReadTimeout(120000);
+            conn_.connect();
+
+
+            OutputStreamWriter out = new OutputStreamWriter(conn_.getOutputStream());
+            out.write(data.getEkycXML());
+            out.close();
+
+            try {
+                int HttpResult = conn_.getResponseCode();
+                if (HttpResult != HttpURLConnection.HTTP_OK) {
+                    Log.e("Error", conn_.getResponseMessage());
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn_.getErrorStream(), "utf-8"));
+                    String line = null;
+                    sb = new StringBuilder();
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                    System.out.println(sb.toString());
+                    Log.e("Data from Service", sb.toString());
+                    response = new FaceAuthObjectResponse();
+                    response = Econstants.createObjectFaceResponse(URL, data.getAadhaarNumber(), conn_.getResponseMessage(), Integer.toString(conn_.getResponseCode()), data.getMethordName());
+                    return response;
+
+
+                } else {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn_.getInputStream(), "utf-8"));
+                    String line = null;
+                    sb = new StringBuilder();
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                    System.out.println(sb.toString());
+                    Log.e("Data from Service", sb.toString());
+                    response = new FaceAuthObjectResponse();
+                    response = Econstants.createObjectFaceResponse(URL, data.getAadhaarNumber(), sb.toString(), Integer.toString(conn_.getResponseCode()), data.getMethordName());
+
+                }
+
+            } catch (Exception e) {
+                response = new FaceAuthObjectResponse();
+                response = Econstants.createObjectFaceResponse(URL, data.getAadhaarNumber(), "", "0", data.getMethordName());
+                return response;
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn_ != null)
+                conn_.disconnect();
+        }
+        return response;
+    }
+
 
 
 

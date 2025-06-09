@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -87,6 +88,13 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         setContentView(R.layout.activity_new_login);
 
         Preferences.getInstance().clearPreferences(this);
+
+        if (Preferences.getInstance().isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
 
         userName = findViewById(R.id.userName);
         password = findViewById(R.id.password);
@@ -167,7 +175,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
 
     // Custom methods
 
-    // Get Token.. Without JWT
+    // Get HimAccess Token
     public void getHimAccessToken(String email) {
         if (AppStatus.getInstance(LoginHRTC.this).isOnline()) {
             UploadObject uploadObject = new UploadObject();
@@ -239,18 +247,17 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     }
 
 
-   public void showVisitConfimationDialog(){
-       new AlertDialog.Builder(this)
-               .setTitle("Visit HimAccess?")
-               .setMessage("Visit https://himaccess.hp.gov.in to reset your password or register?")
-               .setPositiveButton("Visit", (dialog, which) -> {
-                   Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://himaccess.hp.gov.in"));
-                   startActivity(browserIntent);
-               })
-               .setNegativeButton("No", null)
-               .show();
-   }
-
+    public void showVisitConfimationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Visit HimAccess?")
+                .setMessage("Visit https://himaccess.hp.gov.in to reset your password or register?")
+                .setPositiveButton("Visit", (dialog, which) -> {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://himaccess.hp.gov.in"));
+                    startActivity(browserIntent);
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
 
 
     // Get User Details..
@@ -606,7 +613,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                     Log.e("Not able to get token", "Not able to get token HRTC JWT");
                 }
             } else {
-                CD.showDialog(LoginHRTC.this, "Result is null");
+                CD.showDialog(LoginHRTC.this, "No result in HRTC JWT Token");
             }
         }
 

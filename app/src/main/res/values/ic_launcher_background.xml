@@ -2,5 +2,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 <!--    <color name="ic_launcher_background">#FFFFFF</color>-->
 <!--    <color name="ic_launcher_background">@drawable/app_icon_bg</color>-->
-    <color name="ic_launcher_background" tools:ignore="ReferenceType">@drawable/hrtc_home_bg</color>
+    <color name="ic_launcher_background" tools:ignore="ReferenceType">@drawable/hrtc_icon_bg_fixed</color>
 </resources>

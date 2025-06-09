@@ -30,6 +30,7 @@ import com.dit.hp.hrtc_app.Modals.RoutePojo;
 import com.dit.hp.hrtc_app.R;
 import com.dit.hp.hrtc_app.utilities.Preferences;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class CustomDialog {
@@ -96,7 +97,6 @@ public class CustomDialog {
             dialog.show();
         }
     }
-
 
     public void addCompleteEntityDialog(final Activity activity, String msg) {
         final Dialog dialog = new Dialog(activity);
@@ -190,7 +190,6 @@ public class CustomDialog {
         });
         dialog.show();
     }
-
 
     public void showDepotEditCompleteDialog(final Activity activity, String msg) {
         final Dialog dialog = new Dialog(activity);
@@ -354,6 +353,87 @@ public class CustomDialog {
     }
 
 
+    // Face Auth Attendance Success
+//    public void showeKYCDataFarmer(final Activity activity, final KycResData kycResData) {
+//        final Dialog dialog = new Dialog(activity);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setCancelable(false);
+//        dialog.setContentView(R.layout.dialog_custom_vahan_member);
+//
+//        int width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.95);
+//        int height = (int) (activity.getResources().getDisplayMetrics().heightPixels * 0.95);
+//        dialog.getWindow().setLayout(width, height);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//        ImageLoader il = new ImageLoader(activity);
+//
+//
+//        ImageView image = (ImageView) dialog.findViewById(R.id.profile_image);
+//        TextView name_aadhaar = (TextView) dialog.findViewById(R.id.name_aadhaar);
+//        TextView dob_aadhaar = (TextView) dialog.findViewById(R.id.dob_aadhaar);
+//        TextView gender_aadhaar = (TextView) dialog.findViewById(R.id.gender_aadhaar);
+//        TextView address_aadhaar = (TextView) dialog.findViewById(R.id.address_aadhaar);
+//
+//
+//        name_aadhaar.setText(kycResData.getUidData().getPoi().getName());
+//        dob_aadhaar.setText(kycResData.getUidData().getPoi().getDob());
+//        gender_aadhaar.setText(kycResData.getUidData().getPoi().getGender());
+//
+//
+//        StringBuilder SB = new StringBuilder();
+//
+//        SB.append(Econstants.isNotEmpty(kycResData.getUidData().getPoa().getCo()) ? kycResData.getUidData().getPoa().getCo() : "");
+//        SB.append(" ,");
+//        SB.append(Econstants.isNotEmpty(kycResData.getUidData().getPoa().getHouse()) ? kycResData.getUidData().getPoa().getHouse() : "");
+//        SB.append(" ,");
+//        SB.append(Econstants.isNotEmpty(kycResData.getUidData().getPoa().getLoc()) ? kycResData.getUidData().getPoa().getLoc() : "");
+//        SB.append(" ,");
+//        SB.append(Econstants.isNotEmpty(kycResData.getUidData().getPoa().getVtc()) ? kycResData.getUidData().getPoa().getVtc() : "");
+//        SB.append(" ,");
+//        SB.append(Econstants.isNotEmpty(kycResData.getUidData().getPoa().getSubdist()) ? kycResData.getUidData().getPoa().getSubdist() : "");
+//        SB.append(" ,");
+//        SB.append(Econstants.isNotEmpty(kycResData.getUidData().getPoa().getState()) ? kycResData.getUidData().getPoa().getState() : "");
+//        SB.append(" ,");
+//        SB.append(Econstants.isNotEmpty(kycResData.getUidData().getPoa().getPc()) ? kycResData.getUidData().getPoa().getPc() : "");
+//        SB.append(" ,");
+//        SB.append(Econstants.isNotEmpty(kycResData.getUidData().getPoa().getPo()) ? kycResData.getUidData().getPoa().getPo() : "");
+//        SB.append(" ,");
+//
+//
+//        address_aadhaar.setText(SB.toString());
+//
+//
+//        // Decode the base64 string to a byte array
+//        byte[] decodedBytes = Base64.decode(kycResData.getUidData().getPht(), Base64.DEFAULT);
+//
+//        // Create a Bitmap from the byte array
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+//
+//        // Set the Bitmap to the ImageView
+//        image.setImageBitmap(bitmap);
+//
+//        String directoryName = "AadhaarPhotos";
+//        String photoPath = Econstants.saveBase64ImageToFile(kycResData.getUidData().getPht(), directoryName, kycResData.getAadhaarNumber(), activity);
+//
+//        kycResData.setAadhaarPhotoPath(photoPath);
+//
+//
+//        Button dialog_ok = (Button) dialog.findViewById(R.id.ok);
+//
+//
+//        dialog_ok.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//
+//    }
+
+
+
     // this dialog takes an additional parameter for already existing route name..
     public void showAlreadyExistRecordDialog(final Activity activity, String msg, String alreadyExistingRouteName) {
         final Dialog dialog = new Dialog(activity);
@@ -469,6 +549,12 @@ public class CustomDialog {
 
                     Intent intent = new Intent(activity, Homescreen.class);
                     intent.putExtra("SelectedAdditionalCharge", selectedAdditionalCharge[0]);
+
+                    // Passing Complete list via intent
+                    if (!additionalChargesList.isEmpty()){
+                        intent.putExtra("CompleteChargesList", (Serializable) additionalChargesList);
+                    }
+
                     startActivity(activity, intent, null);
 
                     // Office ID Becomes the Depot ID now

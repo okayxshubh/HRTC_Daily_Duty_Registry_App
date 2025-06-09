@@ -107,20 +107,20 @@
                     android:padding="4dp" />
             </TableRow>
 
-            <!-- Row: Depot Name -->
-            <TableRow android:elevation="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Vehicle Depot:"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/depotName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp" />
-            </TableRow>
+<!--            &lt;!&ndash; Row: Depot Name &ndash;&gt;-->
+<!--            <TableRow android:elevation="5dp">-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="4dp"-->
+<!--                    android:text="Vehicle Depot:"-->
+<!--                    android:textStyle="bold" />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/depotName"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="4dp" />-->
+<!--            </TableRow>-->
 
         </TableLayout>
 

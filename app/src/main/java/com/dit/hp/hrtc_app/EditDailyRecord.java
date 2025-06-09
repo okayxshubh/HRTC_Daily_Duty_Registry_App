@@ -1501,7 +1501,6 @@ public class EditDailyRecord extends AppCompatActivity implements ShubhAsyncTask
                     CD.showDismissActivityDialog(this, successResponse.getMessage());
 //                    CD.showRecordAddedCompleteDialog(this, successResponse.getMessage());
 
-
                 } else if (successResponse.getStatus().equalsIgnoreCase("FAILED")) {
                     CD.showAlreadyExistRecordDialog(this, successResponse.getMessage(), originalRoute.getRouteName());
 

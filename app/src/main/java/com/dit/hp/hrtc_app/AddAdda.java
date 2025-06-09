@@ -90,7 +90,6 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
         oldDepotLabel = findViewById(R.id. oldDepotLabel);
         oldDepotLabel.setText(Html.fromHtml("Associated Office <font color='#FF0000'>*</font>"));
 
-
         titleTV = findViewById(R.id.titleTextView);
         addaName = findViewById(R.id.addaName);
         locationSpinner = findViewById(R.id.locationSpinner);
@@ -262,6 +261,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
                         UploadObject uploadObject = new UploadObject();
                         // We can use Enums / Econstant to store these values of url and method names
                         try {
+//                            uploadObject.setUrl("http://192.168.0.172:8081/hrtc");
                             uploadObject.setUrl(Econstants.base_url);
                             uploadObject.setMethordName("/master-data?masterName=");
                             uploadObject.setMasterName(URLEncoder.encode(aesCrypto.encrypt("adda"), "UTF-8"));
@@ -277,7 +277,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
                             jsonObject.put("addaName", addaName.getText().toString());
                             jsonObject.put("location", selectedLocation.getId());
                             jsonObject.put("staff", selectedAddaIncharge.getId());
-                            jsonObject.put("depot", selectedOffice.getOfficeId());
+                            jsonObject.put("depotId", selectedOffice.getOfficeId());
                             jsonObject.put("remarks", remarks.getText().toString());
                             jsonObject.put("createdBy", Preferences.getInstance().emailID);
 
@@ -335,7 +335,7 @@ public class AddAdda extends AppCompatActivity implements ShubhAsyncTaskListener
                             jsonObject.put("addaName", addaName.getText().toString());
                             jsonObject.put("location", selectedLocation.getId());
                             jsonObject.put("staff", selectedAddaIncharge.getId());
-                            jsonObject.put("depot", selectedOffice.getOfficeId());
+                            jsonObject.put("depotId", selectedOffice.getOfficeId());
                             jsonObject.put("remarks", remarks.getText().toString());
                             jsonObject.put("updateBy", Preferences.getInstance().empId);
 

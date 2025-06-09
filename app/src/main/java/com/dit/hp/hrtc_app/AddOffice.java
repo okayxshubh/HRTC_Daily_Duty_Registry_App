@@ -695,6 +695,8 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
 
 
                 // ADDING VALUES
+                officeValuesToAdd.setOfficeLocation(GLOBAL_LOCATION_STR);
+
                 officeValuesToAdd.setOfficeName(officeName.getText().toString());
                 officeValuesToAdd.setAddress(addressET.getText().toString());
                 officeValuesToAdd.setPinCode(Integer.parseInt(pincode.getText().toString()));

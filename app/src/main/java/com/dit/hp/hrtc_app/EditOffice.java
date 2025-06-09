@@ -5,13 +5,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -57,10 +54,6 @@ import com.dit.hp.hrtc_app.utilities.AppStatus;
 import com.dit.hp.hrtc_app.utilities.Econstants;
 import com.dit.hp.hrtc_app.utilities.SamplePresenter;
 import com.doi.spinnersearchable.SearchableSpinner;
-import com.kushkumardhawan.locationmanager.base.LocationBaseActivity;
-import com.kushkumardhawan.locationmanager.configuration.LocationConfiguration;
-import com.kushkumardhawan.locationmanager.constants.FailType;
-import com.kushkumardhawan.locationmanager.constants.ProcessType;
 
 import org.json.JSONException;
 
@@ -418,6 +411,12 @@ public class EditOffice extends AppCompatActivity implements ShubhAsyncTaskListe
             proceed.setText("Edit");
             headTV.setText("Edit Office");
 
+            // Preselect Location
+            if (receivedOfficeToEdit.getOfficeLocation() != null) {
+                locationTVLinearLayout.setVisibility(View.VISIBLE);
+                locationTV.setText(receivedOfficeToEdit.getOfficeLocation());
+            }
+
             officeName.setText(receivedOfficeToEdit.getOfficeName());
             addressET.setText(receivedOfficeToEdit.getAddress());
             officeName.setText(receivedOfficeToEdit.getOfficeName() != null ? receivedOfficeToEdit.getOfficeName() : "");
@@ -655,6 +654,9 @@ public class EditOffice extends AppCompatActivity implements ShubhAsyncTaskListe
                     return;
                 }
 
+
+                // Same Office Location
+                officeValuesToAdd.setOfficeLocation(receivedOfficeToEdit.getOfficeLocation());
 
                 officeValuesToAdd.setOfficeName(officeName.getText().toString());
                 officeValuesToAdd.setAddress(addressET.getText().toString());
@@ -1308,7 +1310,7 @@ public class EditOffice extends AppCompatActivity implements ShubhAsyncTaskListe
                                     }
                                     System.out.println("DONE SHUBH");
                                 });
-                            } else{
+                            } else {
                                 System.out.println("Municipality Cannot Be Selected");
                             }
 

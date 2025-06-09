@@ -114,7 +114,7 @@ public class AddStop extends AppCompatActivity implements ShubhAsyncTaskListener
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("route"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8"));
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8"));
                 object.setTasktype(TaskType.GET_ROUTES);
                 object.setAPI_NAME(Econstants.API_NAME_HRTC);
 
@@ -509,7 +509,7 @@ public class AddStop extends AppCompatActivity implements ShubhAsyncTaskListener
                             completeStopList.addAll(pojoList);
 
                         } else {
-                            CD.showDialog(AddStop.this, "No Stops Found");
+//                            CD.showDialog(AddStop.this, "No Stops Found");
                         }
                     } else {
                         CD.showDialog(AddStop.this, response.getMessage());

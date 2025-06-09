@@ -6,6 +6,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.cardview.widget.CardView;
+
+import com.dit.hp.hrtc_app.AttendanceModule.AttendanceAuthentication;
 import com.dit.hp.hrtc_app.Presentation.CustomDialog;
 import com.dit.hp.hrtc_app.utilities.Preferences;
 
@@ -41,21 +43,22 @@ public class AttendanceHome extends BaseDrawerActivity {
         welcomeTV = findViewById(R.id.headTV);
         depotNameTV = findViewById(R.id.depotLocationTV);
 
-        cardView1 = findViewById(R.id.cardView1);
+//        cardView1 = findViewById(R.id.cardView1);
         cardView2 = findViewById(R.id.cardView2);
         profileBtn = findViewById(R.id.profileB);
 
         // Reload user details to update the UI
         reloadUserDetails();
 
-        // Card 1 click listener
-        cardView1.setOnClickListener(v -> {
-            CD.showDialog(this, "Coming Soon..");
-        });
+//        // Card 1 See
+//        cardView1.setOnClickListener(v -> {
+//            CD.showDialog(this, "Coming Soon..");
+//        });
 
-        // Card 2 click listener
+        // Card 2 Mark
         cardView2.setOnClickListener(v -> {
-            CD.showDialog(this, "Coming Soon..");
+           Intent intent = new Intent(this, AttendanceAuthentication.class);
+           startActivity(intent);
         });
 
     }

@@ -236,7 +236,10 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
         if (vehiclePojo != null) {
             Intent editIntent = new Intent(this, EditVehicle.class);
             editIntent.putExtra("VehicleInfo", (Serializable) vehiclePojo);
-            startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
+//            startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
+
+            startActivity(editIntent);
+            AllBusesCards.this.finish();
         } else {
             Log.e("onEditClick", "VehiclePojo is null!");
         }
@@ -300,7 +303,7 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
         TextView iotDeviceId = dialogView.findViewById(R.id.iotDeviceId);
         TextView busModel = dialogView.findViewById(R.id.busModel);
         TextView busCapacity = dialogView.findViewById(R.id.busCapacity);
-        TextView vehicleDepot = dialogView.findViewById(R.id.depotName);
+//        TextView vehicleDepot = dialogView.findViewById(R.id.depotName);
 
         // Check and set the values into the views with null checks
         if (vehiclePojo != null) {
@@ -330,11 +333,11 @@ public class AllBusesCards extends AppCompatActivity implements OnBusEditClickLi
                 busModel.setText("N/A");
             }
 
-            if (vehiclePojo.getDepot() != null) {
-                vehicleDepot.setText(vehiclePojo.getDepot().getDepotName());
-            } else {
-                vehicleDepot.setText("N/A");
-            }
+//            if (vehiclePojo.getDepot() != null) {
+//                vehicleDepot.setText(vehiclePojo.getDepot().getDepotName());
+//            } else {
+//                vehicleDepot.setText("N/A");
+//            }
         }
 
         // Show the dialog

@@ -280,7 +280,7 @@ public class JsonParse {
                     DepotPojo depot = new DepotPojo();
                     depot.setDepotName(depotObject.optString("depotName"));
                     depot.setDepotCode(depotObject.optString("depotCode"));
-                    depot.setId(depotObject.optInt("id"));
+                    depot.setId(depotObject.optInt("depotId"));
                     vehicle.setDepot(depot);
                 }
 
@@ -1153,7 +1153,7 @@ public class JsonParse {
             JSONObject depot = jsonObject.optJSONObject("depot");
             if (depot != null) {
                 DepotPojo depotPojo = new DepotPojo();
-                depotPojo.setId(depot.optInt("id", 0));
+                depotPojo.setId(depot.optInt("depotId", 0));
                 depotPojo.setDepotName(depot.optString("depotName", null));
                 depotPojo.setDepotCode(depot.optString("depotCode", null));
                 route.setDepotPojo(depotPojo);
@@ -1239,7 +1239,7 @@ public class JsonParse {
                 JSONObject depot = jsonObject.optJSONObject("depot");
                 if (depot != null) {
                     DepotPojo depotPojo = new DepotPojo();
-                    depotPojo.setId(depot.optInt("id", 0));
+                    depotPojo.setId(depot.optInt("depotId", 0));
                     depotPojo.setDepotName(depot.optString("depotName", null));
                     depotPojo.setDepotCode(depot.optString("depotCode", null));
                     route.setDepotPojo(depotPojo);
@@ -1321,7 +1321,7 @@ public class JsonParse {
             JSONObject depot = jsonObject.optJSONObject("depot");
             if (depot != null) {
                 DepotPojo depotPojo = new DepotPojo();
-                depotPojo.setId(depot.optInt("id", 0));
+                depotPojo.setId(depot.optInt("depotId", 0));
                 depotPojo.setDepotName(depot.optString("depotName", null));
                 depotPojo.setDepotCode(depot.optString("depotCode", null));
                 route.setDepotPojo(depotPojo);
@@ -1441,6 +1441,11 @@ public class JsonParse {
                 JSONObject parentObj = obj.optJSONObject("office");
                 if (parentObj != null) {
                     OfficePojo parent = new OfficePojo();
+
+                    // Parse Location
+                    parent.setOfficeLocation(parentObj.optString("location", "N/A"));
+
+
                     parent.setOfficeId(parentObj.optInt("id", -1));
                     parent.setOfficeName(parentObj.optString("officeName", "N/A"));
                     parent.setAddress(parentObj.optString("address", "N/A"));
@@ -2149,69 +2154,6 @@ public class JsonParse {
 
         return sr;
     }
-
-//    public static List<VehiclePojo> parseVehicleList(String response) throws JSONException {
-//        // Parse the response JSON string into a JSONObject
-//        JSONObject rootObject = new JSONObject(response);
-//
-//        // Extract the 'data' JSONArray
-//        JSONArray dataArray = rootObject.getJSONArray("data");
-//
-//        // Create a list to store VehiclePojo objects
-//        List<VehiclePojo> vehicleList = new ArrayList<>();
-//
-//        // Iterate over the 'data' array
-//        for (int i = 0; i < dataArray.length(); i++) {
-//            // Get each JSONObject inside the 'data' array
-//            JSONObject vehicleObject = dataArray.getJSONObject(i);
-//
-//            // Create a new VehiclePojo and set its fields
-//            VehiclePojo vehicle = new VehiclePojo();
-//            vehicle.setVehicleNo(vehicleObject.optString("vehicleNo"));
-//            vehicle.setVehicleType(vehicleObject.optString("vehicleType"));
-//            vehicle.setVehicleDetails(vehicleObject.optString("vehicleDetails"));
-//
-//            // Add the object to the list
-//            vehicleList.add(vehicle);
-//        }
-//
-//        // Return the parsed list
-//        return vehicleList;
-//    }
-
-
-//    public static List<DepotPojo> parseDepotsInfo(String response) throws JSONException {
-//        List<DepotPojo> depotList = new ArrayList<>();
-//
-//        try {
-//            JSONObject jsonResponse = new JSONObject(response);
-//
-//            // Check if "data" array is present
-//            if (jsonResponse.has("data")) {
-//                JSONArray jsonArray = jsonResponse.getJSONArray("data");
-//
-//                // Iterate through each object in the "data" array
-//                for (int i = 0; i < jsonArray.length(); i++) {
-//                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-//
-//                    // Map each object to a DepotPojo instance
-//                    DepotPojo depot = new DepotPojo();
-//                    depot.setDepotId(jsonObject.getString("depotId"));
-//                    depot.setDepotName(jsonObject.getString("depotName"));
-//
-//                    depotList.add(depot);
-//                }
-//            } else {
-//                Log.e("Parse Error", "No 'data' array found in the response!");
-//            }
-//
-//        } catch (JSONException e) {
-//            Log.e("Parse Error", "Exception while parsing depots: " + e.getMessage());
-//            throw e;
-//        }
-//
-//        return depotList;
-//    }
 
 
 }

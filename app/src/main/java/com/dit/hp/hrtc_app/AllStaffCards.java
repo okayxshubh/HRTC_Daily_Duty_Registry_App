@@ -233,7 +233,9 @@ public class AllStaffCards extends AppCompatActivity implements OnStaffCardClick
         Intent editIntent = new Intent(this, EditStaff.class);
         editIntent.putExtra("EditType", "DriverEdit");
         editIntent.putExtra("DriverInfo", selectedPojo);
-        startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
+//        startActivityForResult(editIntent, UPDATE_REQUEST_CODE);
+        startActivity(editIntent);
+        AllStaffCards.this.finish();
     }
 
     @Override

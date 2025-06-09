@@ -212,7 +212,7 @@ public class DailyDutyRegisterCards extends AppCompatActivity implements OnEditC
                 object.setUrl(Econstants.base_url);
                 object.setMethordName("/master-data/paginated?");
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("dailyDuty"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8")
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8")
                         + "&dutyDate=" + URLEncoder.encode(aesCrypto.encrypt(date), "UTF-8")
                         + "&page=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(page)))
                         + "&size=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(size)))
@@ -273,7 +273,7 @@ public class DailyDutyRegisterCards extends AppCompatActivity implements OnEditC
                 object.setMethordName("/master-data?");  // Adjust based on actual endpoint
 
                 object.setMasterName(URLEncoder.encode(aesCrypto.encrypt("dailyDuty"), "UTF-8")
-                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().depotId)), "UTF-8")
+                        + "&parentId=" + URLEncoder.encode(aesCrypto.encrypt(String.valueOf(Preferences.getInstance().regionalOfficeId)), "UTF-8")
                         + "&dutyDate=" + URLEncoder.encode(aesCrypto.encrypt(date), "UTF-8")
                         + "&searchByName=" + URLEncoder.encode(aesCrypto.encrypt(query), "UTF-8"));
                 object.setTasktype(TaskType.GET_RECORD_SEARCH);

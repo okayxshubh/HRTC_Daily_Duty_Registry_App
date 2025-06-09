@@ -15,6 +15,7 @@ public class OfficePojo implements Serializable {
     private int officeId;
     private String officeName;
     private String officeArea;
+    private String officeLocation;
 
     private OfficeLevel officeLevelPojo;
 
@@ -48,6 +49,14 @@ public class OfficePojo implements Serializable {
     private int sanctionedPosts;
 
     private int otherPosts;
+
+    public String getOfficeLocation() {
+        return officeLocation;
+    }
+
+    public void setOfficeLocation(String officeLocation) {
+        this.officeLocation = officeLocation;
+    }
 
     public OfficePojo getParentOffice() {
         return parentOffice;
@@ -248,6 +257,8 @@ public class OfficePojo implements Serializable {
 
         JSONObject json = new JSONObject();
         try {
+            json.put("location", officeLocation);
+
             json.put("officeName", officeName);
 
             json.put("officeType", officeLevelPojo.getOfficeLevelId());
@@ -295,6 +306,8 @@ public class OfficePojo implements Serializable {
 
         JSONObject json = new JSONObject();
         try {
+            json.put("location", officeLocation);
+
             json.put("officeName", officeName);
 
             json.put("officeType", officeLevelPojo.getOfficeLevelId());
