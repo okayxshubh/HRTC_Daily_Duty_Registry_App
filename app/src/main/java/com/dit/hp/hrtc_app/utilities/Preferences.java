@@ -22,7 +22,9 @@ public class Preferences {
     private final String KEY_EMP_ID = "empId";
 
     private final String KEY_USER_NAME = "userName";
+    private final String KEY_COMPLETE_NAME = "completeName";
     private final String KEY_MOBILE_NUMBER = "mobileNumber";
+    private final String KEY_AADHAAR_NUMBER = "aadhaarNumber";
 
     private final String KEY_ROLE_ID = "roleId";
     private final String KEY_ROLE_NAME = "roleName";
@@ -64,7 +66,9 @@ public class Preferences {
     public Integer empId;
 
     public String userName = null;
+    public String completeName = null;
     public String mobileNumber = null;
+    public String aadhaarNumber = null;
 
     public String dateOfBirth = null;
 
@@ -130,6 +134,7 @@ public class Preferences {
         orgName = preferences.getString(KEY_ORG_NAME, null);
 
         dateOfBirth = preferences.getString(KEY_DATE_OF_BIRTH, null);
+        completeName = preferences.getString(KEY_COMPLETE_NAME, null);
 
         int departmentIdValue = preferences.getInt(KEY_DEPARTMENT_ID, -1);
         departmentId = (departmentIdValue == -1) ? null : departmentIdValue;
@@ -160,6 +165,8 @@ public class Preferences {
 
         userName = preferences.getString(KEY_USER_NAME, null);
         mobileNumber = preferences.getString(KEY_MOBILE_NUMBER, null);
+        aadhaarNumber = preferences.getString(KEY_AADHAAR_NUMBER, null);
+
 
         token = preferences.getString(KEY_TOKEN, null);
 
@@ -187,6 +194,8 @@ public class Preferences {
         editor.putString(KEY_USER_NAME, userName);
         editor.putString(KEY_MOBILE_NUMBER, mobileNumber);
         editor.putString(KEY_DATE_OF_BIRTH, dateOfBirth);
+        editor.putString(KEY_AADHAAR_NUMBER, aadhaarNumber);
+        editor.putString(KEY_COMPLETE_NAME, completeName);
 
         editor.putInt(KEY_OFFICE_TYPE_ID, officeTypeId == null ? -1 : officeTypeId);
         editor.putString(KEY_OFFICE_TYPE_NAME, officeTypeName);

@@ -29,7 +29,16 @@ public class HimAccessUser implements Serializable {
     private String dateOfBirth;
     private String designation;
     private String department;
+    private String aadhaarNumber;
 
+
+    public String getAadhaarNumber() {
+        return aadhaarNumber;
+    }
+
+    public void setAadhaarNumber(String aadhaarNumber) {
+        this.aadhaarNumber = aadhaarNumber;
+    }
 
     public String getUid() {
         return uid;

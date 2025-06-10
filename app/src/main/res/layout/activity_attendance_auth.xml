@@ -44,7 +44,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@color/navyblue"
+                            android:background="@color/hrtc_green"
                             android:gravity="center|center_vertical|center_horizontal"
                             android:padding="10dp"
                             android:text="Perform Authentication/eKYC"

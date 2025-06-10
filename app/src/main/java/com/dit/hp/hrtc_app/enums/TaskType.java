@@ -105,6 +105,8 @@ public enum TaskType {
     GET_OFFICE_FOR_ADMIN(79),
 
     FACE_AUTH(80),
+    GET_AADHAAR_NUMBER(81),
+    SUBMIT_ATTENDANCE(81),
 
 
 

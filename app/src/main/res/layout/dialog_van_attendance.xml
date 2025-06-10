@@ -1,0 +1,268 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/customborder_dialog"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/a"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/hrtc_green"
+        android:gravity="center"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/punch_out" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/a"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.8"
+            android:orientation="vertical">
+
+
+
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:orientation="vertical">
+
+                <!--android:minWidth="300dp"-->
+                <!--android:minHeight="400dp"-->
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/blue"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:padding="10dp"
+                    android:text="Verify the Data before submitting"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <!-- Add the ImageView at the top -->
+
+
+
+<!-- Aadhaar Photo -->
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/name"
+                    android:gravity="center_horizontal|center_vertical|center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/aadhaar"
+                        android:background="@drawable/customborder_dialog"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:id="@+id/aadhaar_iv"
+                            android:scaleType="fitCenter" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Authentication successful"
+                            android:textColor="@color/green"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:layout_gravity="center|center_vertical|center_horizontal"
+                            android:layout_marginTop="10dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/consent"
+                        android:visibility="gone"
+
+                        android:background="@drawable/customborder_dialog"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        android:padding="16dp">
+
+                        <ImageView
+
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:id="@+id/consent_iv"
+                            android:scaleType="fitCenter" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Captured Consent"
+                            android:textColor="@color/green"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:layout_gravity="center|center_vertical|center_horizontal"
+                            android:layout_marginTop="10dp" />
+
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+<!-- Attendance Options -->
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/dynamic_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/customborder_dialog">
+
+                    <TextView
+                        android:id="@+id/name_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Name: "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/date_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Date: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Punch Type:"
+                        android:layout_marginTop="8dp" />
+
+                    <RadioGroup
+                        android:id="@+id/punch_type_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_punch_in"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Punch In" />
+
+                        <RadioButton
+                            android:id="@+id/rb_punch_out"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Punch Out" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/work_type_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Type of Work:"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone" />
+
+                    <Spinner
+                        android:id="@+id/type_of_work_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/remarks_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Remarks:"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/remarks_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="@drawable/customborder_dialog"
+                        android:gravity="top|start"
+                        android:hint="Enter remarks here"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="0.2"
+            android:orientation="vertical">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/layout"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/ok"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/green"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="Submit Attendance"
+                    android:textColor="#ffffffff" />
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

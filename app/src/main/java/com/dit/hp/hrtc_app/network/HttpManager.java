@@ -1056,7 +1056,11 @@ public class HttpManager {
 
         try {
 
-            URL = data.getUrl() + data.getMethordName() + data.getMasterName();
+            URL = "";
+            if (data.getUrl() != null) URL += data.getUrl();
+            if (data.getMethordName() != null) URL += data.getMethordName();
+            if (data.getMasterName() != null) URL += data.getMasterName();
+
             Log.e("URL Formed", "URL FORMED: " + URL.toString());
             url_ = new URL(URL);
             conn_ = (HttpURLConnection) url_.openConnection();

@@ -201,6 +201,13 @@ public class ShubhAsyncPost extends AsyncTask<UploadObject, Void, ResponsePojoGe
             return Data_From_Server;
         }
 
+        // Get Aadhaar No of HimAccess Users
+        if (uploadObjects[0].getTasktype() == TaskType.GET_AADHAAR_NUMBER) {
+            Log.e("We Here", "Upload Object Debug: " + uploadObjects[0].getUrl() + "  " + uploadObjects[0].getMethordName() + "  " + uploadObjects[0].getMasterName() + "  " + uploadObjects[0].getParam());
+            Data_From_Server = http_manager.PostDataHimAccess(uploadObjects[0]);
+            return Data_From_Server;
+        }
+
 
 
         // POST Data Without JWT

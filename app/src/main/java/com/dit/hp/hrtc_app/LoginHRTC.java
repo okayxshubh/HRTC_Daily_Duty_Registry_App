@@ -659,6 +659,8 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                             Preferences.getInstance().roleId = himAccessUserInfo.getAppRoleId();  // Normal Role ID
                             Preferences.getInstance().roleName = himAccessUserInfo.getRoleName();
 
+                            Preferences.getInstance().completeName = himAccessUser.getCn(); // Complete Name
+
                             Preferences.getInstance().emailID = himAccessUserInfo.getEmployeePojo().getEmailId();
                             Preferences.getInstance().empId = himAccessUserInfo.getEmployeePojo().getEmpId();
                             Preferences.getInstance().userName = himAccessUserInfo.getEmployeePojo().getEmployeeName();

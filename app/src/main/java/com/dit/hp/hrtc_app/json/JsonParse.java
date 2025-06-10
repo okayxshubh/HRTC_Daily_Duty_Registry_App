@@ -74,6 +74,34 @@ public class JsonParse {
         return sr;
     }
 
+
+    // For Submitting Attendance
+    public static SuccessResponse getSuccessResponseFinal(String data) {
+        SuccessResponse sr = new SuccessResponse();
+
+        try {
+            JSONObject responseObject = new JSONObject(data);
+
+            if (responseObject.has("status")) {
+                sr.setStatus(responseObject.optString("status"));
+            }
+            if (responseObject.has("message")) {
+                sr.setMessage(responseObject.optString("message"));
+            }
+            if (responseObject.has("error")) {
+                sr.setError(responseObject.optString("error"));
+            }
+            if (responseObject.has("data")) {
+                sr.setResponse(responseObject.optString("data"));
+            }
+        } catch (JSONException e) {
+            Log.e("Parsing Error", "Parsing Error: " + e.getMessage());
+            e.printStackTrace(); // Log error but continue execution
+        }
+
+        return sr;
+    }
+
     public static User parseDecryptedUserInfo(String response) {
         User user = null;
         try {
@@ -1445,7 +1473,6 @@ public class JsonParse {
                     // Parse Location
                     parent.setOfficeLocation(parentObj.optString("location", "N/A"));
 
-
                     parent.setOfficeId(parentObj.optInt("id", -1));
                     parent.setOfficeName(parentObj.optString("officeName", "N/A"));
                     parent.setAddress(parentObj.optString("address", "N/A"));
@@ -2139,6 +2166,34 @@ public class JsonParse {
         return allRecordsList;
     }
 
+    //[
+    //  {
+    //    "aadhar_no": "274791902679",
+    //    "employee_name": "Bhupender Singh Thakur",
+    //    "mobile_no": "9857598075",
+    //    "office": "823",
+    //    "official_email": "bhupendersingh.thakur@himaccess.hp.gov.in"
+    //  }
+    //]
+
+
+    public static HimAccessUser parseAadhaarNumberForHimAccessUser(String dataString) {
+        try {
+            JSONArray dataArray = new JSONArray(dataString);
+            JSONObject item = dataArray.getJSONObject(0);
+
+            HimAccessUser user = new HimAccessUser();
+            user.setMail(item.optString("email"));
+            user.setMobile(item.optString("mobile_no"));
+            user.setAadhaarNumber(item.optString("aadhar_no"));
+
+            return user;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 //################################################### Normal Ones ################################################

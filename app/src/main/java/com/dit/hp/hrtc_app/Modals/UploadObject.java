@@ -1,9 +1,11 @@
 package com.dit.hp.hrtc_app.Modals;
 
 
+import com.dit.hp.hrtc_app.AttendanceModule.attendanceModals.AadhaarDoc;
 import com.dit.hp.hrtc_app.enums.TaskType;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 public class UploadObject implements Serializable {
@@ -27,6 +29,16 @@ public class UploadObject implements Serializable {
 
     private String parentId;
     private String secondaryParentId;
+
+    List<AadhaarDoc> imagePaths;
+
+    public List<AadhaarDoc> getImagePaths() {
+        return imagePaths;
+    }
+
+    public void setImagePaths(List<AadhaarDoc> imagePaths) {
+        this.imagePaths = imagePaths;
+    }
 
     public String getBody() {
         return body;
