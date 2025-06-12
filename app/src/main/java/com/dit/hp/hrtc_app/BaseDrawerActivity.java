@@ -85,6 +85,8 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 intent = new Intent(this, SalaryHome.class);
             }else if (id == R.id.nav_settings) {
                 intent = new Intent(this, Settings.class);
+            }else if (id == R.id.nav_notifics) {
+                intent = new Intent(this, Notifications.class);
             }
             else if (id == R.id.nav_logout) {
                 showLogoutConfirmationDialog();
@@ -125,45 +127,6 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         headerOfficeTV.setText(depot);
     }
 
-    private void openScreen(int id) {
-        Intent intent = null;
-
-        if (id == R.id.nav_home) {
-
-            intent = new Intent(this, Homescreen.class);
-        }
-        //
-        else if (id == R.id.nav_profile) {
-            intent = new Intent(this, ProfileScreen.class);
-        }
-        //
-        else if (id == R.id.nav_attendance) {
-            intent = new Intent(this, AttendanceHome.class);
-        }
-        //
-        else if (id == R.id.nav_payslip) {
-            intent = new Intent(this, SalaryHome.class);
-        }
-        //
-        else if (id == R.id.nav_settings) {
-            // intent = new Intent(this, SettingsActivity.class);
-        }
-        //
-        else if (id == R.id.nav_notifics) {
-            // intent = new Intent(this, NotificationsActivity.class);
-        }
-        //
-        else if (id == R.id.nav_logout) {
-            showLogoutConfirmationDialog();
-            return;
-        }
-
-        if (intent != null) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-        }
-
-    }
 
     private void showLogoutConfirmationDialog() {
         new android.app.AlertDialog.Builder(this)

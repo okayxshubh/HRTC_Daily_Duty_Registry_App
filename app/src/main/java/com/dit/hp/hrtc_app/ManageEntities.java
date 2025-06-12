@@ -110,7 +110,7 @@ public class ManageEntities extends AppCompatActivity {
 
         // Depot
         String regionalOfficeName = Preferences.getInstance().regionalOfficeName;
-        depotLocationTV.setText(regionalOfficeName != null && !regionalOfficeName.isEmpty() ? "Office: " + regionalOfficeName : "No Info Available");
+        depotLocationTV.setText(regionalOfficeName != null && !regionalOfficeName.isEmpty() ? "Depot: " + regionalOfficeName : "Depot: Not Available");
     }
 
 

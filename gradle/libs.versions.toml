@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.2"
+androidImageSlider = "1.4.0"
 compressor = "3.0.1"
 jacksonDatabind = "2.12.5"
 jacksonDataformatXml = "2.12.5"
@@ -17,6 +18,8 @@ playServicesLocation = "21.3.0"
 xstream = "1.4.7"
 
 [libraries]
+android-image-slider = { module = "com.github.smarteist:Android-Image-Slider", version.ref = "androidImageSlider" }
+autoimageslider = { module = "com.github.smarteist:autoimageslider", version.ref = "androidImageSlider" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 jackson-databind-v2125 = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonDatabind" }
 jackson-dataformat-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonDataformatXml" }

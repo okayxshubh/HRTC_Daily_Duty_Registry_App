@@ -1,5 +1,6 @@
 package com.dit.hp.hrtc_app.AttendanceModule;
 
+import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 
 import android.annotation.SuppressLint;
@@ -339,7 +340,7 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
 
 
                 object.setAadhaarNumber("764500450582");  //HARDCODED AS MINE
-                Toast.makeText(this,"Hardcoded Aadhaar No",LENGTH_SHORT).show();
+                Toast.makeText(this,"Hardcoded Aadhaar No",LENGTH_LONG).show();
 //                object.setAadhaarNumber(Preferences.getInstance().aadhaarNumber);  //Preferences.getInstance().beat_aadhaar
                 System.out.println("Shubh Log: Aadhaar Number As: " + Preferences.getInstance().aadhaarNumber);
 

@@ -220,15 +220,27 @@ public class Preferences {
     }
 
 
-    // CLear All Prefs
-    public void clearPreferences(Context context) {
-        if (context == null) return;
+//    // CLear All Prefs Normal
+//    public void clearPreferences(Context context) {
+//        if (context == null) return;
+//
+//        preferences = context.getSharedPreferences(preferenceName, Activity.MODE_PRIVATE);
+//        editor = preferences.edit();
+//        editor.clear(); // Clear all keys
+//        editor.apply(); // Apply changes
+//    }
 
-        preferences = context.getSharedPreferences(preferenceName, Activity.MODE_PRIVATE);
-        editor = preferences.edit();
-        editor.clear(); // Clear all keys
-        editor.apply(); // Apply changes
+    public void clearPreferences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+
+        // Also clear cached static fields (very important)
+        userName = null;
+        depotName = null;
+        roleName = null;
+        isDarkMode = false; // or default
     }
+
 
 
 

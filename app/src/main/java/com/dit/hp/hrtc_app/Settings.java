@@ -69,18 +69,19 @@ public class Settings extends BaseDrawerActivity {
 
 
         // On toggle switch
-//        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-//
-//            Preferences.getInstance().isDarkMode = isChecked;
-//            Preferences.getInstance().savePreferences(this);
-////            showRestartConfimationDialog();
+        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+
+            Preferences.getInstance().isDarkMode = isChecked;
+            Preferences.getInstance().savePreferences(this);
+//            showRestartConfimationDialog();
+        });
+
+
+//        switchDarkMode.setOnClickListener(v -> {
+//            Toast.makeText(this,"Coming Soon",Toast.LENGTH_SHORT).show();
 //        });
 
-
-        switchDarkMode.setOnClickListener(v -> {
-            Toast.makeText(this,"Coming Soon",Toast.LENGTH_SHORT).show();
-        });
         switchNotifications.setOnClickListener(v -> {
             Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
         });

@@ -71,8 +71,8 @@ public class SalaryHome extends BaseDrawerActivity {
         welcomeTV.setText("Welcome " + userName);
 
         // Depot
-        String depotName = Preferences.getInstance().depotName;
-        depotNameTV.setText(depotName != null && !depotName.isEmpty() ? "Office: " + depotName : "No Info Available");
+        String regionalOfficeName = Preferences.getInstance().regionalOfficeName;
+        depotNameTV.setText(regionalOfficeName != null && !regionalOfficeName.isEmpty() ? "Depot: " + regionalOfficeName : "Depot: No Info Available");
 
         // Role
         String roleName = Preferences.getInstance().roleName;

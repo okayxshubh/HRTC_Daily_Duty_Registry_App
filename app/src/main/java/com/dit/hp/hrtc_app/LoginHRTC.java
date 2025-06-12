@@ -87,7 +87,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_login);
 
-        Preferences.getInstance().clearPreferences(this);
+        Preferences.getInstance().loadPreferences(this);
 
         if (Preferences.getInstance().isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -337,7 +337,7 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
         } else {
-            getLocation(); // Already granted
+            // Do nothing permission granted
         }
     }
 
@@ -726,14 +726,14 @@ public class LoginHRTC extends AppCompatActivity implements ShubhAsyncTaskListen
     @Override
     protected void onRestart() {
         super.onRestart();
-        Preferences.getInstance().clearPreferences(this);
+        Preferences.getInstance().loadPreferences(this);
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        Preferences.getInstance().clearPreferences(this);
+        Preferences.getInstance().loadPreferences(this);
     }
 
 

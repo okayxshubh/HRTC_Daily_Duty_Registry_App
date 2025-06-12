@@ -61,7 +61,7 @@ public class ProfileScreen extends BaseDrawerActivity implements ShubhAsyncTaskL
     ListView resultListView;
     AdditionalChargesListAdapter additionalChargesListAdapter;
 
-    TextView username, deptName, role, designation, email, employeeId, dob, phone;
+    TextView username, deptName, role, designation, email, employeeId, dob, phone, allChargesHead;
     AESCrypto aesCrypto = new AESCrypto();
     HimAccessUserInfo himAccessUserInfo = new HimAccessUserInfo();
 
@@ -83,6 +83,7 @@ public class ProfileScreen extends BaseDrawerActivity implements ShubhAsyncTaskL
         phone = findViewById(R.id.user_phone);
         dob = findViewById(R.id.dob);
         resultListView = findViewById(R.id.resultListView);
+        allChargesHead = findViewById(R.id.allChargesHead);
 
 
         username.setText(Preferences.getInstance().userName != null ? Preferences.getInstance().userName : "Not Available");
@@ -232,14 +233,14 @@ public class ProfileScreen extends BaseDrawerActivity implements ShubhAsyncTaskL
                                 }
                             }
 
-                            System.out.println("shubh123 "+  additionalChargeList.size());
+                            allChargesHead.setText("All Charges List: " + additionalChargeList.size() + " Charge(s)");
 
                             additionalChargesListAdapter = new AdditionalChargesListAdapter(this, additionalChargeList);
                             resultListView.setAdapter(additionalChargesListAdapter);
 
                         } else {
                             // Hide Addtional Charges Section
-                            Toast.makeText(this,"Can't fetch data",LENGTH_SHORT).show();
+                            Toast.makeText(this,"Can't fetch charges",LENGTH_SHORT).show();
                         }
 
                     } else {

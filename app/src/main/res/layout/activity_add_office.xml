@@ -91,7 +91,6 @@
                     android:orientation="vertical">
 
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -107,8 +106,8 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:background="@drawable/outline_round_tv"
-                            android:scaleType="centerInside"
                             android:padding="60dp"
+                            android:scaleType="centerInside"
                             android:src="@drawable/camera"
                             android:tooltipText="Click Asset Photo" />
 
@@ -127,46 +126,43 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/home_white_bg"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:weightSum="1">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/locationTV"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:layout_weight="0.8"
+                                android:layout_margin="5dp"
+                                android:layout_weight="0.9"
                                 android:background="@drawable/outline_round_tv"
+                                android:ellipsize="end"
                                 android:fontFamily="@font/raleway_semibold"
                                 android:gravity="center"
-                                android:focusable="false"
                                 android:hint="Location Appears Here"
-                                android:inputType="phone"
-                                android:minHeight="48dp"
-                                android:padding="8dp"
-                                android:singleLine="false"
+                                android:maxLines="3"
+                                android:minHeight="60dp"
+                                android:padding="10dp"
                                 android:textAlignment="center"
                                 android:textColor="#13914f"
-                                android:textSize="15sp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                             <ImageButton
                                 android:id="@+id/getLocationBtn"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_weight="0.2"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:contentDescription="Get Location"
-                                android:padding="8dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/location" />
                         </LinearLayout>
 
 
-                    </LinearLayout>
 
+                    </LinearLayout>
 
 
                     <TextView
@@ -184,39 +180,38 @@
                 </LinearLayout>
 
 
-<!--                <LinearLayout-->
-<!--                    android:layout_width="fill_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_margin="2dp"-->
-<!--                    android:background="#fff"-->
-<!--                    android:elevation="4dp"-->
-<!--                    android:orientation="vertical">-->
+                <!--                <LinearLayout-->
+                <!--                    android:layout_width="fill_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_margin="2dp"-->
+                <!--                    android:background="#fff"-->
+                <!--                    android:elevation="4dp"-->
+                <!--                    android:orientation="vertical">-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/departmentLabel"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:padding="5dp"-->
-<!--                        android:paddingStart="18dp"-->
-<!--                        android:text="Please Select Department"-->
-<!--                        android:textAlignment="textStart"-->
-<!--                        android:textColor="@color/darkblue"-->
-<!--                        android:textSize="16sp" />-->
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/departmentLabel"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:padding="5dp"-->
+                <!--                        android:paddingStart="18dp"-->
+                <!--                        android:text="Please Select Department"-->
+                <!--                        android:textAlignment="textStart"-->
+                <!--                        android:textColor="@color/darkblue"-->
+                <!--                        android:textSize="16sp" />-->
 
-<!--                    &lt;!&ndash; Searchable Spinner for Employment Type &ndash;&gt;-->
-<!--                    <com.doi.spinnersearchable.SearchableSpinner-->
-<!--                        android:id="@+id/departmentSpinner"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="30dp"-->
-<!--                        android:layout_margin="10dp"-->
-<!--                        android:background="@drawable/customborder_dialog"-->
-<!--                        android:fontFamily="@font/raleway_semibold"-->
-<!--                        android:textColor="#13914f"-->
-<!--                        android:textSize="16sp"-->
-<!--                        app:hintText="Please Select Department" />-->
+                <!--                    &lt;!&ndash; Searchable Spinner for Employment Type &ndash;&gt;-->
+                <!--                    <com.doi.spinnersearchable.SearchableSpinner-->
+                <!--                        android:id="@+id/departmentSpinner"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        android:layout_margin="10dp"-->
+                <!--                        android:background="@drawable/customborder_dialog"-->
+                <!--                        android:fontFamily="@font/raleway_semibold"-->
+                <!--                        android:textColor="#13914f"-->
+                <!--                        android:textSize="16sp"-->
+                <!--                        app:hintText="Please Select Department" />-->
 
-<!--                </LinearLayout>-->
-
+                <!--                </LinearLayout>-->
 
 
                 <LinearLayout
@@ -242,18 +237,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <com.doi.spinnersearchable.SearchableSpinner
                             android:id="@+id/parentOfficeSpinner"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:minHeight="30dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/customborder_dialog"
                             android:fontFamily="@font/raleway_semibold"
+                            android:minHeight="30dp"
                             android:textColor="#13914f"
                             android:textSize="16sp"
                             app:hintText="Please Select Parent Office" />
@@ -272,7 +267,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
 
 
                 <LinearLayout
@@ -333,12 +327,12 @@
                         android:id="@+id/officeName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="false"
                         android:layout_margin="10dp"
                         android:background="@drawable/customborder_dialog"
                         android:fontFamily="@font/raleway_semibold"
                         android:hint="Office Name"
                         android:padding="8dp"
+                        android:singleLine="false"
                         android:textColor="#13914f"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -415,10 +409,10 @@
                 <!--URBAN LL-->
                 <LinearLayout
                     android:id="@+id/urbanLinearLayout"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -490,10 +484,10 @@
                 <!--Rural LL-->
                 <LinearLayout
                     android:id="@+id/ruralLinearLayout"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -594,7 +588,6 @@
                 </LinearLayout>
 
 
-
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -656,11 +649,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
-                        android:maxLength="6"
-                        android:inputType="number"
                         android:background="@drawable/customborder_dialog"
                         android:fontFamily="@font/raleway_semibold"
                         android:hint="Please Enter Pincode "
+                        android:inputType="number"
+                        android:maxLength="6"
                         android:padding="8dp"
                         android:singleLine="true"
                         android:textColor="#13914f"
@@ -690,13 +683,13 @@
                     <EditText
                         android:id="@+id/addressET"
                         android:layout_width="match_parent"
-                        android:minHeight="100dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/customborder_dialog"
                         android:fontFamily="@font/raleway_semibold"
                         android:hint="Please Enter Address"
+                        android:minHeight="100dp"
                         android:padding="8dp"
                         android:singleLine="true"
                         android:textColor="#13914f"
@@ -733,11 +726,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
-                        android:maxLength="5"
-                        android:inputType="number"
                         android:background="@drawable/customborder_dialog"
                         android:fontFamily="@font/raleway_semibold"
                         android:hint="Please Enter Total No. of Sanctioned Posts"
+                        android:inputType="number"
+                        android:maxLength="5"
                         android:padding="8dp"
                         android:singleLine="true"
                         android:textColor="#13914f"

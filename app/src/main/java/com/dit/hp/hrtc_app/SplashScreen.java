@@ -31,13 +31,18 @@ public class SplashScreen extends AppCompatActivity {
 
         Preferences.getInstance().loadPreferences(this);
 
-        if (Preferences.getInstance().isDarkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//            Toast.makeText(this, "Dark Mode Enabled", Toast.LENGTH_SHORT).show();
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//            Toast.makeText(this, "Light Mode Enabled", Toast.LENGTH_SHORT).show();
-        }
+
+        // Always Light Splash Screen
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+
+//        if (Preferences.getInstance().isDarkMode) {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+////            Toast.makeText(this, "Dark Mode Enabled", Toast.LENGTH_SHORT).show();
+//        } else {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+////            Toast.makeText(this, "Light Mode Enabled", Toast.LENGTH_SHORT).show();
+//        }
 
 
         if (!isTaskRoot()) {

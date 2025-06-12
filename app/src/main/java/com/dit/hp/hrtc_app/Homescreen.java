@@ -106,9 +106,6 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
         // Reload user details to update the UI
         reloadUserDetails();
 
-        loadOfficeForAdmin();
-
-
         // Apply null check
         System.out.println(Preferences.getInstance().appRoleId);
         System.out.println(Preferences.getInstance().appRoleId);
@@ -257,7 +254,6 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
 
 //    CUSTOM METHODS ########################################################################################################################################
 
-    // Exit confirmation
     private void showLogoutConfirmationDialog() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to logout as the current user?")
@@ -269,7 +265,7 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
                         startActivity(intent);
                         finish();
 
-                        // Clear
+                        // Clear Prefs
                         Preferences.getInstance().clearPreferences(Homescreen.this);
 
 
@@ -283,7 +279,6 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
         android.app.AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 
     // Load Offices for Inventory
     private void loadOfficeForAdmin() {
@@ -314,7 +309,6 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
             CD.showDialog(Homescreen.this, "Something Bad happened . Please reinstall the application and try again.");
         }
     }
-
 
     // DIALOG FOR Regional Office SELECTION
     private void showRegionalOfficeSelectionPopup() {
@@ -397,8 +391,8 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
         welcomeTV.setText("Welcome " + userName);
 
         // Depot
-        String depotName = Preferences.getInstance().depotName;
-        depotNameTV.setText(depotName != null && !depotName.isEmpty() ? "Depot: " + depotName : "No Info Available");
+        String regionalOfficeName = Preferences.getInstance().regionalOfficeName;
+        depotNameTV.setText(regionalOfficeName != null && !regionalOfficeName.isEmpty() ? "Depot: " + regionalOfficeName : "Depot: Not Available");
 
         // Role
         String roleName = Preferences.getInstance().roleName;
@@ -434,24 +428,19 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
                             officesSelectionSpinnerAdapter = new OfficesSelectionSpinnerAdapter(this, android.R.layout.simple_spinner_item, pojoList);
                             if (officeSpinner != null) {
                                 officeSpinner.setAdapter(officesSelectionSpinnerAdapter);
-                            } else {
-                                Log.e("SpinnerError", "officeSpinner is null. Check XML or findViewById.");
                             }
 
-
-                            //  Preselect Depot or Regional Office If Available
-                            if (Preferences.getInstance().depotName != null && officeSpinner != null) {
-                                Log.d("DepotCheck", "Depot Name: " + Preferences.getInstance().depotName);
+                            //  Preselect Depot or Regional Office When Popup Clicked
+                            if (Preferences.getInstance().regionalOfficeName != null && officeSpinner != null) {
                                 officeSpinner.post(() -> {
                                     if (officesSelectionSpinnerAdapter != null) {
                                         int itemPosition = officesSelectionSpinnerAdapter.getPositionForOffice(
-                                                Preferences.getInstance().depotName,
-                                                Preferences.getInstance().depotId
+                                                Preferences.getInstance().regionalOfficeName,
+                                                Preferences.getInstance().regionalOfficeId
                                         );
 
                                         if (itemPosition != -1) {
                                             officeSpinner.setSelectedItemByIndex(itemPosition);
-                                            Log.d("OfficeSelection", "Selected index: " + itemPosition);
                                         } else {
                                             Log.e("OfficeSelection", "Office not found in adapter.");
                                         }
@@ -459,13 +448,9 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
                                         Log.e("OfficeSelection", "Adapter is null.");
                                     }
                                 });
-                            } else {
-                                Log.e("OfficeSelection", "Spinner is null or depot name missing.");
                             }
 
 
-                        } else {
-//                            CD.showDialog(Homescreen.this, "No offices found for selection");
                         }
 
                     } else {
