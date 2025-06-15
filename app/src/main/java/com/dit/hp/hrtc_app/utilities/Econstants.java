@@ -77,7 +77,7 @@ public class Econstants {
 
     // ATTENDANCE
     public static final String attendanceBaseURL = "https://himstaging1.hp.gov.in/attendance-api?";
-    public static final String methodSaveAttendance = "/van/save";
+    public static final String methodSaveAttendance = "/attendance/save";
 
 
 

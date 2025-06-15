@@ -257,7 +257,7 @@ public class OfficePojo implements Serializable {
 
         JSONObject json = new JSONObject();
         try {
-            json.put("location", officeLocation);
+            json.put("office_location", officeLocation);
 
             json.put("officeName", officeName);
 
@@ -306,7 +306,7 @@ public class OfficePojo implements Serializable {
 
         JSONObject json = new JSONObject();
         try {
-            json.put("location", officeLocation);
+//            json.put("office_location", officeLocation); // Not Allowed to change location on edit
 
             json.put("officeName", officeName);
 

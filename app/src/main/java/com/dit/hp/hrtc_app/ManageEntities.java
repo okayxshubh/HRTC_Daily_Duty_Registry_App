@@ -125,11 +125,9 @@ public class ManageEntities extends AppCompatActivity {
                         startActivity(intent);
                         finish();
 
-                        // Clear
-                        SharedPreferences preferences = getSharedPreferences("com.dit.himachal.hrtc.app", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.clear(); // This will remove all preferences
-                        editor.apply(); // or editor.commit();
+                        // Clear Prefs
+                        Preferences.getInstance().clearPreferences(ManageEntities.this);
+
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

@@ -10,6 +10,7 @@ import com.dit.hp.hrtc_app.AttendanceModule.attendanceModals.AadhaarDoc;
 import com.dit.hp.hrtc_app.Modals.UploadObject;
 import com.dit.hp.hrtc_app.enums.TaskType;
 import com.dit.hp.hrtc_app.network.HttpFileUpload;
+import com.dit.hp.hrtc_app.utilities.Preferences;
 
 import org.json.JSONException;
 
@@ -72,13 +73,10 @@ public class Generic_Async_Upload_Attendance extends AsyncTask<UploadObject, Str
             // Add surveyData as a common part
             multipartBuilder.addFormDataPart("data", mediaFiles[0].getParam());
 
-
             List<AadhaarDoc> imagePathList = mediaFiles[0].getImagePaths(); // Assuming getImagePath returns an ArrayList<String>
 
 
-
             if (imagePathList != null && !imagePathList.isEmpty()) {
-
 
                 for(int i=0; i< imagePathList.size(); i++){
                     String firstImagePath = imagePathList.get(i).getDocPath(); // Assuming you want to use the first element
@@ -101,6 +99,7 @@ public class Generic_Async_Upload_Attendance extends AsyncTask<UploadObject, Str
                     .url(mediaFiles[0].getUrl() + mediaFiles[0].getMethordName())
                     .method("POST", body)
                     .addHeader("Connection", "Keep-Alive")
+                    .addHeader("Authorization", "Bearer " + Preferences.getInstance().token) // HRTC Token JWT
                     .build();
 
             System.out.println("=-===-=Request=-=-=-=-" + request.toString());

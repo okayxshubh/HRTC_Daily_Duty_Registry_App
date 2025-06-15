@@ -7,9 +7,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
@@ -17,10 +17,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +35,10 @@ import com.dit.hp.hrtc_app.AttendanceModule.aadhaar_util.modal.kyc.KycResData;
 import com.dit.hp.hrtc_app.AttendanceModule.aadhaar_util.utils.Utils;
 import com.dit.hp.hrtc_app.AttendanceModule.attendanceAdapters.GenericAdapterAuthentication;
 import com.dit.hp.hrtc_app.AttendanceModule.attendanceAsync.GenericAsyncPostObjectFaceeKYC;
+import com.dit.hp.hrtc_app.AttendanceModule.attendanceAsync.Generic_Async_Upload_Attendance;
 import com.dit.hp.hrtc_app.AttendanceModule.attendanceInterfaces.AsyncTaskListenerFile;
 import com.dit.hp.hrtc_app.AttendanceModule.attendanceInterfaces.FaceEKYCInterface;
+import com.dit.hp.hrtc_app.AttendanceModule.attendanceModals.AadhaarDoc;
 import com.dit.hp.hrtc_app.AttendanceModule.attendanceModals.AttendanceObject;
 import com.dit.hp.hrtc_app.AttendanceModule.jsonAttendance.JsonParseAttendance;
 import com.dit.hp.hrtc_app.Modals.HimAccessUser;
@@ -66,6 +68,8 @@ import org.json.JSONObject;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -134,7 +138,6 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
             }
         });
 
-
 //        face_authentication.setOnClickListener(v -> {
 //            try {
 //                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + Econstants.FaceRD_PackageName)));
@@ -186,7 +189,6 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
                 if (isEkycDataAvailable) {
                     if (userLocation != null) {
 
-
                         attendanceObject.setLocation(userLocation.trim());
                         attendanceObject.setUserId(Preferences.getInstance().emailID);
                         attendanceObject.setName(Preferences.getInstance().completeName);
@@ -206,72 +208,77 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
         });
 
 
-//        // FINAL SAVE VIA BROADCAST RECEIVER
-//        mReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                if (intent.getAction() == "attendanceObject") {
-//                    if (AppStatus.getInstance(AttendanceAuthentication.this).isOnline()) {
-//                        Bundle extras = intent.getExtras();
-//                        assert extras != null;
-//                        AttendanceObject data = (AttendanceObject) extras.getSerializable("ATTENDANCE_OBJECT");
-//                        Log.e("Data From Dialog", data.toString());
-//
-//                        /**
-//                         * Save the Data
-//                         */
-//                        UploadObject object = new UploadObject();
+
+        // FINAL SAVE VIA BROADCAST RECEIVER
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                System.out.println("Shubh Received");
+                if ("attendanceObject".equals(intent.getAction())) {
+
+                    System.out.println("Inside Attendance Object Receiver");
+
+                    if (AppStatus.getInstance(AttendanceAuthentication.this).isOnline()) {
+                        Bundle extras = intent.getExtras();
+                        assert extras != null;
+                        AttendanceObject data = (AttendanceObject)extras.getSerializable("ATTENDANCE_OBJECT");
+                        Log.e("Data Received In Receiver: Shubh: ", data.toString());
+
+                        /**
+                         * Save the Data
+                         */
+                        UploadObject object = new UploadObject();
+
+                        object.setUrl("http://http://192.168.0.172:8080");
 //                        object.setUrl(Econstants.attendanceBaseURL);
-//                        object.setTasktype(TaskType.SUBMIT_ATTENDANCE);
-//                        object.setMethordName(Econstants.methodSaveAttendance);  //to be changed
-//                        object.setParam(data.getAttendanceObjectJson().toString());
-//                        System.out.println(data.getAttendanceObjectJson().toString());
-//
-//
-//                        List<AadhaarDoc> imagePaths = new ArrayList<>();
-//                        if (Econstants.isNotEmpty(data.getAadhaarEkyc().getAadhaarPhotoPath())) {
-//                            int lastIndex = data.getAadhaarEkyc().getAadhaarPhotoPath().lastIndexOf("/");
-//                            String lastString = data.getAadhaarEkyc().getAadhaarPhotoPath().substring(lastIndex + 1);
-//                            AadhaarDoc doc = new AadhaarDoc();
-//                            doc.setDocName(lastString);
-//                            doc.setDocPath(data.getAadhaarEkyc().getAadhaarPhotoPath());
-//                            imagePaths.add(doc);
-//                        }
-//
-//                        if (Econstants.isNotEmpty(data.getAadhaarEkyc().getDocPath())) {
-//                            int lastIndex = data.getAadhaarEkyc().getDocPath().lastIndexOf("/");
-//                            String lastString = data.getAadhaarEkyc().getDocPath().substring(lastIndex + 1);
-//                            AadhaarDoc doc = new AadhaarDoc();
-//                            doc.setDocName(lastString);
-//                            doc.setDocPath(data.getAadhaarEkyc().getDocPath());
-//                            imagePaths.add(doc);
-//                        }
-//
-//
-//                        System.out.println("imagePaths" + imagePaths.toString());
-//                        object.setImagePaths(imagePaths);
-//                        System.out.println("object with images" + object.toString());
-//
-//
-//                        Log.e("Data", data.getAttendanceObjectJson().toString());
-//                        if (AppStatus.getInstance(AttendanceAuthentication.this).isOnline()) {
-//                            new Generic_Async_Upload_Attendance(AttendanceAuthentication.this,
-//                                    AttendanceAuthentication.this,
-//                                    TaskType.SUBMIT_ATTENDANCE).execute(object);
-//                        } else {
-//                            CD.showDialog(AttendanceAuthentication.this, Econstants.internetNotAvailable);
-//                        }
-//                    } else {
-//                        CD.showDialog(AttendanceAuthentication.this, "Please Connect to Internet and try again.");
-//                    }
-//
-//                }
-//            }
-//        };
+                        object.setMethordName(Econstants.methodSaveAttendance);  //to be changed
+                        object.setTasktype(TaskType.SUBMIT_ATTENDANCE);
+                        object.setParam(data.getAttendanceObjectJson().toString());
+                        //object.setImagePath(compressedImage.getPath());
+                        System.out.println(data.getAttendanceObjectJson().toString());
+
+
+                        List<AadhaarDoc> imagePaths = new ArrayList<>();
+                        if (Econstants.isNotEmpty(data.getAadhaarEkyc().getAadhaarPhotoPath())) {
+                            int lastIndex = data.getAadhaarEkyc().getAadhaarPhotoPath().lastIndexOf("/");
+                            String lastString = data.getAadhaarEkyc().getAadhaarPhotoPath().substring(lastIndex + 1);
+                            AadhaarDoc doc = new AadhaarDoc();
+                            doc.setDocName(lastString);
+                            doc.setDocPath(data.getAadhaarEkyc().getAadhaarPhotoPath());
+                            imagePaths.add(doc);
+                        }
+
+                        if (Econstants.isNotEmpty(data.getAadhaarEkyc().getDocPath())) {
+                            int lastIndex = data.getAadhaarEkyc().getDocPath().lastIndexOf("/");
+                            String lastString = data.getAadhaarEkyc().getDocPath().substring(lastIndex + 1);
+                            AadhaarDoc doc = new AadhaarDoc();
+                            doc.setDocName(lastString);
+                            doc.setDocPath(data.getAadhaarEkyc().getDocPath());
+                            imagePaths.add(doc);
+                        }
+
+
+                        System.out.println("imagePaths" + imagePaths.toString());
+                        object.setImagePaths(imagePaths);
+                        System.out.println("object with images" + object.toString());
+
+                        Log.e("Data", data.getAttendanceObjectJson().toString());
+                        if (AppStatus.getInstance(AttendanceAuthentication.this).isOnline()) {
+                            new Generic_Async_Upload_Attendance(AttendanceAuthentication.this,
+                                    AttendanceAuthentication.this,
+                                    TaskType.SUBMIT_ATTENDANCE).execute(object);
+                        } else {
+                            CD.showDialog(AttendanceAuthentication.this, Econstants.internetNotAvailable);
+                        }
+                    } else {
+                        CD.showDialog(AttendanceAuthentication.this, "Please Connect to Internet and try again.");
+                    }
+                }
+            }
+        };
 
 
     }
-
 
     private void makeAadhaarNoServiceCall(String email, Long mobileNoLong) {
         // Route Service call
@@ -330,29 +337,10 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
                 object.setTasktype(TaskType.FACE_AUTH);
 
                 // GET CORRECT AADHAAR NUMBER
-
-
-
-
-
-
-
-
-
                 object.setAadhaarNumber("764500450582");  //HARDCODED AS MINE
-                Toast.makeText(this,"Hardcoded Aadhaar No",LENGTH_LONG).show();
+                Toast.makeText(this,"Hardcoded Aadhaar No: 764500450582",LENGTH_LONG).show();
 //                object.setAadhaarNumber(Preferences.getInstance().aadhaarNumber);  //Preferences.getInstance().beat_aadhaar
                 System.out.println("Shubh Log: Aadhaar Number As: " + Preferences.getInstance().aadhaarNumber);
-
-
-
-
-
-
-
-
-
-
 
                 object.setIntentPIDXML(response);
                 new GenericAsyncPostObjectFaceeKYC(
@@ -365,11 +353,6 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
             }
         }
     }
-
-    public void showError(String errorMessage) {
-        Toast.makeText(this, errorMessage, LENGTH_SHORT).show();
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -388,22 +371,16 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
         }
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
-    }
 
-
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    // Add in On Resume
     @Override
     protected void onResume() {
         super.onResume();
         Preferences.getInstance().loadPreferences(this); // Ensure preferences are reloaded
-        registerReceiver(mReceiver, new IntentFilter("surveyObjectPDS"));
+//        registerReceiver(mReceiver, new IntentFilter("attendanceObject"), Context.RECEIVER_NOT_EXPORTED);
+//        System.out.println("Shubh onResume registered");
 
-        if (getLocationManager().isWaitingForLocation()
-                && !getLocationManager().isAnyDialogShowing()) {
+        if (getLocationManager().isWaitingForLocation() && !getLocationManager().isAnyDialogShowing()) {
             displayProgress();
         }
     }
@@ -412,20 +389,19 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
     protected void onRestart() {
         super.onRestart();
         Preferences.getInstance().loadPreferences(this); // Ensure preferences are reloaded
+        System.out.println("Shubh onRestart Registered");
+        registerReceiver(mReceiver, new IntentFilter("attendanceObject"), Context.RECEIVER_NOT_EXPORTED);
     }
 
+    // Do not unregister receiver in onPause as it gets off when the activity is started for result
     @Override
     protected void onPause() {
-
-        if (mReceiver != null) {
-            unregisterReceiver(mReceiver);
-            mReceiver = null;
-        }
-
         super.onPause();
         Preferences.getInstance().loadPreferences(this);
         dismissProgress();
     }
+
+
 
 
     /**
@@ -498,6 +474,10 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
     protected void onDestroy() {
         super.onDestroy();
         samplePresenter.destroy();
+
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
     }
 
     @Override
@@ -527,13 +507,28 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
 
                 CD.showeKYCDataFarmer(AttendanceAuthentication.this, kycResData);
 
+                // Set fixed size in pixels (convert 150dp to px)
+                int sizeInDp = 150;
+                float scale = this.getResources().getDisplayMetrics().density;
+                int sizeInPx = (int) (sizeInDp * scale + 0.5f);
+
+                // Resize ImageView
+                ViewGroup.LayoutParams params = face_authentication.getLayoutParams();
+                params.width = sizeInPx;
+                params.height = sizeInPx;
+                face_authentication.setLayoutParams(params);
+
+                // Disable interaction
                 face_authentication.setClickable(false);
-                face_authentication.setTooltipText("KYC Performed");
+                face_authentication.setFocusable(false);
+                face_authentication.setTooltipText("KYC Performed Successfully");
+                face_authentication.setForegroundGravity(Gravity.CENTER);
+
+                // Set scale and image
                 face_authentication.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                // Setting Image
-                String imagePath = kycResData.getAadhaarPhotoPath(); // Get Image Path
-                Drawable drawable = Drawable.createFromPath(imagePath);
+                Drawable drawable = Drawable.createFromPath(kycResData.getAadhaarPhotoPath());
                 face_authentication.setImageDrawable(drawable);
+
 
             } else {
                 CD.showDialog(AttendanceAuthentication.this, "E-KYC Not Successfully completed. Please Retry");
@@ -601,12 +596,20 @@ public class AttendanceAuthentication extends LocationBaseActivity implements Fa
 
         if (TaskType.SUBMIT_ATTENDANCE == taskType) {
             SuccessResponse response = null;
+
+            Log.e("Final Response", "Final Response: " + object);
             response = JsonParse.getSuccessResponseFinal(object);
-            if (response.getStatus().equalsIgnoreCase("OK")) {
-                CD.showDismissActivityDialog(this, response.getMessage());
+
+            if (response != null){
+                if (response.getStatus().equalsIgnoreCase("OK")) {
+                    CD.showDismissActivityDialog(this, response.getMessage());
+                } else {
+                    CD.showDismissActivityDialog(this, response.getMessage());
+                }
             } else {
-                CD.showDismissActivityDialog(this, response.getMessage());
+                CD.showDialog(this, "Response is null: " + object);
             }
+
         }
 
     }

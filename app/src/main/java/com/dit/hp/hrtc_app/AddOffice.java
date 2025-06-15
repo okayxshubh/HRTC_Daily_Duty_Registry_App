@@ -693,7 +693,6 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                     return;
                 }
 
-
                 // ADDING VALUES
                 officeValuesToAdd.setOfficeLocation(GLOBAL_LOCATION_STR);
 
@@ -978,31 +977,6 @@ public class AddOffice extends LocationBaseActivity implements SamplePresenter.S
                     mainImageView.setPadding(5, 5, 5, 5);
 
                     getLocation(); // Automatically Fetch Location.. When Image Clicked
-
-//                    Luban.with(this)
-//                            .load(actualImage)
-//                            .ignoreBy(200) // Ignore if file size < 200KB
-//                            .setCompressListener(new OnCompressListener() {
-//                                @Override
-//                                public void onStart() {
-//                                    // Compression started
-//                                }
-//
-//                                @Override
-//                                public void onSuccess(File file) {
-//                                    compressedImage = file;
-//                                    photoFilePath = file.getPath();
-//                                    photoFileName = file.getName();
-//
-//                                    mainImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-//                                    mainImageView.setPadding(5, 5, 5, 5);
-//                                }
-//
-//                                @Override
-//                                public void onError(Throwable e) {
-//                                    Log.e("LubanError", e.getMessage());
-//                                }
-//                            }).launch();
 
                 }
             }

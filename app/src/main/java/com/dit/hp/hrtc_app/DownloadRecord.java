@@ -98,7 +98,7 @@ public class DownloadRecord extends AppCompatActivity implements ShubhAsyncTaskL
 
         depotNameTV = findViewById(R.id.addNumTV);
 
-        depotNameTV.setText("Depot: " + Preferences.getInstance().depotName);
+        depotNameTV.setText("Depot: " + Preferences.getInstance().regionalOfficeName);
 
         date.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();

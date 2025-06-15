@@ -84,7 +84,8 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
 
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/alerts_slider"

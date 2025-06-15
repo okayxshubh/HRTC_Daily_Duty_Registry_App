@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -51,7 +50,6 @@ public class AttendanceHome extends BaseDrawerActivity {
     CustomDialog CD = new CustomDialog();
     TextView headingTV;
 
-    private static final int UPDATE_REQUEST_CODE = 1;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 102;
 
 
@@ -88,7 +86,8 @@ public class AttendanceHome extends BaseDrawerActivity {
             task.addOnSuccessListener(locationSettingsResponse -> {
                 // Location is ON
                 Intent intent = new Intent(AttendanceHome.this, AttendanceAuthentication.class);
-                startActivityForResult(intent, UPDATE_REQUEST_CODE);
+                startActivity(intent);
+
             });
 
             task.addOnFailureListener(e -> {

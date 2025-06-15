@@ -187,19 +187,19 @@
                             android:text="Punch Out" />
                     </RadioGroup>
 
-                    <TextView
-                        android:id="@+id/work_type_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Type of Work:"
-                        android:layout_marginTop="10dp"
-                        android:visibility="gone" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/work_type_label"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Type of Work:"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:visibility="gone" />-->
 
-                    <Spinner
-                        android:id="@+id/type_of_work_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone" />
+<!--                    <Spinner-->
+<!--                        android:id="@+id/type_of_work_spinner"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:visibility="gone" />-->
 
                     <TextView
                         android:id="@+id/remarks_label"

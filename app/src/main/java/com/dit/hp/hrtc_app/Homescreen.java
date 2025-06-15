@@ -220,7 +220,7 @@ public class Homescreen extends BaseDrawerActivity implements ShubhAsyncTaskList
         cardView5.setOnClickListener(v -> {
 
             Integer appRoleId = Preferences.getInstance().appRoleId;  // App ROLE ID
-            Log.e("ROLE Here: ", "ROLE Here: " + appRoleId);
+            Log.e("ROLE Here: ", "ROLE Here for Office Click: " + appRoleId);
             if (appRoleId != null && (appRoleId == 1 || appRoleId == 2)) {
                 Intent intent = new Intent(Homescreen.this, AllOfficeCards.class);
                 startActivity(intent);

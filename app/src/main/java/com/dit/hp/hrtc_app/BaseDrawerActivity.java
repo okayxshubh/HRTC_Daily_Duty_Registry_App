@@ -132,6 +132,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         new android.app.AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to logout as the current user?")
                 .setPositiveButton("Yes", (dialog, id) -> {
+
                     Preferences.getInstance().clearPreferences(this);
 
                     Intent intent = new Intent(BaseDrawerActivity.this, LoginHRTC.class);

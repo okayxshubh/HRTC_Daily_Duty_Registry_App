@@ -98,11 +98,9 @@ public class AttendanceObject implements Serializable {
     public String toString() {
         return "AttendanceObject{" +
                 "name='" + name + '\'' +
-                ", beatName='" + beatName + '\'' +
                 ", location='" + location + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", punchInOut='" + punchInOut + '\'' +
-                ", workDone='" + workDone + '\'' +
                 ", remarks='" + remarks + '\'' +
                 ", userId='" + userId + '\'' +
                 '}';
@@ -112,11 +110,14 @@ public class AttendanceObject implements Serializable {
         try {
             JSONObject attendanceObject = new JSONObject();
             attendanceObject.put("name", name);
-            attendanceObject.put("beatName", beatName);
             attendanceObject.put("location", location);
             attendanceObject.put("dateTime", dateTime);
             attendanceObject.put("punchInOut", punchInOut);
-            attendanceObject.put("workDone", workDone);
+
+            if (workDone != null) {
+                attendanceObject.put("workDone", workDone);
+            }
+
             attendanceObject.put("remarks", remarks);
             attendanceObject.put("userId", userId);
 
@@ -124,7 +125,7 @@ public class AttendanceObject implements Serializable {
                 attendanceObject.put("aadhaarData", this.getAadhaarEkyc().jsonKYCRESObj());
             }
 
-                return attendanceObject;
+            return attendanceObject;
 
         } catch (JSONException e) {
             e.printStackTrace();

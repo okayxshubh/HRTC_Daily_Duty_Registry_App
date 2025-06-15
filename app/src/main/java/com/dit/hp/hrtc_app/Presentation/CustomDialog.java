@@ -1,5 +1,6 @@
 package com.dit.hp.hrtc_app.Presentation;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.Activity;
@@ -454,7 +455,7 @@ public class CustomDialog {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
 
-        System.out.println(surveyObject.getAttendanceObjectJson().toString());
+        System.out.println("Within Dialog: " + surveyObject.getAttendanceObjectJson().toString());
         dialog.setContentView(R.layout.dialog_van_attendance);
 
         int width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.95);
@@ -476,10 +477,10 @@ public class CustomDialog {
 
         // Fields to be controlled dynamically
         RadioGroup punchTypeGroup = dialog.findViewById(R.id.punch_type_group);
-        Spinner typeOfWorkSpinner = dialog.findViewById(R.id.type_of_work_spinner);
         EditText remarksEditText = dialog.findViewById(R.id.remarks_edittext);
         TextView remarksLabel = dialog.findViewById(R.id.remarks_label);
-        TextView workTypeLabel = dialog.findViewById(R.id.work_type_label);
+//        Spinner typeOfWorkSpinner = dialog.findViewById(R.id.type_of_work_spinner);
+//        TextView workTypeLabel = dialog.findViewById(R.id.work_type_label);
 
         // Name and Date display
         TextView nameText = dialog.findViewById(R.id.name_text);
@@ -510,11 +511,9 @@ public class CustomDialog {
             if (checkedId == R.id.rb_punch_in) {
                 remarksEditText.setVisibility(View.GONE);
                 remarksLabel.setVisibility(View.GONE);
-                workTypeLabel.setVisibility(View.GONE);
             } else if (checkedId == R.id.rb_punch_out) {
                 remarksEditText.setVisibility(View.VISIBLE);
                 remarksLabel.setVisibility(View.VISIBLE);
-                workTypeLabel.setVisibility(View.VISIBLE);
             }
         });
 
@@ -524,7 +523,6 @@ public class CustomDialog {
 
             int selectedId = punchTypeGroup.getCheckedRadioButtonId();
             String punchType = selectedId == R.id.rb_punch_in ? "Punch In" : "Punch Out";
-
 
             String remarks = remarksEditText.getText().toString();
 
@@ -537,12 +535,14 @@ public class CustomDialog {
                 surveyObject.setPunchInOut(punchType);
             }
 
-            System.out.println(surveyObject.getAttendanceObjectJson());
+            System.out.println("Inside Dialog: " + surveyObject.getAttendanceObjectJson());
 
             if (punchType.equals("Punch Out")) {
+                System.out.println("Shubh + PunchOut");
                 if (surveyObject.getRemarks() != null && !surveyObject.getRemarks().isEmpty()) {
                     Intent intent = new Intent("attendanceObject");
                     intent.setPackage(activity.getPackageName());
+
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("ATTENDANCE_OBJECT", surveyObject);
                     intent.putExtras(bundle);
@@ -550,20 +550,21 @@ public class CustomDialog {
                     dialog.dismiss();
 
                 } else {
-                    Toast.makeText(activity, "Please Enter Remarks", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Please Enter Remarks", LENGTH_SHORT).show();
                 }
 
             } else {
+                System.out.println("Shubh + PunchIn");
                 // Broadcast
                 Intent intent = new Intent("attendanceObject");
                 intent.setPackage(activity.getPackageName());
+
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("ATTENDANCE_OBJECT", surveyObject);
                 intent.putExtras(bundle);
                 activity.sendBroadcast(intent);
                 dialog.dismiss();
             }
-
 
         });
 
