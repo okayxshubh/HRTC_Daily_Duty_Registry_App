@@ -1,0 +1,165 @@
+<!-- res/layout/dialog_more_info.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_bg"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/card_bg"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="MORE INFORMATION"
+        android:textColor="@color/hrtc_green"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Info Table -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/card_bg"
+            android:elevation="5dp"
+            android:stretchColumns="1">
+
+            <!-- Personal Info Section -->
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Name:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/employeeName"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Gender:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/genderTv"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Caste:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/casteTv"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Date of Birth:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/dateOfBirth"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <!-- Employment Info Section -->
+            <TableRow android:layout_marginTop="10dp">
+                <TextView
+                    android:text="Official ID:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/officialId"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Staff Type:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/staffType"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Employment Type:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/employmentType"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Employee Code:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/employeeCode"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Date of Joining:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/dateOfJoining"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <!-- Contact Info Section -->
+            <TableRow android:layout_marginTop="10dp">
+                <TextView
+                    android:text="Licence No:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/licenceNo"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Contact No:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/contactNo"
+                    android:padding="6dp" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+                <TextView
+                    android:text="Address:"
+                    android:textStyle="bold"
+                    android:padding="6dp" />
+                <TextView
+                    android:id="@+id/address"
+                    android:padding="6dp" />
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

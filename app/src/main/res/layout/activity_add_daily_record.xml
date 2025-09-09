@@ -1,0 +1,770 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+    <!-- Top Section: Header Image -->
+    <RelativeLayout
+        android:id="@+id/top_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/navyblue"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#B7FFFFFF"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/hrtcBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="centerCrop"
+                android:src="@drawable/hrtc" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/raleway_semibold"
+                android:gravity="center"
+                android:letterSpacing="0.025"
+                android:text="Add Record"
+                android:textColor="@color/hrtc_green"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/logOutB"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/hp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- Body Section: Scrollable Content -->
+    <LinearLayout
+        android:id="@+id/body_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <!--BODY-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--Trip Layout-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="#FFFF"
+                    android:elevation="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/hrtc_green"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:gravity="center|center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="Duty Details"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!--Record Date-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/dateLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Record Date *"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/date"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:focusable="false"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:gravity="center"
+                            android:hint="Select Date"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/routeLL"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/routeLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="20dp"
+                            android:text="Select Route *"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/routeSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Route" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/routeActionLL"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:visibility="gone"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/actionLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="20dp"
+                            android:text="Select action to perform (if any)"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <Spinner
+                            android:id="@+id/routeActionSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            app:hintText="Please Select Route"
+                            android:textSize="16sp"
+                            android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:id="@+id/otherRouteLL"
+                        android:visibility="gone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/otherRouteLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="20dp"
+                            android:text="Other Route *"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/otherRouteSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Other Route" />
+
+                    </LinearLayout>
+
+
+                    <!--STOPS-->
+                    <LinearLayout
+                        android:id="@+id/stopsLL"
+                        android:visibility="gone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/stopsLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="20dp"
+                            android:text="Please select the final stop (when curtailed)"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/finalStopSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Final Stop" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/timeLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Actual \nDeparture Time *"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/time"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:gravity="center"
+                            android:hint="Time"
+                            android:textAlignment="center"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/vehicleLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="20dp"
+                            android:text="Assign Vehicle *"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/vehicleNumberSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Vehicle Number" />
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!--Driver Layout-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="#FFFF"
+                    android:elevation="5dp"
+                    android:orientation="vertical">
+
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#FFFF"
+                        android:elevation="5dp"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/driverLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Driver's Name *"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/driverSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            app:hintText="Driver's Name" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <!--Conductor Spinner Layout-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="#FFFF"
+                    android:elevation="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/conductorLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:paddingStart="18dp"
+                        android:text="Conductor's Name *"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/darkblue"
+                        android:textSize="16sp" />
+
+                    <com.doi.spinnersearchable.SearchableSpinner
+                        android:id="@+id/conductorSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/customborder_dialog"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:textColor="#13914f"
+                        app:hintText="Conductor's Name" />
+                </LinearLayout>
+
+
+                <!-- ACCORDIAN -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/outline_for_layout"
+                    android:layout_margin="10dp">
+
+                    <!-- Accordion Header (Clickable) -->
+                    <LinearLayout
+                        android:id="@+id/accordionHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_margin="2dp"
+                        android:background="@color/green"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/accordionTitle"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Relieving Staff (if any)"
+                            android:textSize="18sp"
+                            android:textColor="@android:color/white" />
+
+                        <ImageView
+                            android:id="@+id/arrowIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/down_arrow" />
+                    </LinearLayout>
+
+                    <!-- Hidden Content -->
+                    <LinearLayout
+                        android:id="@+id/accordionContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        android:orientation="vertical">
+
+                        <!-- Relieving Driver Layout -->
+                        <LinearLayout
+                            android:id="@+id/relievingDriverLL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/relievingDriverLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:paddingStart="18dp"
+                                android:text="Relieving Driver's Name"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/darkblue"
+                                android:textSize="16sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <com.doi.spinnersearchable.SearchableSpinner
+                                    android:id="@+id/relievingDriverSpinner"
+                                    android:layout_width="0dp"
+                                    android:layout_height="30dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/customborder_dialog"
+                                    app:hintText="Select Relieving Driver" />
+
+                                <ImageButton
+                                    android:id="@+id/clearRelievingDriverSelection"
+                                    android:layout_width="45dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginStart="10dp"
+                                    android:background="?attr/selectableItemBackground"
+                                    android:contentDescription="Clear Selection"
+                                    android:fontFamily="@font/raleway_semibold"
+                                    android:padding="14dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/delete" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/relievingDriverStopLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:paddingStart="18dp"
+                                android:text="Relieving Driver's Stop"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/darkblue"
+                                android:textSize="16sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <com.doi.spinnersearchable.SearchableSpinner
+                                    android:id="@+id/relievingDriverStopSpinner"
+                                    android:layout_width="0dp"
+                                    android:layout_height="30dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/customborder_dialog"
+                                    app:hintText="Select Stop for Relieving Driver" />
+
+                                <ImageButton
+                                    android:id="@+id/clearRelievingDriverStopSelection"
+                                    android:layout_width="45dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginStart="10dp"
+                                    android:background="?attr/selectableItemBackground"
+                                    android:contentDescription="Clear Selection"
+                                    android:fontFamily="@font/raleway_semibold"
+                                    android:padding="14dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/delete" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Relieving Conductor Layout -->
+                        <LinearLayout
+                            android:id="@+id/relievingConductorLL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/relievingConductorLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:paddingStart="18dp"
+                                android:text="Relieving Conductor's Name"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/darkblue"
+                                android:textSize="16sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <com.doi.spinnersearchable.SearchableSpinner
+                                    android:id="@+id/relievingConductorSpinner"
+                                    android:layout_width="0dp"
+                                    android:layout_height="30dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/customborder_dialog"
+                                    app:hintText="Select Relieving Conductor" />
+
+                                <ImageButton
+                                    android:id="@+id/clearRelievingConductorSelection"
+                                    android:layout_width="45dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginStart="10dp"
+                                    android:background="?attr/selectableItemBackground"
+                                    android:contentDescription="Clear Selection"
+                                    android:fontFamily="@font/raleway_semibold"
+                                    android:padding="14dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/delete" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/relievingConductorStopLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:paddingStart="18dp"
+                                android:text="Relieving Conductor's Stop"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/darkblue"
+                                android:textSize="16sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <com.doi.spinnersearchable.SearchableSpinner
+                                    android:id="@+id/relievingConductorStopSpinner"
+                                    android:layout_width="0dp"
+                                    android:layout_height="30dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/customborder_dialog"
+                                    app:hintText="Select Stop for Relieving Conductor" />
+
+                                <ImageButton
+                                    android:id="@+id/clearRelievingConductorStopSelection"
+                                    android:layout_width="45dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginStart="10dp"
+                                    android:background="?attr/selectableItemBackground"
+                                    android:contentDescription="Clear Selection"
+                                    android:fontFamily="@font/raleway_semibold"
+                                    android:padding="14dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/delete" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+                <!--Vehicle Layout-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="#FFFF"
+                    android:elevation="5dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Remarks"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+
+                        <EditText
+                            android:id="@+id/remarks"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:maxLength="200"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:hint="Please Enter Remarks"
+                            android:padding="8dp"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- Bottom Section: Buttons -->
+    <LinearLayout
+        android:id="@+id/bottom_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="0.2"
+        android:background="#FFFF"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/red"
+            android:text="Back"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/proceedBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:text="Add Record"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

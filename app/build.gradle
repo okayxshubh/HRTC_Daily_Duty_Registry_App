@@ -1,0 +1,97 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.dit.hp.hrtc_app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.dit.hp.hrtc_app"
+        minSdk 29  // Min Version 29 to Support Searchable Spinner + HttpManager works better with API 30+
+        targetSdk 34
+
+        // Version Codes here
+        versionCode 6
+        versionName "v6.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+
+    // Add This to ignore cuz multiple libs have the same file
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'LICENSE-EPL-1.0.txt'
+        exclude 'LICENSE-EDL-1.0.txt'
+    }
+
+}
+
+dependencies {
+
+    // Module Dependency
+    implementation project(path: ':easycam')
+    implementation project(path: ':locationmanager')
+    implementation project(path: ':spinnersearchable')
+
+    // Compressor (latest version)
+//    implementation libs.compressor
+
+    // RxJava and RxAndroid
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+
+    // Add Office Location Needs to be turned on
+    implementation libs.play.services.location
+
+
+    // Attendance Module Face Auth Requirements
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8' // Parsing
+    implementation group: 'javax.xml.stream', name: 'stax-api', version: '1.0-2'  // Parsing XML Along with Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5' // Use the latest version available
+    implementation('com.thoughtworks.xstream:xstream:1.4.7') {
+        exclude group: 'xmlpull', module: 'xmlpull'
+    }
+
+
+    // Excel Download
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
+
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    implementation libs.retrofit
+    implementation libs.retrofit.gson
+    implementation libs.gson
+    implementation libs.espresso.core
+    implementation libs.play.services.location
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+}

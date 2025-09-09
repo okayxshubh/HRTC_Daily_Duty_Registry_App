@@ -1,0 +1,651 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+    <!-- Top Section: Header Image -->
+    <RelativeLayout
+        android:id="@+id/top_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/navyblue"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#B7FFFFFF"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/hrtcBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="centerCrop"
+                android:src="@drawable/hrtc" />
+
+            <TextView
+                android:id="@+id/addStaffHeadTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/raleway_semibold"
+                android:gravity="center"
+                android:letterSpacing="0.025"
+                android:text="Add Staff"
+                android:textColor="@color/hrtc_green"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/logOutB"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/hp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <!-- Body Section: Scrollable Content -->
+    <LinearLayout
+        android:id="@+id/body_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <!--BODY-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="#FFFF"
+                    android:elevation="5dp"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/hrtc_green"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:gravity="center|center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="Basic Details"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/firstNameLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="First Name"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+
+                        <EditText
+                            android:id="@+id/newStaffFirstName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:hint="Please enter first name"
+                            android:padding="8dp"
+                            android:singleLine="true"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/lastNameLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Last Name"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+
+                        <EditText
+                            android:id="@+id/newStaffLastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:hint="Please enter last name"
+                            android:padding="8dp"
+                            android:singleLine="true"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <!-- Gender Selection -->
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/genderLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Please Select Gender"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <!-- Searchable Spinner for Gender -->
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/genderSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Gender" />
+
+                    </LinearLayout>
+
+                    <!-- Caste Selection -->
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/casteLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Please Select Caste"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <!-- Searchable Spinner for Caste -->
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/casteSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Caste" />
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/hrtc_green"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:gravity="center|center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="Organisation Related Details"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/staffTypeLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Staff Type: "
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/staffTypeDropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Staff Type" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <!-- Employee Code -->
+                        <TextView
+                            android:id="@+id/employeeCodeLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Employee Code"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/employeeCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:hint="Enter Employee Code"
+                            android:inputType="number"
+                            android:padding="8dp"
+                            android:singleLine="true"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/employmentTypeLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Please Select Employment Type"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <!-- Searchable Spinner for Employment Type -->
+                        <com.doi.spinnersearchable.SearchableSpinner
+                            android:id="@+id/employmentTypeSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            app:hintText="Please Select Employment Type" />
+
+                    </LinearLayout>
+
+                    <!-- License Number -->
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <!-- License Number Label -->
+                        <TextView
+                            android:id="@+id/licenseNumberLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="License Number"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <!-- License Number Input Field -->
+                        <EditText
+                            android:id="@+id/licenseNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:hint="Enter License Number"
+                            android:inputType="textNoSuggestions"
+                            android:padding="8dp"
+                            android:singleLine="true"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/hrtc_green"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:gravity="center|center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="Other Details"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!-- Date of Birth -->
+                        <TextView
+                            android:id="@+id/dobLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Date of Birth"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/dob"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:focusable="false"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:gravity="center"
+                            android:hint="Select Date"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/dateOfJoiningLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Date of Joining"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/date1"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:focusable="false"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:gravity="center"
+                            android:hint="Select Date"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/contactLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Contact Number"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/contact"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:hint="Enter Contact Number"
+                            android:inputType="phone"
+                            android:digits="0123456789"
+                            android:maxLength="10"
+                            android:padding="8dp"
+                            android:singleLine="true"
+                            android:textColor="#13914f"
+                            android:textSize="16sp"
+                            android:importantForAutofill="no"
+                            android:autofillHints=""
+                            android:filterTouchesWhenObscured="true"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/membersNameLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Enter father's / husband's name"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+
+                        <EditText
+                            android:id="@+id/relationNameET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:hint="Please enter member's name"
+                            android:padding="8dp"
+                            android:singleLine="true"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#fff"
+                        android:elevation="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/addressLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingStart="18dp"
+                            android:text="Enter Permanent Address"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/darkblue"
+                            android:textSize="16sp" />
+
+
+                        <EditText
+                            android:id="@+id/addressField"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/customborder_dialog"
+                            android:fontFamily="@font/raleway_semibold"
+                            android:hint="Please Enter Address"
+                            android:padding="8dp"
+                            android:textColor="#13914f"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- Bottom Section: Buttons -->
+    <LinearLayout
+        android:id="@+id/bottom_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="0.2"
+        android:background="#FFFF"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/red"
+            android:text="Back"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/proceedBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:text="Add"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

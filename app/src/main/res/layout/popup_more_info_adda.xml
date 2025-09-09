@@ -1,0 +1,115 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_bg"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/card_bg"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Adda Information"
+        android:textColor="@color/hrtc_green"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Info Table -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/card_bg"
+            android:elevation="5dp"
+            android:stretchColumns="1">
+
+            <!-- Row: Depot ID -->
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Adda ID:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/addaId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+
+
+            <!-- Row: Adda Name -->
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Adda Name:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/addaName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Location Name:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Associated Depot:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/associatedDepot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Adda In-charge:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/addaIncharge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>

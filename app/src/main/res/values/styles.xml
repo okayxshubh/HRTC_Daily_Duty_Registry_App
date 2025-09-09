@@ -1,0 +1,25 @@
+<!--LIGHT THEME-->
+<resources>
+    <!--MAIN LIGHT-->
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/hrtc_green</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="cardViewStyle">@style/MyCardViewLight</item>
+    </style>
+
+    <style name="MyCardViewLight" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
+
+    <!--For Hints in Login Screen-->
+    <style name="CustomTextHintStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/darkblue</item> <!-- Customize the hint color -->
+        <item name="android:textSize">15sp</item> <!-- Customize the hint size -->
+        <item name="fontFamily">@font/raleway_semibold</item> <!-- Set the font -->
+    </style>
+
+</resources>

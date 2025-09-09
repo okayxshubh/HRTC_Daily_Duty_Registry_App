@@ -1,0 +1,208 @@
+<!-- res/layout/dialog_more_info.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_bg"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/card_bg"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="MORE INFORMATION"
+        android:textColor="@color/hrtc_green"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Info Table -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/card_bg"
+            android:elevation="5dp"
+            android:stretchColumns="1">
+
+            <!-- Row: Bus Type -->
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Bus Type:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/busType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: Vehicle Number -->
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Vehicle Number:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/vehicleNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: IoT Device ID -->
+            <TableRow android:layout_marginTop="5dp" android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="IoT Device ID:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/iotDeviceId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: Bus Model -->
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Bus Model:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/busModel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: Vehicle Make -->
+            <TableRow android:layout_marginTop="5dp" android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Vehicle Make:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/otherDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: Registration Date -->
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Registration Date:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/registrationDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: Maintenance Status -->
+            <TableRow android:layout_marginTop="5dp" android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Maintenance Status:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/maintenanceStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: GPS Status -->
+            <TableRow android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="GPS Status:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/gpsStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: Remarks -->
+            <TableRow android:layout_marginTop="5dp" android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Remarks:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/remarks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: Last Updated By -->
+            <TableRow android:layout_marginTop="5dp" android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Last Updated By:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/lastUpdatedBy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+            <!-- Row: Last Updated On -->
+            <TableRow android:layout_marginTop="5dp" android:elevation="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Last Updated On:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/lastUpdatedOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
+            </TableRow>
+
+        </TableLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

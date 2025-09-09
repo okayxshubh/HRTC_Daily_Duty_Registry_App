@@ -1,0 +1,46 @@
+<!--DARK THEME-->
+<resources>
+
+    <!--MAIN DARK-->
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/hrtc_green</item>
+        <item name="android:colorBackground">#121212</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:windowBackground">#121212</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:statusBarColor">#4CAF50</item>
+        <item name="cardViewStyle">@style/MyCardViewDark</item>
+        <item name="editTextStyle">@style/DarkEditText</item>
+        <item name="buttonStyle">@style/DarkButton</item>
+    </style>
+
+    <!-- Card style for dark mode -->
+    <style name="MyCardViewDark" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">#EBEBEB</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">12dp</item>
+    </style>
+
+    <!-- EditText in dark mode -->
+    <style name="DarkEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:backgroundTint">#C6C6C6</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorHint">#AAAAAA</item>
+    </style>
+
+    <!-- Button in dark mode -->
+    <style name="DarkButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <!-- Hint Text for Login (dark gray) -->
+    <style name="CustomTextHintStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#6F6F6F</item> <!-- Dark gray hint -->
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">@font/raleway_semibold</item>
+    </style>
+
+</resources>
